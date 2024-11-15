@@ -1,0 +1,1 @@
+Instead of using matrices for weights, use a vector, taking only the first N entries for the first layer, the successive M for the second and so on. 
