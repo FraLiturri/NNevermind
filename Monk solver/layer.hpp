@@ -5,7 +5,7 @@
 #include <fstream>
 #include <string>
 #include "activation_functions.hpp"
-#include "C:/Users/franc/OneDrive/Desktop/Sync/Code/eigen-3.4.0/Eigen/Dense" //works
+#include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense" //works
 
 using namespace std;
 using namespace Eigen;
