@@ -1,0 +1,7 @@
+Write here ideas or observations for the project, even schematic code is appreciated. 
+
+Trying to automatize the building of the network...
+Has to be done in this way in order to modify freely the number of layers, units, architecture...
+Other ways will be Too much dispendious, it's better to not hard-coding the network.
+
+TO DO: check backpropagation to understand what is needed.
