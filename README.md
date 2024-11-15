@@ -1,2 +1,2 @@
 # ML-Project
-Repository of Monk solver and NN for ML exam
+Repository for Monk Solver and Multi-Layer-Perceptron Neural Network for the Machine Learning course project.
