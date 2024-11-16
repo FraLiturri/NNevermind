@@ -17,9 +17,6 @@ const int out_units = 2; // Number of units in the output layer;
 int hidden_layers = 4;                // Number of hidden layers;
 VectorXd hidden_units(hidden_layers); // Each component represents the numbers of unit in each HIDDEN layer;
 
-//Testing...
-MatrixXd matrix(2,3); 
-
 // How many units?
 double tot_units;
 double counter()
