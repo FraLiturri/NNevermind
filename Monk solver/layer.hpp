@@ -17,6 +17,9 @@ const int out_units = 2; // Number of units in the output layer;
 int hidden_layers = 4;                // Number of hidden layers;
 VectorXd hidden_units(hidden_layers); // Each component represents the numbers of unit in each HIDDEN layer;
 
+//Testing...
+MatrixXd matrix(2,3); 
+
 // How many units?
 double tot_units;
 double counter()
@@ -30,22 +33,23 @@ double counter()
     return tot_units;
 }
 
-//General hidden layer; 
+// General hidden layer;
 double Layer(string function_choosen, Vector3d input) // In future has to return a vector;
 {
     func_choiser(function_choosen); //! use act_func as working tool [e.g. act_func(2.3)];
     return 0;
 }
 
-//Input layer; 
+// Input layer;
 double input_Layer(VectorXd input) // Input layer;
 {
-    int next_units = int(hidden_units[0]); 
+    int next_units = int(hidden_units[0]);
     VectorXd output_0(next_units);
-    for(int i = 0; i < int(hidden_units[0]); i++){
-         output_0[i] = 1; 
+    for (int i = 0; i < int(hidden_units[0]); i++)
+    {
+        output_0[i] = 1;
     }
-    cout << output_0 ; 
+    cout << output_0;
     return 0;
 }
 
