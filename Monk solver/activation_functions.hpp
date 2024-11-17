@@ -9,7 +9,7 @@ using namespace std;
 // Defining activation functions and their derivatives (needed for Backpropagation);
 double sigmoid(double x)
 {
-    return 1;
+    return 1/(double)(1+exp(x));
 }
 double sigmoid_der(double x){
     return 1; 
