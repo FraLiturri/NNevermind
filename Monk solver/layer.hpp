@@ -12,11 +12,13 @@ using namespace std;
 using namespace Eigen;
 
 // Defining networks variables;
-const int in_units = 1;  // Number of units in input layer;
+const int in_units = 6;  // Number of units in input layer;
 const int out_units = 2; // Number of units in the output layer;
-int hidden_layers = 3;   // Number of hidden layers;
 
-VectorXd hidden_units(hidden_layers); // Each component represents the numbers of unit in each HIDDEN layer;
+int hidden_layers = 2;       // Number of hidden layers;
+Vector2d hidden_units(4, 5); // Each component represents the numbers of unit in each HIDDEN layer;
+                             // In case of bigger networks, change to VectorXd (specifing the size)
+                             // and put hidden_units << -your units list- in main(){};
 
 // How many units?
 double tot_units;
@@ -32,12 +34,12 @@ double counter()
 }
 
 // Creating weights matrices;
-vector<MatrixXd> weights; 
+vector<MatrixXd> weights;
 void weights_creator()
 {
     int rows;
     int columns;
-    for (int i = 0; i < hidden_layers +1; i++)
+    for (int i = 0; i <= hidden_layers; i++)
     {
         i == 0 ? columns = in_units : columns = hidden_units[i - 1];    // Paying attention to first layer (input);
         i == hidden_layers ? rows = out_units : rows = hidden_units[i]; // Paying attention to last layer (output);
