@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 #include "activation_functions.hpp"
 #include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense" //works
 
@@ -13,8 +14,8 @@ using namespace Eigen;
 // Defining networks variables;
 const int in_units = 1;  // Number of units in input layer;
 const int out_units = 2; // Number of units in the output layer;
+int hidden_layers = 4;   // Number of hidden layers;
 
-int hidden_layers = 4;                // Number of hidden layers;
 VectorXd hidden_units(hidden_layers); // Each component represents the numbers of unit in each HIDDEN layer;
 
 // How many units?
@@ -28,6 +29,20 @@ double counter()
     }
     tot_units = count * in_units * out_units;
     return tot_units;
+}
+
+// Creating weights matrices;
+vector<MatrixXd> weights;
+void weights_creator()
+{
+    int rows;
+    int columns;
+    for (int i = 0; i < hidden_layers + 1; i++)
+    {
+        i == 0 ? columns = in_units : columns = hidden_units[i - 1];    // Paying attention to first layer (input);
+        i == hidden_layers ? rows = out_units : rows = hidden_units[i]; // Paying attention to last layer (output);
+        
+    }
 }
 
 // General hidden layer;
@@ -46,7 +61,6 @@ double input_Layer(VectorXd input) // Input layer;
     {
         output_0[i] = 1;
     }
-    cout << output_0;
     return 0;
 }
 

@@ -1,5 +1,7 @@
 #include "layer.hpp"
 #include "activation_functions.hpp"
+#include "info.hpp"
+
 #include <iostream>
 #include <string>
 #include <random>
@@ -13,9 +15,14 @@ int main()
     //! Initialization part: do not delete;
     hidden_units << 1, 2, 3, 4; // Number of units in each hidden layer;
     counter();                  // Counts how many units have been used;
+    weights_creator();
 
-    // Neural network construction;
+    //! Neural network construction;
     Layer("linear", {0, 0, 3}); // test printing act_func(double);
     input_Layer({0, 1});
+
+    // Printing config. info:
+    print_info(); 
+
     return 0;
 }
