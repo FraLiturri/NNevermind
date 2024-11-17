@@ -44,8 +44,8 @@ void weights_creator()
         i == 0 ? columns = in_units : columns = hidden_units[i - 1];    // Paying attention to first layer (input);
         i == hidden_layers ? rows = out_units : rows = hidden_units[i]; // Paying attention to last layer (output);
 
-        MatrixXd weight(rows, columns);
-        weights.push_back(weight.setRandom());
+        MatrixXd weight(rows, columns);        // Creating matrix;
+        weights.push_back(weight.setRandom()); // Storing weights;
     }
 }
 
