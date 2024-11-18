@@ -45,7 +45,7 @@ void weights_creator()
         i == hidden_layers ? rows = out_units : rows = hidden_units[i]; // Paying attention to last layer (output);
 
         MatrixXd weight(rows, columns);        // Creating matrix;
-        weights.push_back(weight.setConstant(1)); // Storing weights;
+        weights.push_back(weight.setRandom()); // Storing weights;
     }
 }
 
@@ -65,15 +65,13 @@ private:
 public:
     input_Layer(Vector<double, in_units> input)
     {
-
         for (int k = 0; k < in_units; k++)
         {
             VectorXd output = weights[0] * input;
             outputs.push_back(output); 
         }
     };
-
-    vector<VectorXd> output_getter()
+    vector<VectorXd> outputs_getter()
     {
         cout << outputs[0];
         return outputs;

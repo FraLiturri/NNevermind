@@ -24,7 +24,7 @@ int main()
     }
 
     input_Layer input_Layer({1,2,3,4,5,6});
-    input_Layer.output_getter(); 
+    input_Layer.outputs_getter(); 
 
     // Printing config. info:
     print_info();
