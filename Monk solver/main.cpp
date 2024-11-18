@@ -14,19 +14,20 @@ int main()
 {
     //! Initialization part: do not delete (config. settings are in layer.hpp); 
     counter();         // Counts how many units have been used;
-    weights_creator(); // Builds the vector containing all the weights (in form of matri
+    weights_creator(); // Builds the vector containing all the weights (in form of matrices)
 
     //! Neural network construction;
-    Layer("linear", {0, 0, 3}); // test printing act_func(double);
-    input_Layer({0, 1});
-
     for (int j = 0; j < weights.size(); j++)
     {
         cout << weights[j] << endl
              << endl;
     }
 
+    input_Layer input_Layer({1,2,3,4,5,6});
+    input_Layer.output_getter(); 
+
     // Printing config. info:
     print_info();
+
     return 0;
 }

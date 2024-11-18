@@ -12,13 +12,13 @@ using namespace std;
 using namespace Eigen;
 
 // Defining networks variables;
-const int in_units = 6;  // Number of units in input layer;
-const int out_units = 2; // Number of units in the output layer;
+const int in_units = 6;      // Number of units in input layer;
+const int out_units = 2;     // Number of units in the output layer;
+const int hidden_layers = 2; // Number of hidden layers;
 
-int hidden_layers = 2;       // Number of hidden layers;
-Vector2d hidden_units(4, 5); // Each component represents the numbers of unit in each HIDDEN layer;
-                             // In case of bigger networks, change to VectorXd (specifing the size)
-                             // and put hidden_units << -your units list- in main(){};
+Vector<int, hidden_layers> hidden_units(4, 5); // Each component represents the numbers of unit in each HIDDEN layer;
+                                               // In case of bigger networks, change to VectorXd (specifing the size)
+                                               // and put hidden_units << -your units list- in main(){};
 
 // How many units?
 double tot_units;
@@ -33,7 +33,7 @@ double counter()
     return tot_units;
 }
 
-// Creating weights matrices;
+// Creating weights matrices and output vec;
 vector<MatrixXd> weights;
 void weights_creator()
 {
@@ -45,27 +45,39 @@ void weights_creator()
         i == hidden_layers ? rows = out_units : rows = hidden_units[i]; // Paying attention to last layer (output);
 
         MatrixXd weight(rows, columns);        // Creating matrix;
-        weights.push_back(weight.setRandom()); // Storing weights;
+        weights.push_back(weight.setConstant(1)); // Storing weights;
     }
 }
 
-// General hidden layer;
+// General hidden layer; //? Has to be converted into a class?;
 double Layer(string function_choosen, Vector3d input) // In future has to return a vector;
 {
     func_choiser(function_choosen); //! use act_func as working tool [e.g. act_func(2.3)];
     return 0;
 }
 
-// Input layer;
-double input_Layer(VectorXd input) // Input layer;
+//Creating input_Layer class; 
+class input_Layer
 {
-    int next_units = int(hidden_units[0]);
-    VectorXd output_0(next_units);
-    for (int i = 0; i < int(hidden_units[0]); i++)
+private:
+    vector<VectorXd> outputs; // Specific the size of the vector when possible;
+
+public:
+    input_Layer(Vector<double, in_units> input)
     {
-        output_0[i] = 1;
-    }
-    return 0;
-}
+
+        for (int k = 0; k < in_units; k++)
+        {
+            VectorXd output = weights[0] * input;
+            outputs.push_back(output); 
+        }
+    };
+
+    vector<VectorXd> output_getter()
+    {
+        cout << outputs[0];
+        return outputs;
+    };
+};
 
 #endif
