@@ -17,8 +17,7 @@ const int out_units = 2;     // Number of units in the output layer;
 const int hidden_layers = 2; // Number of hidden layers;
 
 Vector<int, hidden_layers> hidden_units(4, 5); // Each component represents the numbers of unit in each HIDDEN layer;
-                                               // In case of bigger networks, change to VectorXd (specifing the size)
-                                               // and put hidden_units << -your units list- in main(){};
+                                               // In case of bigger networks, change to VectorXd (specifing the size);
 
 // How many units?
 double tot_units;
