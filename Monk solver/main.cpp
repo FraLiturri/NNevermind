@@ -17,14 +17,9 @@ int main()
     weights_creator(); // Builds the vector containing all the weights (in form of matrices)
 
     //! Neural network construction;
-    for (int j = 0; j < weights.size(); j++)
-    {
-        cout << weights[j] << endl
-             << endl;
-    }
-
-    input_Layer input_Layer({1,2,3,4,5,6});
-    input_Layer.outputs_getter(); 
+    input_Layer Input_Layer({1,2,3,4,5,6}); 
+    Input_Layer.outputs_getter(); 
+    hidden_Layer First_hidden("threshold", {1,2,3,4});
 
     // Printing config. info:
     print_info();

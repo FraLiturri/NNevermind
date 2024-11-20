@@ -19,7 +19,6 @@ template <class T = Layer>
 class HiddenLayer : public Layer
 {
 public:
-	HiddenLayer() : NumNodes_1(0), PrevLayer(nullptr) {}
 	HiddenLayer(int NumNodes, T *LayerPrecedente)
 		: NumNodes_1(NumNodes), PrevLayer(LayerPrecedente) {}
 
@@ -38,7 +37,7 @@ private:
 class InputLayer : public Layer
 {
 public:
-	InputLayer() : NumNodes_1(0) {}
+	//InputLayer() : NumNodes_1(0) {}
 	InputLayer(int NumNodes) : NumNodes_1(NumNodes) {}
 
 	int NumNode() const override { return NumNodes_1; }

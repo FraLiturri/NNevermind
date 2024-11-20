@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <algorithm>
 #include "activation_functions.hpp"
 #include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense" //works
 
@@ -48,15 +49,35 @@ void weights_creator()
     }
 }
 
-// General hidden layer; //? Has to be converted into a class?;
-double Layer(string function_choosen, Vector3d input) // In future has to return a vector;
+//! Creating Layer class;
+class Layer // This creates a virtual class;
 {
-    func_choiser(function_choosen); //! use act_func as working tool [e.g. act_func(2.3)];
-    return 0;
-}
+public:
+    virtual ~Layer() = default;
+    virtual Layer *GoToPrevLayer() const = 0;
+};
 
-//Creating input_Layer class; 
-class input_Layer
+//Hidden layer class; 
+class hidden_Layer : public Layer
+{
+public:
+    hidden_Layer(string choosen_function, Vector<double, 4> inputs)
+    {
+        func_choiser(choosen_function); 
+        cout << "\n\nActivation function test: " << act_func(3) << endl;
+    }
+    virtual Layer *GoToPrevLayer() const override // A pointer function that return a Layer-type;
+    {
+        return 0;
+    }
+
+protected:
+    Layer *Previous_Layer;
+
+};
+
+//Input layer class; 
+class input_Layer : public Layer //works
 {
 private:
     vector<VectorXd> outputs; // Specific the size of the vector when possible;
@@ -66,8 +87,8 @@ public:
     {
         for (int k = 0; k < in_units; k++)
         {
-            VectorXd output = weights[0] * input;
-            outputs.push_back(output); 
+            VectorXd output = weights[0] * input; //Encapsulate in a function? 
+            outputs.push_back(output);
         }
     };
     vector<VectorXd> outputs_getter()
@@ -75,6 +96,8 @@ public:
         cout << outputs[0];
         return outputs;
     };
+
+    virtual Layer *GoToPrevLayer() const override { return 0; };
 };
 
 #endif
