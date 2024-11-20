@@ -49,7 +49,7 @@ void weights_creator()
     }
 }
 
-//! Creating Layer class;
+//! Creating Layer classes;
 class Layer // This creates a virtual class;
 {
 public:
@@ -57,27 +57,34 @@ public:
     virtual Layer *GoToPrevLayer() const = 0;
 };
 
-//Hidden layer class; 
+// Hidden layer class;
 class hidden_Layer : public Layer
 {
 public:
-    hidden_Layer(string choosen_function, Vector<double, 4> inputs)
+    hidden_Layer(string choosen_function, Vector<double, 4> inputs, bool isOutputLayer) // Class constructor;
     {
-        func_choiser(choosen_function); 
+        func_choiser(choosen_function);
         cout << "\n\nActivation function test: " << act_func(3) << endl;
+        isLast = isOutputLayer; 
     }
-    virtual Layer *GoToPrevLayer() const override // A pointer function that return a Layer-type;
+
+    virtual Layer *GoToPrevLayer() const override // A pointer function that returns a Layer-type;
     {
+        if(isLast){
+            for(int i = hidden_layers +1; i >= 0; i--){
+                cout << i << endl; 
+            }
+        }
         return 0;
     }
 
 protected:
     Layer *Previous_Layer;
-
+    bool isLast; 
 };
 
-//Input layer class; 
-class input_Layer : public Layer //works
+// Input layer class;
+class input_Layer : public Layer // works
 {
 private:
     vector<VectorXd> outputs; // Specific the size of the vector when possible;
@@ -87,7 +94,7 @@ public:
     {
         for (int k = 0; k < in_units; k++)
         {
-            VectorXd output = weights[0] * input; //Encapsulate in a function? 
+            VectorXd output = weights[0] * input; // Encapsulate in a function?
             outputs.push_back(output);
         }
     };
