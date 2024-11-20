@@ -17,10 +17,9 @@ int main()
     weights_creator(); // Builds the vector containing all the weights (in form of matrices)
 
     //! Neural network construction;
-    input_Layer Input_Layer({1,2,3,4,5,6}); 
-    Input_Layer.outputs_getter(); 
-    hidden_Layer First_hidden("threshold", {1,2,3,4}, true); 
-    First_hidden.GoToPrevLayer(); 
+    input_Layer Input_Layer({1,2,3,4,5,6});
+    hidden_Layer First_hidden("threshold", {1,2,3,4}, 1, true); 
+    First_hidden.GoToPrevLayer();
 
     // Printing config. info:
     print_info();
