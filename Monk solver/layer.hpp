@@ -42,17 +42,18 @@ void weights_creator()
 class hidden_Layer
 {
 public: //! Problem to be solved: for some reasons size of inputs vector has to be specified...;
-    hidden_Layer(string choosen_function, Vector<double, 4> inputs, int depth, bool isOutputLayer = false)
+    hidden_Layer(string choosen_function, int depth, bool isOutputLayer = false)
     {
         // depth indicates the hidden layer number;
         func_choiser(choosen_function);
         isLast = isOutputLayer;
+        VectorXd inputs = outputs[depth];        //! Has to be checked;
         single_output = weights[depth] * inputs; // Calculating outputs vector;
         outputs.insert(outputs.begin() + depth, single_output);
         cout << outputs[0] << endl;
     }
 
-    double BackPropagation() // A pointer function that returns a Layer-type;
+    void BackPropagation() // A pointer function that returns a Layer-type;
     {
         if (isLast)
         {
@@ -62,14 +63,13 @@ public: //! Problem to be solved: for some reasons size of inputs vector has to 
                 // Insert BP here, making i flowing from end to start in weights vector;
             }
         }
-        return 0;
     }
 
 protected:
-    bool isLast;
+    bool isLast; //Defined to access isOutputlayer value; 
 };
 
-// Input layer class;
+//! Input layer class;
 class input_Layer // works
 {
 public:
