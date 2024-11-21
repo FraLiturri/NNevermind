@@ -1,2 +1,2 @@
 TO DO: 
-substitute VectorXd with Vector<double, N> where the size of the vector is well-known; 
+Change some var names (single_output) to a clearer one;  
