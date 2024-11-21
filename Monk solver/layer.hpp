@@ -16,13 +16,14 @@ const int in_units = 2;      // Number of units in input layer; //?For some reas
 const int out_units = 1;     // Number of units in the output layer;
 const int hidden_layers = 2; // Number of hidden layers + output;
 
-Vector<int, hidden_layers> hidden_units(1,1); // Each component represents the numbers of unit in each HIDDEN layer;
-                                                        // In case of bigger networks, change to VectorXd (specifing the size);
+Vector<int, hidden_layers> hidden_units(1, 1); // Each component represents the numbers of unit in each HIDDEN layer;
+                                               // In case of bigger networks, change to VectorXd (specifing the size);
 // Creating weights matrices and output vec;
 vector<MatrixXd> weights;
 vector<VectorXd> outputs;
 VectorXd single_output;
-void weights_creator()
+
+void weights_creator() // Creates weights matrices;
 {
     int rows;
     int columns;
@@ -41,7 +42,7 @@ void weights_creator()
 //! Creating Layer classes;
 class hidden_Layer
 {
-public: //! Problem to be solved: for some reasons size of inputs vector has to be specified...;
+public:
     hidden_Layer(string choosen_function, int depth, bool isOutputLayer = false)
     {
         func_choiser(choosen_function);
@@ -49,15 +50,17 @@ public: //! Problem to be solved: for some reasons size of inputs vector has to 
         VectorXd inputs = outputs[depth - 1]; //! Has to be checked;
         for (int k = 0; k < inputs.size(); k++)
         {
-            inputs[k] = act_func(inputs[k]);
+            inputs[k] = act_func(inputs[k]); // Making act_function act on input to each unit;
         }
-        single_output = weights[depth] * inputs; // Calculating outputs vector;
-        outputs.insert(outputs.begin() + depth, single_output);
+        single_output = weights[depth] * inputs;                // Calculating outputs vector;
+        outputs.insert(outputs.begin() + depth, single_output); // Storing outputs;
+
+        // Test: can be deleted after debugging session;
         cout << depth << " hidden layer's output: "
              << single_output.transpose() << endl;
     }
 
-    void BackPropagation() // A pointer function that returns a Layer-type;
+    void BackPropagation() // BackProp. algorithm;
     {
         if (isLast)
         {
@@ -74,14 +77,15 @@ private:
 };
 
 //! Input layer class;
-class input_Layer // works
+class input_Layer
 {
 public:
     input_Layer(Vector<double, in_units> input)
     {
-        single_output = weights[0] * input; // Encapsulate in a function?
+        single_output = weights[0] * input;
         outputs.insert(outputs.begin(), single_output);
 
+        // Test: can be deleted after debugging;
         cout << "Input layer's output: "
              << single_output.transpose()
              << endl;
