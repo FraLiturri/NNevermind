@@ -12,14 +12,13 @@ using namespace std;
 
 int main()
 {
-    //! Initialization part: do not delete (config. settings are in layer.hpp); 
-    counter();         // Counts how many units have been used;
+    //! Initialization part: do not delete (config. settings are in layer.hpp);
     weights_creator(); // Builds the vector containing all the weights (in form of matrices)
 
     //! Neural network construction;
     input_Layer Input_Layer({1,2,3,4,5,6});
     hidden_Layer First_hidden("threshold", {1,2,3,4}, 1, true); 
-    First_hidden.GoToPrevLayer();
+    First_hidden.BackPropagation();
 
     // Printing config. info:
     print_info();
