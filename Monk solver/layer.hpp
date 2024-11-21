@@ -19,9 +19,9 @@ using namespace Eigen;
 // Defining networks variables;
 const int in_units = 2;      // Number of units in input layer; //?For some reasons in. units has to be greater than 1...fix it (it's not that important)
 const int out_units = 1;     // Number of units in the output layer;
-const int hidden_layers = 2; // Number of hidden layers + output;
+const int hidden_layers = 4; // Number of hidden layers + output;
 
-Vector<int, hidden_layers> hidden_units(1, 1); // Each component represents the numbers of unit in each HIDDEN layer;
+Vector<int, hidden_layers> hidden_units(50, 55, 50, 1); // Each component represents the numbers of unit in each HIDDEN layer;
 
 // Creating weights matrices and output vec;
 vector<MatrixXd> weights;
