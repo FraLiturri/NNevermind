@@ -6,8 +6,12 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <chrono>
+
 #include "activation_functions.hpp"
-#include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense" //works
+
+#include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
+
 using namespace std;
 using namespace Eigen;
 
@@ -17,7 +21,7 @@ const int out_units = 1;     // Number of units in the output layer;
 const int hidden_layers = 2; // Number of hidden layers + output;
 
 Vector<int, hidden_layers> hidden_units(1, 1); // Each component represents the numbers of unit in each HIDDEN layer;
-                                               // In case of bigger networks, change to VectorXd (specifing the size);
+
 // Creating weights matrices and output vec;
 vector<MatrixXd> weights;
 vector<VectorXd> outputs;
@@ -27,13 +31,15 @@ void weights_creator() // Creates weights matrices;
 {
     int rows;
     int columns;
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+
     for (int i = 0; i <= hidden_layers; i++)
     {
         i == 0 ? columns = in_units : columns = hidden_units[i - 1];    // Paying attention to first layer (input);
         i == hidden_layers ? rows = out_units : rows = hidden_units[i]; // Paying attention to last layer (output);
 
         MatrixXd weight = MatrixXd::NullaryExpr(rows, columns, []()
-                                                { return Eigen::internal::random<double>(-1.0, 1.0); });
+                                                { return Eigen::internal::random<double>(0, 0.5); });
         weights.push_back(weight); // Storing weights;
         cout << i << " Weights matrix: " << weight << endl;
     }

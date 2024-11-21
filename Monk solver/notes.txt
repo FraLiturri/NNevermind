@@ -1,2 +1,4 @@
 TO DO: 
-Change some var names (single_output) to a clearer one;  
+Change some var names (single_output) to a clearer one; 
+Better (clearer) Var def. in hidden_layers, hidden units; 
+Random numbers don't change after every launch: solved this;  
