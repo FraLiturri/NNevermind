@@ -7,6 +7,7 @@
 #include <vector>
 #include <algorithm>
 #include <chrono>
+#include <random>
 
 #include "activation_functions.hpp"
 
@@ -31,10 +32,12 @@ void weights_creator() // Creates weights matrices;
 {
     int rows;
     int columns;
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 
     for (int i = 0; i <= hidden_layers; i++)
     {
+        unsigned seed = std::chrono::system_clock::now().time_since_epoch().count(); // Defining seed for different random numbers;
+        srand(seed);
+
         i == 0 ? columns = in_units : columns = hidden_units[i - 1];    // Paying attention to first layer (input);
         i == hidden_layers ? rows = out_units : rows = hidden_units[i]; // Paying attention to last layer (output);
 
