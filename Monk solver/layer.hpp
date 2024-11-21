@@ -6,74 +6,70 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <chrono>
+#include <random>
+
 #include "activation_functions.hpp"
-#include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense" //works
+
+#include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
 
 using namespace std;
 using namespace Eigen;
 
 // Defining networks variables;
-const int in_units = 6;      // Number of units in input layer;
-const int out_units = 2;     // Number of units in the output layer;
-const int hidden_layers = 2; // Number of hidden layers;
+const int in_units = 2;      // Number of units in input layer; //?For some reasons in. units has to be greater than 1...fix it (it's not that important)
+const int out_units = 1;     // Number of units in the output layer;
+const int hidden_layers = 2; // Number of hidden layers + output;
 
-Vector<int, hidden_layers> hidden_units(4, 5); // Each component represents the numbers of unit in each HIDDEN layer;
-                                               // In case of bigger networks, change to VectorXd (specifing the size);
-
-// How many units?
-double tot_units;
-double counter()
-{
-    double count = 1;
-    for (int i = 0; i < hidden_units.size(); i++)
-    {
-        count *= hidden_units[i];
-    }
-    tot_units = count * in_units * out_units;
-    return tot_units;
-}
+Vector<int, hidden_layers> hidden_units(1, 1); // Each component represents the numbers of unit in each HIDDEN layer;
 
 // Creating weights matrices and output vec;
 vector<MatrixXd> weights;
-vector<VectorXd> outputs; // Specific the size of the vector when possible;
+vector<VectorXd> outputs;
 VectorXd single_output;
-void weights_creator()
+
+void weights_creator() // Creates weights matrices;
 {
     int rows;
     int columns;
+
     for (int i = 0; i <= hidden_layers; i++)
     {
+        unsigned seed = std::chrono::system_clock::now().time_since_epoch().count(); // Defining seed for different random numbers;
+        srand(seed);
+
         i == 0 ? columns = in_units : columns = hidden_units[i - 1];    // Paying attention to first layer (input);
         i == hidden_layers ? rows = out_units : rows = hidden_units[i]; // Paying attention to last layer (output);
 
-        MatrixXd weight(rows, columns);        // Creating matrix;
-        weights.push_back(weight.setRandom()); // Storing weights;
+        MatrixXd weight = MatrixXd::NullaryExpr(rows, columns, []()
+                                                { return Eigen::internal::random<double>(0, 0.5); });
+        weights.push_back(weight); // Storing weights;
+        cout << i << " Weights matrix: " << weight << endl;
     }
 }
 
 //! Creating Layer classes;
-class Layer // This creates a virtual class;
+class hidden_Layer
 {
 public:
-    virtual ~Layer() = default;
-    virtual Layer *GoToPrevLayer() const = 0;
-};
-
-// Hidden layer class;
-class hidden_Layer : public Layer
-{
-public: //! Problem to be solved: for some reasons size of inputs vector has to be specified... (std::vector??); 
-    hidden_Layer(string choosen_function, Vector<double, 4> inputs, int depth, bool isOutputLayer = false) // Class constructor; 
+    hidden_Layer(string choosen_function, int depth, bool isOutputLayer = false)
     {
-        //depth indicates the hidden layer number; 
         func_choiser(choosen_function);
         isLast = isOutputLayer;
-        single_output = weights[depth]*inputs;  //Calculating outputs vector;
-        outputs.insert(outputs.begin() + depth, single_output); 
-        cout << outputs[0] <<endl; 
+        VectorXd inputs = outputs[depth - 1]; //! Has to be checked;
+        for (int k = 0; k < inputs.size(); k++)
+        {
+            inputs[k] = act_func(inputs[k]); // Making act_function act on input to each unit;
+        }
+        single_output = weights[depth] * inputs;                // Calculating outputs vector;
+        outputs.insert(outputs.begin() + depth, single_output); // Storing outputs;
+
+        // Test: can be deleted after debugging session;
+        cout << depth << " hidden layer's output: "
+             << single_output.transpose() << endl;
     }
 
-    virtual Layer *GoToPrevLayer() const override // A pointer function that returns a Layer-type;
+    void BackPropagation() // BackProp. algorithm;
     {
         if (isLast)
         {
@@ -81,34 +77,28 @@ public: //! Problem to be solved: for some reasons size of inputs vector has to 
             for (int i = hidden_layers + 1; i >= 0; i--)
             {
                 // Insert BP here, making i flowing from end to start in weights vector;
-                cout << i << endl;
             }
         }
-        return 0;
     }
 
-protected:
-    bool isLast;
+private:
+    bool isLast; // Defined to access isOutputlayer's value;
 };
 
-// Input layer class;
-class input_Layer : public Layer // works
+//! Input layer class;
+class input_Layer
 {
 public:
     input_Layer(Vector<double, in_units> input)
     {
-        for (int k = 0; k < in_units; k++)
-        {
-            single_output = weights[0] * input; // Encapsulate in a function?
-            outputs.push_back(single_output);
-        }
-    };
-    vector<VectorXd> outputs_getter()
-    {
-        return outputs;
-    };
+        single_output = weights[0] * input;
+        outputs.insert(outputs.begin(), single_output);
 
-    virtual Layer *GoToPrevLayer() const override { return 0; };
+        // Test: can be deleted after debugging;
+        cout << "Input layer's output: "
+             << single_output.transpose()
+             << endl;
+    };
 };
 
 #endif

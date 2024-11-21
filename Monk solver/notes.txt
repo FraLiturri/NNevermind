@@ -1,2 +1,4 @@
 TO DO: 
-substitute VectorXd with Vector<double, N> where the size of the vector is well-known; 
+Change some var names (single_output) to a clearer one; 
+Better (clearer) Var def. in hidden_layers, hidden units; 
+Random numbers don't change after every launch: solved this;  
