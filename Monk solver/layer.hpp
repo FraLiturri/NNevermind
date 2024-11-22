@@ -69,6 +69,13 @@ public:
              << single_output.transpose() << endl;
     }
 
+    void RandomTraining() // Random training;
+    {
+        if (isLast)
+        {
+        }
+    }
+
     void BackPropagation() // BackProp. algorithm;
     {
         if (isLast)
