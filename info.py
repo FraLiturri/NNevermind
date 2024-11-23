@@ -14,7 +14,7 @@ def StringPainter(color, string):  # Transforms a string in a colored one;
 
 
 def main():
-    list = ""
+    questions_list = ""
 
     questions = [  # raws questions: pure strings;
         "How to perform a Backpropagation?",
@@ -31,18 +31,19 @@ def main():
             q = (
                 "\n " + f"{questions.index(q)+1}. " + q
             )  # formatting strings in a certain way;
-            list += q
+            questions_list += q
         print(
-            f"\nHi welcome! I'll be your guide during this journey; try asking these questions: {list}\n"
+            f"\nHi welcome! I'll be your guide during this journey; try asking these questions: {questions_list}\n"
         )
         print(
-            "Note: ask question typing its number after\033[94m python info.py \033[0min the terminal.\n"
+            f"Note: ask question typing its number after\033[94m python info.py \033[0min the terminal. If you want to get general info, type {StringPainter('blue', '0')}. \n"
         )
 
-    else:  # passed parameter;
-        parametro = sys.argv[1]
-        parametro = int(parametro)
-        if parametro <= len(questions):
+    else:  # Passed parameter;
+        parametro = int(sys.argv[1])
+        if parametro == 0:
+            print("\nGuide \n")
+        elif parametro <= len(questions):
             print("\n" + answers[parametro - 1] + "\n")
         else:
             print(f"\nNumber {parametro} does not correspond to any question.\n")

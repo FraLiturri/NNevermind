@@ -33,7 +33,7 @@ double threshold_der(double x){
     return 0; 
 }
 
-// Defining pointer to activation function(s);
+// Defining pointer to activation function(s) and derivative(s);
 double (*act_func)(double); // pointer to f;
 double (*der_act_func)(double); //pointer to f'; 
 

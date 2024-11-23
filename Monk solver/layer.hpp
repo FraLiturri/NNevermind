@@ -21,7 +21,7 @@ const int in_units = 2;      // Number of units in input layer; //?For some reas
 const int out_units = 1;     // Number of units in the output layer;
 const int hidden_layers = 4; // Number of hidden layers + output;
 
-Vector<int, hidden_layers> hidden_units(50, 55, 50, 1); // Each component represents the numbers of unit in each HIDDEN layer;
+Vector<int, hidden_layers> hidden_units(1, 2, 3, 4); // Each component represents the numbers of unit in each HIDDEN layer;
 
 // Creating weights matrices and output vec;
 vector<MatrixXd> weights;
@@ -33,7 +33,7 @@ void weights_creator() // Creates weights matrices;
     int rows;
     int columns;
 
-    for (int i = 0; i <= hidden_layers; i++)
+    for (int i = 0; i <= hidden_layers; i++) //! Bias terms still not inserted...(first column of each matrix has to be == 1?);
     {
         unsigned seed = std::chrono::system_clock::now().time_since_epoch().count(); // Defining seed for different random numbers;
         srand(seed);
@@ -43,6 +43,7 @@ void weights_creator() // Creates weights matrices;
 
         MatrixXd weight = MatrixXd::NullaryExpr(rows, columns, []()
                                                 { return Eigen::internal::random<double>(0, 0.5); });
+        weight.col(0).setConstant(1);
         weights.push_back(weight); // Storing weights;
         cout << i << " Weights matrix: " << weight << endl;
     }

@@ -1,5 +1,11 @@
+Ideas: 
+Can for loop be inserted directly in .Backpropagation() method?
+
 TO DO: 
 Change some var names (single_output) to a clearer one; 
 Better (clearer) Var def. in hidden_layers, hidden units; 
 Random numbers don't change after every launch: solved this;  
 Add a method called RandomTraining() for last hidden trianing (see slieds on randon NN); 
+
+TO DO (info.py): 
+Add general info getter
