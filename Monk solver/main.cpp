@@ -21,7 +21,7 @@ int main()
     weights_creator(); // Builds the vector containing all the weights (in form of matrices)
 
     //! Printing config. info:
-    print_info();
+    print_info(); //Printing NN general info; 
 
     //! Neural network construction;
     input_Layer Input_Layer({0.23, 3.45});

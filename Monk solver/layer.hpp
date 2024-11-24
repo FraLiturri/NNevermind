@@ -21,13 +21,12 @@ const int out_units = 1;     // Number of units in the output layer;
 const int hidden_layers = 3; // Number of hidden layers;
 
 Vector<int, hidden_layers + 1> hidden_and_out_units(1, 2, 3, out_units); // Number of units in each hidden and output layer (last one);
-
 const int training_iterations = 1000; //Number of iterations;
 
 // Creating weights matrices and output vec;
 vector<MatrixXd> weights;
 vector<VectorXd> outputs;
-VectorXd single_output;
+VectorXd single_output; 
 
 void weights_creator() // Creates weights matrices;
 {
@@ -66,7 +65,7 @@ public:
         single_output = weights[depth] * inputs;                // Calculating outputs vector;
         outputs.insert(outputs.begin() + depth, single_output); // Storing outputs;
 
-        // Test: can be deleted after debugging session;
+        // Test: can be deleted after debugging;
         cout << depth << " hidden layer's output: "
              << single_output.transpose() << endl;
     }
