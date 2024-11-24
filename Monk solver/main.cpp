@@ -14,7 +14,7 @@ using namespace std;
 
 int main()
 {
-    //Counter started; 
+    // Counter started;
     auto start = chrono::high_resolution_clock::now();
 
     //! Initialization part: do not delete (config. settings are in layer.hpp);
@@ -24,17 +24,20 @@ int main()
     print_info();
 
     //! Neural network construction;
-    input_Layer Input_Layer({1,2});
+    input_Layer Input_Layer({0.23, 3.45});
     hidden_Layer First_hidden("linear", 1);
-    hidden_Layer Second_hidden("linear", 2, true); 
+    hidden_Layer Second_hidden("linear", 2);
+    hidden_Layer Third_hidden("linear", 3);
+    hidden_Layer Output_Layer("linear", 4, true);
 
-    //!Backpropagation algorithm; 
-    Second_hidden.BackPropagation();
+    //! Backpropagation algorithm;
+    Output_Layer.BackPropagation();
 
-    //Counter stopped; 
+    // Counter stopped;
     auto end = chrono::high_resolution_clock::now();
-    chrono::duration<double> elapsed_time = end - start; 
-    cout << "Elapsed time: " << elapsed_time.count() << " seconds.\n" << endl;  
+    chrono::duration<double> elapsed_time = end - start;
+    cout << "Elapsed time: " << elapsed_time.count() << " seconds.\n"
+         << endl;
 
     return 0;
 }

@@ -13,6 +13,9 @@ def StringPainter(color, string):  # Transforms a string in a colored one;
     return painted_string
 
 
+guide = "Guide to the algorithm..."
+
+
 def main():
     questions_list = ""
 
@@ -42,7 +45,7 @@ def main():
     else:  # Passed parameter;
         parametro = int(sys.argv[1])
         if parametro == 0:
-            print("\nGuide \n")
+            print(f"\n{guide}\n")
         elif parametro <= len(questions):
             print("\n" + answers[parametro - 1] + "\n")
         else:

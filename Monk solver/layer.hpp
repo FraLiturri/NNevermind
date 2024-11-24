@@ -10,7 +10,6 @@
 #include <random>
 
 #include "activation_functions.hpp"
-
 #include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
 
 using namespace std;
@@ -19,9 +18,11 @@ using namespace Eigen;
 // Defining networks variables;
 const int in_units = 2;      // Number of units in input layer; //?For some reasons in. units has to be greater than 1...fix it (it's not that important)
 const int out_units = 1;     // Number of units in the output layer;
-const int hidden_layers = 4; // Number of hidden layers + output;
+const int hidden_layers = 3; // Number of hidden layers;
 
-Vector<int, hidden_layers> hidden_units(1, 2, 3, 4); // Each component represents the numbers of unit in each HIDDEN layer;
+Vector<int, hidden_layers + 1> hidden_and_out_units(1, 2, 3, out_units); // Number of units in each hidden and output layer (last one);
+
+const int training_iterations = 1000; //Number of iterations;
 
 // Creating weights matrices and output vec;
 vector<MatrixXd> weights;
@@ -33,18 +34,18 @@ void weights_creator() // Creates weights matrices;
     int rows;
     int columns;
 
-    for (int i = 0; i <= hidden_layers; i++) //! Bias terms still not inserted...(first column of each matrix has to be == 1?);
+    for (int i = 0; i <= hidden_layers + 1; i++)
     {
         unsigned seed = std::chrono::system_clock::now().time_since_epoch().count(); // Defining seed for different random numbers;
         srand(seed);
 
-        i == 0 ? columns = in_units : columns = hidden_units[i - 1];    // Paying attention to first layer (input);
-        i == hidden_layers ? rows = out_units : rows = hidden_units[i]; // Paying attention to last layer (output);
+        i == 0 ? columns = in_units : columns = hidden_and_out_units[i - 1];        // Paying attention to first layer (input);
+        i == hidden_layers + 1 ? rows = out_units : rows = hidden_and_out_units[i]; // Paying attention to last layer (output);
 
         MatrixXd weight = MatrixXd::NullaryExpr(rows, columns, []()
                                                 { return Eigen::internal::random<double>(0, 0.5); });
-        weight.col(0).setConstant(1);
-        weights.push_back(weight); // Storing weights;
+        weight.col(0).setConstant(1); //! Bias terms (Check);
+        weights.push_back(weight);    // Storing weights;
         cout << i << " Weights matrix: " << weight << endl;
     }
 }
