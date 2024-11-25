@@ -20,7 +20,7 @@ const int in_units = 2;      // Number of units in input layer; //?For some reas
 const int out_units = 1;     // Number of units in the output layer;
 const int hidden_layers = 3; // Number of hidden layers;
 
-Vector<int, hidden_layers + 1> hidden_and_out_units(1, 2, 3, out_units); // Number of units in each hidden and output layer (last one);
+Vector<int, hidden_layers + 1> hidden_and_out_units(1, 1, 1, out_units); // Number of units in each hidden and output layer (last one);
 const int training_iterations = 1000; //Number of iterations;
 
 // Creating weights matrices and output vec;

@@ -24,10 +24,10 @@ int main()
     print_info(); //Printing NN general info; 
 
     //! Neural network construction;
-    input_Layer Input_Layer({0.23, 3.45});
+    input_Layer Input_Layer({0.23, 0.45});
     hidden_Layer First_hidden("linear", 1);
-    hidden_Layer Second_hidden("linear", 2);
-    hidden_Layer Third_hidden("linear", 3);
+    hidden_Layer Second_hidden("threshold", 2);
+    hidden_Layer Third_hidden("sigmoid", 3);
     hidden_Layer Output_Layer("linear", 4, true);
 
     //! Backpropagation algorithm;
