@@ -14,26 +14,31 @@ using namespace std;
 
 int main()
 {
-    // Counter started;
+    // Counter starts;
     auto start = chrono::high_resolution_clock::now();
 
     //! Initialization part: do not delete (config. settings are in layer.hpp);
-    weights_creator(); // Builds the vector containing all the weights (in form of matrices)
+    Vector<double, 2> data = {1, 2}; // Creating data vector;
+    vector<int> HiddenUnits = {1, 1, 1};
+
+    //! Demiurge blows;
+    Demiurge NN(2, HiddenUnits, 1);
+    Demiurge *pointerNN = &NN;
 
     //! Printing config. info:
-    print_info(); //Printing NN general info; 
+    print_info(pointerNN); // Printing NN general info;
 
     //! Neural network construction;
-    input_Layer Input_Layer({0.23, 0.45});
-    hidden_Layer First_hidden("linear", 1);
-    hidden_Layer Second_hidden("threshold", 2);
-    hidden_Layer Third_hidden("sigmoid", 3);
-    hidden_Layer Output_Layer("linear", 4, true);
+    Input_Layer Input_Layer(data);
+    Hidden_Layer First_hidden("linear", 1);
+    Hidden_Layer Second_hidden("threshold", 2);
+    Hidden_Layer Third_hidden("sigmoid", 3);
+    Hidden_Layer Output_Layer("linear", 4, true);
 
     //! Backpropagation algorithm;
     Output_Layer.BackPropagation();
 
-    // Counter stopped;
+    // Counter stops and prints elapsed time;
     auto end = chrono::high_resolution_clock::now();
     chrono::duration<double> elapsed_time = end - start;
     cout << "Elapsed time: " << elapsed_time.count() << " seconds.\n"

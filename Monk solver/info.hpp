@@ -1,12 +1,22 @@
 #include <iostream>
 #include "layer.hpp"
 
+Demiurge *pointer;
+
 // Setting info to print in main.cpp;
-void print_info()
+void print_info(Demiurge *myNN)
 {
-    cout << "\nIn. units: " << in_units << endl;
-    cout << "Hidden. layers: " << hidden_layers << endl;
-    cout << "Hidden units: " << hidden_and_out_units.head(hidden_and_out_units.size() - 1).transpose() << endl;
-    cout << "Out. units: " << out_units << endl;
+    pointer = myNN;
+
+    cout << "\nIn. units: " << pointer->in_units << endl;
+    cout << "Hidden. layers: " << pointer->hidden_layers << endl;
+    cout << "Hidden units: ";
+
+    for (int k = 0; k < pointer->hidden_layers; k++)
+    {
+        cout << pointer->hidden_and_out_units[k] << " ";
+    }
+
+    cout << "\nOut. units: " << pointer->out_units << endl;
     cout << "\n";
 }
