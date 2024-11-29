@@ -21,15 +21,15 @@ int main()
 
     //! Demiurge blows;
     Demiurge NeuralNetwork(3, {1}, 1);    // input units - hidden_units vector - output units;
-    Demiurge *pointerNN = &NeuralNetwork; // pointer to NeuralNetwork; 
+    Demiurge *pointerNN = &NeuralNetwork; // pointer to NeuralNetwork;
 
     //! Printing NN general info:
     print_info(pointerNN);
 
     //! Neural network construction;
     Input_Layer Input_Layer(data);
-    Hidden_Layer First_hidden("linear", 1);
-    Hidden_Layer Output_Layer("linear", 2, true);
+    Hidden_Layer First_hidden("linear", 1, pointerNN);
+    Hidden_Layer Output_Layer("linear", 2, pointerNN, true);
 
     //! Backpropagation algorithm;
     Output_Layer.BackPropagation();

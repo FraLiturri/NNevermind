@@ -21,9 +21,11 @@ using namespace Eigen;
 class Hidden_Layer
 {
 public:
-    Hidden_Layer(string choosen_function, int depth, bool isOutputLayer = false)
+    int hidden_layers;
+    Hidden_Layer(string choosen_function, int depth, Demiurge *pointer, bool isOutputLayer = false)
     {
         func_choiser(choosen_function);
+        hidden_layers = pointer->hidden_layers;
         isLast = isOutputLayer;
         VectorXd inputs = outputs[depth - 1]; //! Has to be checked;
 
@@ -34,8 +36,9 @@ public:
 
         single_output = weights[depth] * inputs;                // Calculating outputs vector;
         outputs.insert(outputs.begin() + depth, single_output); // Storing outputs;
-        if(isLast){
-            cout << "Final output: " << outputs[depth] << endl; 
+        if (isLast)
+        {
+            cout << "Final output: " << outputs[depth] << endl;
         }
     }
 
@@ -50,9 +53,9 @@ public:
     {
         if (isLast)
         {
-            for (int i = 2 + 1; i >= 0; i--)
+            for (int i = hidden_layers + 1; i >= 0; i--)
             {
-                // Insert BP here, making i flowing from end to start in weights vector;
+                cout << "Testing";
             }
         }
     }
