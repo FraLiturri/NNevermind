@@ -11,6 +11,7 @@
 
 #include "activation_functions.hpp"
 #include "demiurge.hpp"
+
 #include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
 
 using namespace std;
@@ -33,6 +34,9 @@ public:
 
         single_output = weights[depth] * inputs;                // Calculating outputs vector;
         outputs.insert(outputs.begin() + depth, single_output); // Storing outputs;
+        if(isLast){
+            cout << "Final output: " << outputs[depth] << endl; 
+        }
     }
 
     void RandomTraining() // Random training;

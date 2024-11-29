@@ -25,6 +25,7 @@ class Demiurge
 {
 public:
     int in_units, out_units, hidden_layers;
+    int rows, cols;
     vector<int> hidden_and_out_units;
 
     Demiurge(int inputs_units, vector<int> hidden_units, int output_units)
@@ -35,9 +36,7 @@ public:
         hidden_layers = hidden_units.size();
         hidden_and_out_units.push_back(output_units);
 
-        //! Weights creator;
-        int rows, cols;
-        for (int i = 0; i <= hidden_layers + 1; i++)
+        for (int i = 0; i <= hidden_layers + 1; i++) //This cycle creates weights matrices; 
         {
             unsigned seed = std::chrono::system_clock::now().time_since_epoch().count(); // Defining seed for different random numbers;
             srand(seed);
@@ -49,7 +48,7 @@ public:
                                                     { return Eigen::internal::random<double>(0, 0.5); });
             weight.col(0).setConstant(1); //! Bias terms (Check);
             weights.push_back(weight);    // Storing weights;
-            cout << weight << endl;
+            cout << "Peso " << i  << ": " <<  weight << "\n \n";
         }
     };
 };

@@ -19,10 +19,9 @@ int main()
 
     //! Initialization part: do not delete (config. settings are in layer.hpp);
     Vector<double, 2> data = {1, 2}; // Creating data vector;
-    vector<int> HiddenUnits = {1, 1, 1};
 
     //! Demiurge blows;
-    Demiurge NN(2, HiddenUnits, 1);
+    Demiurge NN(2, {1}, 1);
     Demiurge *pointerNN = &NN;
 
     //! Printing config. info:
@@ -31,9 +30,7 @@ int main()
     //! Neural network construction;
     Input_Layer Input_Layer(data);
     Hidden_Layer First_hidden("linear", 1);
-    Hidden_Layer Second_hidden("threshold", 2);
-    Hidden_Layer Third_hidden("sigmoid", 3);
-    Hidden_Layer Output_Layer("linear", 4, true);
+    Hidden_Layer Output_Layer("linear", 2, true);
 
     //! Backpropagation algorithm;
     Output_Layer.BackPropagation();
