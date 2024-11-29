@@ -1,7 +1,6 @@
 #include "layer.hpp"
 #include "activation_functions.hpp"
 #include "info.hpp"
-
 #include <iostream>
 #include <string>
 #include <random>
@@ -17,15 +16,15 @@ int main()
     // Counter starts;
     auto start = chrono::high_resolution_clock::now();
 
-    //! Initialization part: do not delete (config. settings are in layer.hpp);
-    Vector<double, 2> data = {1, 2}; // Creating data vector;
+    //! Data vector (inputs to Input_Layer);
+    Vector<double, 3> data = {0.45, 0.34, -0.3}; // Creating data vector;
 
     //! Demiurge blows;
-    Demiurge NN(2, {1}, 1);
-    Demiurge *pointerNN = &NN;
+    Demiurge NeuralNetwork(3, {1}, 1);    // input units - hidden_units vector - output units;
+    Demiurge *pointerNN = &NeuralNetwork; // pointer to NeuralNetwork; 
 
-    //! Printing config. info:
-    print_info(pointerNN); // Printing NN general info;
+    //! Printing NN general info:
+    print_info(pointerNN);
 
     //! Neural network construction;
     Input_Layer Input_Layer(data);

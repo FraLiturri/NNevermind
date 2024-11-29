@@ -36,7 +36,7 @@ public:
         hidden_layers = hidden_units.size();
         hidden_and_out_units.push_back(output_units);
 
-        for (int i = 0; i <= hidden_layers + 1; i++) //This cycle creates weights matrices; 
+        for (int i = 0; i <= hidden_layers + 1; i++) // This cycle creates weights matrices;
         {
             unsigned seed = std::chrono::system_clock::now().time_since_epoch().count(); // Defining seed for different random numbers;
             srand(seed);
@@ -48,7 +48,6 @@ public:
                                                     { return Eigen::internal::random<double>(0, 0.5); });
             weight.col(0).setConstant(1); //! Bias terms (Check);
             weights.push_back(weight);    // Storing weights;
-            cout << "Peso " << i  << ": " <<  weight << "\n \n";
         }
     };
 };
