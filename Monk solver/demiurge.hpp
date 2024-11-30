@@ -15,10 +15,9 @@
 using namespace std;
 using namespace Eigen;
 
-// Creating weights matrices and output vec;
-vector<MatrixXd> weights;
-vector<VectorXd> outputs;
-VectorXd single_output;
+vector<MatrixXd> weights; // i-th component is the weights matrix of i-th and i+1-th layer;
+vector<VectorXd> outputs; // i-th component is the output (with weights) of i-the layer;
+VectorXd units_output;   // auxiliary vector;
 
 //! Demiurge class: the Creator;
 class Demiurge

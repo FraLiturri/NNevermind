@@ -28,11 +28,11 @@ int main()
 
     //! Neural network construction;
     Input_Layer Input_Layer(data);
-    Hidden_Layer First_hidden("linear", 1, pointerNN);
-    Hidden_Layer Output_Layer("linear", 2, pointerNN, true);
+    Hidden_Layer First_hidden("linear", 1);
+    Hidden_Layer Output_Layer("linear", 2, true);
 
     //! Backpropagation algorithm;
-    Output_Layer.BackPropagation();
+    Output_Layer.RandomTraining(); 
 
     // Counter stops and prints elapsed time;
     auto end = chrono::high_resolution_clock::now();
