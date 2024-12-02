@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <string>
 #include <algorithm>
 #include <chrono>
 #include <random>
@@ -17,35 +18,7 @@
 using namespace std;
 using namespace Eigen;
 
-//! Creating Layer classes;
-class Hidden_Layer
-{
-public:
-    Hidden_Layer(string choosen_function, int depth, bool isOutputLayer = false)
-    {
-        func_choiser(choosen_function);
-        isLast = isOutputLayer;
-        VectorXd inputs = outputs[depth - 1]; //! Has to be checked;
-
-        for (int k = 0; k < inputs.size(); k++)
-        {
-            inputs[k] = act_func(inputs[k]); // Making act_function act on input to each unit;
-        }
-
-        units_output = weights[depth] * inputs;                // Calculating outputs vector;
-        outputs.insert(outputs.begin() + depth, units_output); // Storing outputs;
-        if (isLast)
-        {
-            cout << "Final output: " << outputs[depth] << endl;
-        }
-    }
-
-    void RandomTraining();  // Random training;
-    void BackPropagation(); // BackProp. algorithm;
-
-private:
-    bool isLast; // Defined to access isOutputlayer's value;
-};
+vector<std::string> function_strings;
 
 //! Input layer class;
 class Input_Layer
@@ -54,15 +27,41 @@ public:
     Input_Layer(VectorXd input)
     {
         units_output = weights[0] * input;
-        outputs.insert(outputs.begin(), units_output);
+        outputs.insert(outputs.begin(), input);
+        next_inputs.insert(next_inputs.begin(), units_output);
     };
 };
 
-void Hidden_Layer::RandomTraining()
+//! Creating Layer classes;
+class Hidden_Layer
 {
-    if (isLast)
+public:
+    Hidden_Layer(string choosen_function, int depth, bool isOutputLayer = false)
     {
+        func_choiser(choosen_function);
+        function_strings.push_back(choosen_function);
+
+        isLast = isOutputLayer;
+        VectorXd inputs = next_inputs[depth - 1]; //! Has to be checked;
+
+        for (int k = 0; k < inputs.size(); k++)
+        {
+            inputs[k] = act_func(inputs[k]); // Making act_function act on input for each unit;
+        }
+        outputs.insert(outputs.begin() + depth, inputs);
+
+        if (!isLast)
+        {
+            units_output = weights[depth] * inputs;                        // Calculating outputs vector;
+            next_inputs.insert(next_inputs.begin() + depth, units_output); // Storing outputs;
+        }
     }
+
+    void RandomTraining(VectorXd d);  // Random training;
+    void BackPropagation(VectorXd d); // BackProp. algorithm;
+
+private:
+    bool isLast; // Defined to access isOutputlayer's value;
 };
 
 #endif

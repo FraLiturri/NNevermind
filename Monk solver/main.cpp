@@ -1,6 +1,8 @@
 #include "layer.hpp"
 #include "activation_functions.hpp"
 #include "info.hpp"
+#include "training.hpp"
+
 #include <iostream>
 #include <string>
 #include <random>
@@ -17,22 +19,29 @@ int main()
     auto start = chrono::high_resolution_clock::now();
 
     //! Data vector (inputs to Input_Layer);
-    Vector<double, 3> data = {0.45, 0.34, -0.3}; // Creating data vector;
+    Vector<double, 2> data = {0.45, 0.45}; // Creating data vector;
+    Vector<double, 1> results;
+    results << 1;
 
     //! Demiurge blows;
-    Demiurge NeuralNetwork(3, {1}, 1);    // input units - hidden_units vector - output units;
+    Demiurge NeuralNetwork(2, {1, 2}, 1); // input units - hidden_units vector - output units;
     Demiurge *pointerNN = &NeuralNetwork; // pointer to NeuralNetwork;
 
     //! Printing NN general info:
     print_info(pointerNN);
 
-    //! Neural network construction;
-    Input_Layer Input_Layer(data);
-    Hidden_Layer First_hidden("linear", 1);
-    Hidden_Layer Output_Layer("linear", 2, true);
+    for (int i = 0; i < 10000; i++)
+    {
+        //! Neural network construction;
+        Input_Layer Input_Layer(data);
+        Hidden_Layer First_hidden("sigmoid", 1);
+        Hidden_Layer second_hidden("sigmoid", 2);
+        Hidden_Layer Output_Layer("sigmoid", 3, true);
 
-    //! Backpropagation algorithm;
-    Output_Layer.RandomTraining(); 
+        //! Backpropagation algorithm;
+        Output_Layer.RandomTraining(results);
+        cout << "Final out: " << outputs[3].transpose() << endl;
+    }
 
     // Counter stops and prints elapsed time;
     auto end = chrono::high_resolution_clock::now();
