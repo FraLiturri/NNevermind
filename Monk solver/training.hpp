@@ -23,7 +23,7 @@ VectorXd net_calculator(int layer_number)
 
 void Hidden_Layer::BackPropagation(VectorXd d)
 {
-    double eta = 0.05;
+    double eta = 0.5;
     VectorXd net_t;
     delta.setZero();
 
@@ -52,7 +52,7 @@ void Hidden_Layer::BackPropagation(VectorXd d)
 
 void Hidden_Layer::RandomTraining(VectorXd d)
 {
-    double eta = 0.05;
+    double eta = 0.5;
     int i = weights.size();
     delta.setZero();
 
