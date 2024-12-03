@@ -5,107 +5,63 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <string>
 #include <algorithm>
 #include <chrono>
 #include <random>
 
 #include "activation_functions.hpp"
+#include "demiurge.hpp"
 
 #include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
 
 using namespace std;
 using namespace Eigen;
 
-// Defining networks variables;
-const int in_units = 2;      // Number of units in input layer; //?For some reasons in. units has to be greater than 1...fix it (it's not that important)
-const int out_units = 1;     // Number of units in the output layer;
-const int hidden_layers = 4; // Number of hidden layers + output;
+vector<std::string> function_strings;
 
-Vector<int, hidden_layers> hidden_units(50, 55, 50, 1); // Each component represents the numbers of unit in each HIDDEN layer;
-
-// Creating weights matrices and output vec;
-vector<MatrixXd> weights;
-vector<VectorXd> outputs;
-VectorXd single_output;
-
-void weights_creator() // Creates weights matrices;
-{
-    int rows;
-    int columns;
-
-    for (int i = 0; i <= hidden_layers; i++)
-    {
-        unsigned seed = std::chrono::system_clock::now().time_since_epoch().count(); // Defining seed for different random numbers;
-        srand(seed);
-
-        i == 0 ? columns = in_units : columns = hidden_units[i - 1];    // Paying attention to first layer (input);
-        i == hidden_layers ? rows = out_units : rows = hidden_units[i]; // Paying attention to last layer (output);
-
-        MatrixXd weight = MatrixXd::NullaryExpr(rows, columns, []()
-                                                { return Eigen::internal::random<double>(0, 0.5); });
-        weights.push_back(weight); // Storing weights;
-        cout << i << " Weights matrix: " << weight << endl;
-    }
-}
-
-//! Creating Layer classes;
-class hidden_Layer
+//! Input layer class;
+class Input_Layer
 {
 public:
-    hidden_Layer(string choosen_function, int depth, bool isOutputLayer = false)
+    Input_Layer(VectorXd input)
+    {
+        units_output = weights[0] * input;
+        outputs.insert(outputs.begin(), input);
+        next_inputs.insert(next_inputs.begin(), units_output);
+    };
+};
+
+//! Creating Layer classes;
+class Hidden_Layer
+{
+public:
+    Hidden_Layer(string choosen_function, int depth, bool isOutputLayer = false)
     {
         func_choiser(choosen_function);
+        function_strings.push_back(choosen_function);
+
         isLast = isOutputLayer;
-        VectorXd inputs = outputs[depth - 1]; //! Has to be checked;
+        VectorXd inputs = next_inputs[depth - 1]; //! Has to be checked;
+
         for (int k = 0; k < inputs.size(); k++)
         {
-            inputs[k] = act_func(inputs[k]); // Making act_function act on input to each unit;
+            inputs[k] = act_func(inputs[k]); // Making act_function act on input for each unit;
         }
-        single_output = weights[depth] * inputs;                // Calculating outputs vector;
-        outputs.insert(outputs.begin() + depth, single_output); // Storing outputs;
+        outputs.insert(outputs.begin() + depth, inputs);
 
-        // Test: can be deleted after debugging session;
-        cout << depth << " hidden layer's output: "
-             << single_output.transpose() << endl;
-    }
-
-    void RandomTraining() // Random training;
-    {
-        if (isLast)
+        if (!isLast)
         {
+            units_output = weights[depth] * inputs;                        // Calculating outputs vector;
+            next_inputs.insert(next_inputs.begin() + depth, units_output); // Storing outputs;
         }
     }
 
-    void BackPropagation() // BackProp. algorithm;
-    {
-        if (isLast)
-        {
-            cout << "\n";
-            for (int i = hidden_layers + 1; i >= 0; i--)
-            {
-                // Insert BP here, making i flowing from end to start in weights vector;
-            }
-        }
-    }
+    void RandomTraining(VectorXd d);  // Random training;
+    void BackPropagation(VectorXd d); // BackProp. algorithm;
 
 private:
     bool isLast; // Defined to access isOutputlayer's value;
-};
-
-//! Input layer class;
-class input_Layer
-{
-public:
-    input_Layer(Vector<double, in_units> input)
-    {
-        single_output = weights[0] * input;
-        outputs.insert(outputs.begin(), single_output);
-
-        // Test: can be deleted after debugging;
-        cout << "Input layer's output: "
-             << single_output.transpose()
-             << endl;
-    };
 };
 
 #endif

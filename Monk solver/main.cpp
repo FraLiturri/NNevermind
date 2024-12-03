@@ -1,6 +1,7 @@
 #include "layer.hpp"
 #include "activation_functions.hpp"
 #include "info.hpp"
+#include "training.hpp"
 
 #include <iostream>
 #include <string>
@@ -14,27 +15,40 @@ using namespace std;
 
 int main()
 {
-    //Counter started; 
+    // Counter starts;
     auto start = chrono::high_resolution_clock::now();
 
-    //! Initialization part: do not delete (config. settings are in layer.hpp);
-    weights_creator(); // Builds the vector containing all the weights (in form of matrices)
+    //! Data vector (inputs to Input_Layer);
+    Vector<double, 3> data = {3.56, 4.89, 3}; // Creating data vector;
+    Vector<double, 2> results = {-3.34, 2.23};
 
-    //! Printing config. info:
-    print_info();
+    //! Demiurge blows;
+    Demiurge NeuralNetwork(3, {5, 2, 3}, 2); // input units - hidden_units vector - output units;
+    Demiurge *pointerNN = &NeuralNetwork;    // pointer to NeuralNetwork;
 
-    //! Neural network construction;
-    input_Layer Input_Layer({1,2});
-    hidden_Layer First_hidden("linear", 1);
-    hidden_Layer Second_hidden("linear", 2, true); 
+    //! Printing NN general info:
+    print_info(pointerNN);
 
-    //!Backpropagation algorithm; 
-    Second_hidden.BackPropagation();
+    for (int i = 0; i < 100; i++)
+    {
+        //! Neural network construction;
+        Input_Layer input_layer(data);
+        Hidden_Layer first_hidden("sigmoid", 1);
+        Hidden_Layer second_hidden("sigmoid", 2);
+        Hidden_Layer third_hidden("threshold", 3);
+        Hidden_Layer output_layer("linear", 4, true);
 
-    //Counter stopped; 
+        //! Training algorithm;
+        //output_layer.RandomTraining(results);
+        output_layer.BackPropagation(results);
+        cout << "Final output: " << outputs[weights.size()].transpose() << endl; 
+    }
+
+    // Counter stops and prints elapsed time;
     auto end = chrono::high_resolution_clock::now();
-    chrono::duration<double> elapsed_time = end - start; 
-    cout << "Elapsed time: " << elapsed_time.count() << " seconds.\n" << endl;  
+    chrono::duration<double> elapsed_time = end - start;
+    cout << "Elapsed time: " << elapsed_time.count() << " seconds.\n"
+         << endl;
 
     return 0;
 }

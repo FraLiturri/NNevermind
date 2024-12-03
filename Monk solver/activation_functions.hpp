@@ -9,10 +9,10 @@ using namespace std;
 // Defining activation functions and their derivatives (needed for Backpropagation);
 double sigmoid(double x)
 {
-    return 1/(double)(1+exp(x));
+    return 1/(double)(1+exp(-x)); //Is a needed? (e^-ax);  
 }
 double sigmoid_der(double x){
-    return 1; 
+    return sigmoid(x)*(1-sigmoid(x)); 
 }
 
 double linear(double x)
@@ -33,7 +33,7 @@ double threshold_der(double x){
     return 0; 
 }
 
-// Defining pointer to activation function(s);
+// Defining pointer to activation function(s) and derivative(s);
 double (*act_func)(double); // pointer to f;
 double (*der_act_func)(double); //pointer to f'; 
 
