@@ -24,7 +24,7 @@ vector<std::string> function_strings;
 class Input_Layer
 {
 public:
-    Input_Layer(VectorXd input)
+    void forward_pass(VectorXd input)
     {
         units_output = weights[0] * input;
         outputs.insert(outputs.begin(), input);
@@ -36,7 +36,7 @@ public:
 class Hidden_Layer
 {
 public:
-    Hidden_Layer(string choosen_function, int depth, bool isOutputLayer = false)
+    void forward_pass(string choosen_function, int depth, bool isOutputLayer = false)
     {
         func_choiser(choosen_function);
         function_strings.push_back(choosen_function);

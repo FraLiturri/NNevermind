@@ -29,20 +29,27 @@ int main()
     //! Printing NN general info:
     print_info(pointerNN);
 
-    for (int i = 0; i < 100; i++)
-    {
-        //! Neural network construction;
-        Input_Layer input_layer(data);
-        Hidden_Layer first_hidden("sigmoid", 1);
-        Hidden_Layer second_hidden("sigmoid", 2);
-        Hidden_Layer third_hidden("threshold", 3);
-        Hidden_Layer output_layer("linear", 4, true);
+    //! Neural network construction;
+    Input_Layer input_layer;
+    Hidden_Layer first_hidden;
+    Hidden_Layer second_hidden;
+    Hidden_Layer third_hidden;
+    Hidden_Layer output_layer;
 
-        //! Training algorithm;
-        //output_layer.RandomTraining(results);
-        output_layer.BackPropagation(results);
-        cout << "Final output: " << outputs[weights.size()].transpose() << endl; 
+    //! Training algorithm;
+    for (int k = 0; k < 30; k++)
+    {
+        input_layer.forward_pass(data);
+        first_hidden.forward_pass("sigmoid", 1);
+        second_hidden.forward_pass("sigmoid", 2);
+        third_hidden.forward_pass("sigmoid", 3);
+        output_layer.forward_pass("linear", 4, true);
+
+        output_layer.RandomTraining(results); 
+        // output_layer.BackPropagation(results);
     }
+
+    cout << "Final output: " << outputs[weights.size()].transpose() << endl;
 
     // Counter stops and prints elapsed time;
     auto end = chrono::high_resolution_clock::now();
