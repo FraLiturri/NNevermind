@@ -19,6 +19,7 @@ vector<MatrixXd> weights; // i-th component is the weights matrix of i-th and i+
 vector<VectorXd> outputs; // i-th component is the output (with weights) of i-the layer;
 VectorXd units_output;    // auxiliary vector;
 vector<VectorXd> next_inputs;
+int dio_porco = 0;
 
 //! Demiurge class: the Creator;
 class Demiurge
@@ -35,6 +36,7 @@ public:
         hidden_and_out_units = hidden_units;
         hidden_and_out_units.push_back(output_units); // Adds output's units to vector;
         hidden_layers = hidden_units.size();
+        dio_porco = hidden_layers + 2; 
 
         for (int i = 0; i < hidden_layers + 2; i++) // This cycle creates weights matrices;
         {

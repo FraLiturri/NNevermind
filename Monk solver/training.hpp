@@ -27,6 +27,7 @@ void Hidden_Layer::BackPropagation(VectorXd d)
     MatrixXd update, auxiliar;
 
     double eta = 0.05;
+    double delta_k = 0; // auxiliar double;
 
     int i = weights.size(); // Runs over wieghts matrices;
     while (i > 2)
@@ -40,7 +41,7 @@ void Hidden_Layer::BackPropagation(VectorXd d)
             for (int k = 0; k < d.size(); k++)
             {
                 delta.conservativeResize(k + 1);
-                double delta_k = (d[k] - outputs[i][k]) * der_act_func(net_t[k]);
+                delta_k = (d[k] - outputs[i][k]) * der_act_func(net_t[k]);
                 delta[k] = delta_k;
             }
 
@@ -53,31 +54,39 @@ void Hidden_Layer::BackPropagation(VectorXd d)
         else
         {
             delta.setZero();
-            auxiliar = weights[i - 1];
-            auxiliar.resize(weights[i - 1].cols(), weights[i - 1].cols()); // Otherwise Eigen cries;
+            func_choiser(function_strings[i - 1]);
 
+            auxiliar = weights[i - 1];
+            auxiliar.resize(weights[i - 1].rows(), weights[i - 1].cols()); // Otherwise Eigen cries;
             net_t = net_calculator(i);
-            func_choiser(function_strings[i-1]); 
-            delta = weights[i - 1] * storer[weights.size() - i - 1];
+
+            delta = weights[i - 1] * storer[weights.size() - (i + 1)];
 
             for (int k = 0; k < delta.size(); k++)
             {
                 delta[k] = delta[k] * der_act_func(net_t[k]);
             }
-
-            update = delta * outputs[i - 1].transpose();
-            weights[i - 1] = weights[i - 1] + eta * update;
-            weights[i - 1].col(0).setConstant(1);
+            cout << delta << endl;
+            // update = delta * outputs[i - 1].transpose();
+            // cout << update << endl;
+            // weights[i - 1] = weights[i - 1] + eta * update;
+            // weights[i - 1].col(0).setConstant(1);
 
             storer.push_back(delta);
         }
         i--;
+
+        if (i == 3)
+        {
+            function_strings.clear();
+        }
     };
 }
 
 void Hidden_Layer::RandomTraining(VectorXd d)
 {
-    double eta = 0.5;
+    double eta = 0.005;
+    double delta_k = 0; // auxiliar double;
     MatrixXd update;
     int i = weights.size();
     delta.setZero();
@@ -88,13 +97,17 @@ void Hidden_Layer::RandomTraining(VectorXd d)
     for (int k = 0; k < d.size(); k++)
     {
         delta.conservativeResize(k + 1);
-        double delta_k = (d[k] - outputs[i][k]) * der_act_func(net_t[k]);
+        delta_k = (d[k] - outputs[i][k]) * der_act_func(net_t[k]);
         delta[k] = delta_k;
     }
 
     update = delta * outputs[i - 1].transpose();
     weights[i - 1] = weights[i - 1] + eta * update;
     weights[i - 1].col(0).setConstant(1);
+
+    function_strings.clear();
+    outputs.clear();
+    next_inputs.clear(); 
 }
 
 #endif

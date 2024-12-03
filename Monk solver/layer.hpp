@@ -48,7 +48,9 @@ public:
         {
             inputs[k] = act_func(inputs[k]); // Making act_function act on input for each unit;
         }
+
         outputs.insert(outputs.begin() + depth, inputs);
+        //cout << outputs.size() << endl;
 
         if (!isLast)
         {
