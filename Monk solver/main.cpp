@@ -20,29 +20,35 @@ int main()
 
     //! Data vector (inputs to Input_Layer);
     Vector<double, 3> data = {3.56, 4.89, 3}; // Creating data vector;
-    Vector<double, 2> results = {-3.34, 2.23};
+    Vector<double, 2> results = {-289.3456, 212.23};
 
     //! Demiurge blows;
-    Demiurge NeuralNetwork(3, {5, 2, 3}, 2); // input units - hidden_units vector - output units;
-    Demiurge *pointerNN = &NeuralNetwork;    // pointer to NeuralNetwork;
+    Demiurge NeuralNetwork(3, {200, 400, 30}, 2); // input units - hidden_units vector - output units;
+    Demiurge *pointerNN = &NeuralNetwork;          // pointer to NeuralNetwork;
 
     //! Printing NN general info:
     print_info(pointerNN);
 
-    for (int i = 0; i < 100; i++)
-    {
-        //! Neural network construction;
-        Input_Layer input_layer(data);
-        Hidden_Layer first_hidden("sigmoid", 1);
-        Hidden_Layer second_hidden("sigmoid", 2);
-        Hidden_Layer third_hidden("threshold", 3);
-        Hidden_Layer output_layer("linear", 4, true);
+    //! Neural network construction;
+    Input_Layer input_layer;
+    Hidden_Layer first_hidden;
+    Hidden_Layer second_hidden;
+    Hidden_Layer third_hidden;
+    Hidden_Layer output_layer;
 
-        //! Training algorithm;
-        //output_layer.RandomTraining(results);
-        output_layer.BackPropagation(results);
-        cout << "Final output: " << outputs[weights.size()].transpose() << endl; 
+    //! Output computing and training algorithm;
+    for (int n = 0; n < 200; n++)
+    {
+        input_layer.forward_pass(data);
+        first_hidden.forward_pass("linear", 1);
+        second_hidden.forward_pass("sigmoid", 2);
+        third_hidden.forward_pass("sigmoid", 3);
+        output_layer.forward_pass("linear", 4, true);
+
+        output_layer.RandomTraining(results);
     }
+
+    cout << "Final output: " << outputs[weights.size()].transpose() << endl;
 
     // Counter stops and prints elapsed time;
     auto end = chrono::high_resolution_clock::now();
