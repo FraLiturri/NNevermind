@@ -20,11 +20,11 @@ int main()
 
     //! Data vector (inputs to Input_Layer);
     Vector<double, 3> data = {3.56, 4.89, 3}; // Creating data vector;
-    Vector<double, 2> results = {-3.34, 2.23};
+    Vector<double, 2> results = {-289.3456, 212.23};
 
     //! Demiurge blows;
-    Demiurge NeuralNetwork(3, {1, 1, 50}, 2); // input units - hidden_units vector - output units;
-    Demiurge *pointerNN = &NeuralNetwork;     // pointer to NeuralNetwork;
+    Demiurge NeuralNetwork(3, {200, 400, 30}, 2); // input units - hidden_units vector - output units;
+    Demiurge *pointerNN = &NeuralNetwork;          // pointer to NeuralNetwork;
 
     //! Printing NN general info:
     print_info(pointerNN);
@@ -37,7 +37,7 @@ int main()
     Hidden_Layer output_layer;
 
     //! Output computing and training algorithm;
-    for (int n = 0; n < 2000; n++)
+    for (int n = 0; n < 200; n++)
     {
         input_layer.forward_pass(data);
         first_hidden.forward_pass("linear", 1);
@@ -45,8 +45,6 @@ int main()
         third_hidden.forward_pass("sigmoid", 3);
         output_layer.forward_pass("linear", 4, true);
 
-        // output_layer.RandomTraining(results);
-        // output_layer.BackPropagation(results);
         output_layer.RandomTraining(results);
     }
 

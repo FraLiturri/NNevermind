@@ -50,7 +50,6 @@ public:
         }
 
         outputs.insert(outputs.begin() + depth, inputs);
-        //cout << outputs.size() << endl;
 
         if (!isLast)
         {

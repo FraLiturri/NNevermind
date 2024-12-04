@@ -73,11 +73,14 @@ void Hidden_Layer::BackPropagation(VectorXd d)
             // weights[i - 1].col(0).setConstant(1);
 
             storer.push_back(delta);
+            //Remember to clean storer; 
         }
         i--;
 
-        if (i == 3)
+        if (i == 3) //Has to be improved; 
         {
+            outputs.clear();
+            next_inputs.clear();
             function_strings.clear();
         }
     };
@@ -107,7 +110,7 @@ void Hidden_Layer::RandomTraining(VectorXd d)
 
     function_strings.clear();
     outputs.clear();
-    next_inputs.clear(); 
+    next_inputs.clear();
 }
 
 #endif
