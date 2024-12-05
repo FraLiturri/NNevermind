@@ -78,7 +78,7 @@ void Hidden_Layer::BackPropagation(VectorXd d)
             outputs.clear();
             next_inputs.clear();
             function_strings.clear();
-            storer.clear(); 
+            storer.clear();
         }
 
         i--;
