@@ -26,11 +26,11 @@ void Hidden_Layer::BackPropagation(VectorXd d)
     VectorXd net_t;
     MatrixXd update, auxiliar;
 
-    double eta = 0.05;
+    double eta = 0.002;
     double delta_k = 0; // auxiliar double;
 
     int i = weights.size(); // Runs over wieghts matrices;
-    while (i > 2)
+    while (i > 0)
     {
         if (i == weights.size())
         {
@@ -56,33 +56,32 @@ void Hidden_Layer::BackPropagation(VectorXd d)
             delta.setZero();
             func_choiser(function_strings[i - 1]);
 
-            auxiliar = weights[i - 1];
-            auxiliar.resize(weights[i - 1].rows(), weights[i - 1].cols()); // Otherwise Eigen cries;
+            auxiliar = weights[i];
             net_t = net_calculator(i);
 
-            delta = weights[i - 1] * storer[weights.size() - (i + 1)];
+            delta = storer[weights.size() - (i + 1)].transpose() * auxiliar;
 
             for (int k = 0; k < delta.size(); k++)
             {
                 delta[k] = delta[k] * der_act_func(net_t[k]);
             }
-            cout << delta << endl;
-            // update = delta * outputs[i - 1].transpose();
-            // cout << update << endl;
-            // weights[i - 1] = weights[i - 1] + eta * update;
-            // weights[i - 1].col(0).setConstant(1);
+
+            update = delta * outputs[i - 1].transpose();
+            weights[i - 1] = weights[i - 1] + eta * update;
+            weights[i - 1].col(0).setConstant(1);
 
             storer.push_back(delta);
-            //Remember to clean storer; 
         }
-        i--;
 
-        if (i == 3) //Has to be improved; 
+        if (i == 1)
         {
             outputs.clear();
             next_inputs.clear();
             function_strings.clear();
+            storer.clear();
         }
+
+        i--;
     };
 }
 
