@@ -2,7 +2,7 @@
 #include "activation_functions.hpp"
 #include "info.hpp"
 #include "training.hpp"
-
+#include "data_reader.hpp"
 #include <iostream>
 #include <string>
 #include <random>
@@ -10,7 +10,7 @@
 #include <fstream>
 #include <sstream>
 #include <iterator>
-#include <algorithm>
+#include<algorithm>
 
 #include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
 
@@ -22,6 +22,11 @@ int main()
     // Counter starts;
     auto start = chrono::high_resolution_clock::now();
 
+    std::vector<VectorXd> Inputs;
+    VectorXd Results;
+    std::string fileinput = "Monk_data/monks-1.train";
+
+    FillData(fileinput,Results, Inputs);
     //! Data vector (inputs to Input_Layer);
     Vector<double, 3> data = {3.56, 4.89, 3};   // Creating data vector;
     Vector<double, 2> results = {20.39, -1.34}; // Expected results;
