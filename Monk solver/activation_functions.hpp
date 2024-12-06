@@ -33,6 +33,16 @@ double threshold_der(double x){
     return 0; 
 }
 
+double relu(double x){
+    double relu_res;
+    x >= 0.5 ? relu_res = 0 : relu_res = x;
+    return relu_res; 
+}
+double relu_der(double x){
+    double relu_res;
+    x >= 0.5 ? relu_res = 0 : relu_res = 1;
+    return relu_res; 
+}
 // Defining pointer to activation function(s) and derivative(s);
 double (*act_func)(double); // pointer to f;
 double (*der_act_func)(double); //pointer to f'; 
@@ -54,6 +64,10 @@ void func_choiser(std::string choice)
     {
         act_func = threshold;
         der_act_func = threshold_der; 
+    }
+    else if(choice == "relu"){
+        act_func = relu; 
+        der_act_func = relu_der; 
     }
     else
     {
