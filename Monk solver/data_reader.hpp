@@ -1,9 +1,7 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <iterator>
+#ifndef data_reader
+#define data_reader
+
+#include "lib.hpp"
 #include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
 
 using namespace std;
@@ -45,29 +43,4 @@ void FillData(const string fileinput, VectorXd &resultsVector, vector<VectorXd> 
     }
 }
 
-
-/*     std::string fileinput = "Monk_data/monks-1.train";
-    std::string line; // declaring the std::string that will act as a placeholder for each line of the file
-    std::ifstream myfile_in(fileinput);
-    std::vector<int> Placeholder(6);
-    std::vector<std::vector<int>> Inputs;
-    std::vector<int> Results;
-
-    if (myfile_in.is_open())
-    {
-        while (getline(myfile_in, line))
-        {
-            std::istringstream iss{line};
-            std::vector<std::string> words // we make a vector of words rather than chars
-                {
-                    std::istream_iterator<std::string>(iss),
-                    std::istream_iterator<std::string>()};
-            Results.push_back(std::stoi(words[0]));
-            for (int ss = 1; ss < words.size() - 1; ss++)
-            {
-                Placeholder.push_back(std::stoi(words[ss]));
-            }
-            Inputs.push_back(Placeholder);
-            Placeholder.clear();
-        }
-    } */
+#endif

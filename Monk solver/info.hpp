@@ -1,3 +1,6 @@
+#ifndef info
+#define info
+
 #include <iostream>
 #include "layer.hpp"
 
@@ -20,3 +23,5 @@ void print_info(Demiurge *myNN)
     cout << "\nOut. units: " << pointer->out_units << endl;
     cout << "\n";
 }
+
+#endif

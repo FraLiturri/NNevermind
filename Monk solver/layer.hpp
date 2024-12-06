@@ -1,15 +1,7 @@
 #ifndef layer // Checks if unit isn't defined;
 #define layer // Define unit;
 
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
-#include <string>
-#include <algorithm>
-#include <chrono>
-#include <random>
-
+#include "lib.hpp"
 #include "activation_functions.hpp"
 #include "demiurge.hpp"
 

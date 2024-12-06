@@ -1,14 +1,7 @@
 #ifndef demiurge // Checks if unit isn't defined;
 #define demiurge // Define unit;
 
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <chrono>
-#include <random>
-
+#include "lib.hpp"
 #include "activation_functions.hpp"
 #include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
 

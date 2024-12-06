@@ -4,6 +4,7 @@
 #include "layer.hpp"
 #include "demiurge.hpp"
 #include "activation_functions.hpp"
+
 #include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
 
 #include <iostream>
@@ -26,7 +27,7 @@ void Hidden_Layer::BackPropagation(VectorXd d)
     VectorXd net_t;
     MatrixXd update, auxiliar;
 
-    double eta = 0.002;
+    double eta = 0.02;
     double delta_k = 0; // auxiliar double;
 
     int i = weights.size(); // Runs over wieghts matrices;
