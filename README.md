@@ -7,5 +7,5 @@ For a correct usage install:
 - Better Comments extension for coloured comments (**important for collaborators**); 
 
 
-[![](https://visitcount.itsvg.in/api?id=FraLiturri/ML-Project&label=%20Views&color=1&icon=5&pretty=true)](https://visitcount.itsvg.in)
+[![](https://visitcount.itsvg.in/api?id=FraLiturri/ML-Project&label=%20Views&color=1&icon=3&pretty=true)](https://visitcount.itsvg.in)
 
