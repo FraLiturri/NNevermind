@@ -50,8 +50,8 @@ public:
         }
     }
 
-    void RandomTraining(VectorXd d);  // Random training;
-    void BackPropagation(VectorXd d); // BackProp. algorithm;
+    void RandomTraining(double d);  // Random training;
+    void BackPropagation(double d, double eta, double alpha, double lambda); // BackProp. algorithm;
 
 private:
     bool isLast; // Defined to access isOutputlayer's value;

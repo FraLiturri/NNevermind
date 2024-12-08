@@ -10,24 +10,23 @@
 using namespace Eigen;
 using namespace std;
 
-int main() // Add int argc, char *argv[] in parenthesis;
+vector<VectorXd> Data;
+VectorXd Results;
+std::string file_path = "Monk_data/monks-2binary.train";
+
+int nn = 0;
+double FinalResult;
+
+int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
 {
     // Counter starts;
     auto start = chrono::high_resolution_clock::now();
-    /*
-        std::vector<VectorXd> Inputs;
-        VectorXd Results;
-        std::string fileinput = "Monk_data/monks-1.train";
-
-        FillData(fileinput, Results, Inputs); */
 
     //! Data vector (inputs to Input_Layer);
-    Vector<double, 6> data = {2, 1, 1, 2, 4, 1}; // Creating data vector;
-    Vector<double, 1> _results;                  // Expected results;
-    _results[0] = 0;
+    FillData(file_path, Results, Data);
 
     //! Demiurge blows;
-    Demiurge NeuralNetwork(6, {2, 3}, 1); // Input units - hidden_units vector - output units;
+    Demiurge NeuralNetwork(17, {4}, 1);    // Input units - hidden_units vector - output units;
     Demiurge *pointerNN = &NeuralNetwork; // Pointer to NeuralNetwork, avoidable if not desired;
 
     // Printing NN general info: can be avoided if not desired;
@@ -36,24 +35,46 @@ int main() // Add int argc, char *argv[] in parenthesis;
     //! Neural network construction;
     Input_Layer input_layer;
     Hidden_Layer first_hidden;
-    Hidden_Layer second_hidden;
     Hidden_Layer output_layer;
 
     //! Output computing and training algorithm;
-    for (int n = 0; n < 4000; n++)
+    for (int n = 0; n < atoi(argv[1]); n++)
     {
-        input_layer.forward_pass(data);
-        first_hidden.forward_pass("sigmoid", 1);
-        second_hidden.forward_pass("sigmoid", 2);
-        output_layer.forward_pass("sigmoid", 3, true);
+        for (int k = 0; k < Data.size(); k++)
+        {
+            input_layer.forward_pass(Data[k]);
+            first_hidden.forward_pass("sigmoid", 1);
+            output_layer.forward_pass("sigmoid", 2, true);
 
-        // output_layer.RandomTraining(results);
-        output_layer.BackPropagation(_results);
-        // cout << "Final output: " << outputs[weights.size()].transpose() << endl;
+            output_layer.BackPropagation(Results[k], 0.1);
+
+            if (n == atoi(argv[1]) - 1)
+            {
+                outputs[weights.size()][0] >= 0.5 ? FinalResult = 1 : FinalResult = 0;
+                FinalResult == Results[k] ? nn++ : 0;
+                // cout << "\033[38;5;214mFinal output \033[0m(" << k + 1 << "): " << outputs[weights.size()].transpose() << endl;
+            }
+        }
     }
 
-    cout << "\033[38;5;214mFinal output: \033[0m " << outputs[weights.size()].transpose() << endl;
-    // cout << "Expected results: " << _results.transpose() << endl;
+    cout << "\nAccuracy: " << nn / (double)169 << " " << nn << " " << Data.size() << endl;
+    nn = 0;
+    Data.clear();
+    Results.setZero();
+
+    FillData("Monk_data/monks-2binary.test", Results, Data);
+
+    for (int k = 0; k < Data.size(); k++)
+    {
+        input_layer.forward_pass(Data[k]);
+        first_hidden.forward_pass("sigmoid", 1);
+        output_layer.forward_pass("sigmoid", 2, true);
+
+        outputs[weights.size()][0] >= 0.5 ? FinalResult = 1 : FinalResult = 0;
+        FinalResult == Results[k] ? nn++ : 0;
+    }
+
+    cout << "\nAccuracy: " << nn / (double)432 << " " << nn << " " << Data.size() << endl;
 
     // Counter stops and prints elapsed time;
     auto end = chrono::high_resolution_clock::now();

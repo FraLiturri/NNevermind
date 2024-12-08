@@ -11,7 +11,7 @@ void FillData(const string fileinput, VectorXd &resultsVector, vector<VectorXd> 
 {
     string line; // declaring the std::string that will act as a placeholder for each line of the file
     ifstream myfile_in(fileinput);
-    vector<double> Placeholder(6);
+    vector<double> Placeholder;
     VectorXd PlaceholderConverter;
     vector<double> Results;
 
@@ -26,12 +26,15 @@ void FillData(const string fileinput, VectorXd &resultsVector, vector<VectorXd> 
                     istream_iterator<string>()};
 
             Results.push_back(stoi(words[0]));
-            for (int ss = 1; ss < words.size() - 1; ss++)
+            for (int ss = 1; ss < words.size(); ss++)
             {
                 Placeholder.push_back(stoi(words[ss]));
             }
             PlaceholderConverter = Map<VectorXd>(Placeholder.data(), Placeholder.size());
+            //cout<<PlaceholderConverter.transpose()<<endl;
+
             Inputs.push_back(PlaceholderConverter);
+            //cout<< Placeholder.size() << "\n " <<endl;
             Placeholder.clear();
         }
     }
@@ -40,6 +43,7 @@ void FillData(const string fileinput, VectorXd &resultsVector, vector<VectorXd> 
     for (size_t i = 0; i < Results.size(); ++i)
     {
         resultsVector[i] = Results[i];
+        
     }
 }
 
