@@ -1,39 +1,32 @@
+#include "lib.hpp"
 #include "layer.hpp"
 #include "activation_functions.hpp"
 #include "info.hpp"
 #include "training.hpp"
 #include "data_reader.hpp"
-#include <iostream>
-#include <string>
-#include <random>
-#include <chrono>
-#include <fstream>
-#include <sstream>
-#include <iterator>
-#include<algorithm>
 
 #include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
 
 using namespace Eigen;
 using namespace std;
 
-int main()
+vector<VectorXd> Data;
+VectorXd Results;
+
+int nn = 0;
+double FinalResult;
+
+int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
 {
     // Counter starts;
     auto start = chrono::high_resolution_clock::now();
 
-    std::vector<VectorXd> Inputs;
-    VectorXd Results;
-    std::string fileinput = "Monk_data/monks-1.train";
-
-    FillData(fileinput,Results, Inputs);
     //! Data vector (inputs to Input_Layer);
-    Vector<double, 3> data = {3.56, 4.89, 3};   // Creating data vector;
-    Vector<double, 2> results = {20.39, -1.34}; // Expected results;
+    FillData("Monk_data/monks-2binary.train", Results, Data);
 
     //! Demiurge blows;
-    Demiurge NeuralNetwork(3, {20, 40, 25, 30, 20, 12}, 2); // Input units - hidden_units vector - output units;
-    Demiurge *pointerNN = &NeuralNetwork;                   // Pointer to NeuralNetwork, avoidable if not desired;
+    Demiurge NeuralNetwork(17, {4}, 1);   // Input units - hidden_units vector - output units;
+    Demiurge *pointerNN = &NeuralNetwork; // Pointer to NeuralNetwork for print_info, avoidable if not desired;
 
     // Printing NN general info: can be avoided if not desired;
     print_info(pointerNN);
@@ -41,32 +34,47 @@ int main()
     //! Neural network construction;
     Input_Layer input_layer;
     Hidden_Layer first_hidden;
-    Hidden_Layer second_hidden;
-    Hidden_Layer third_hidden;
-    Hidden_Layer fourth_hidden;
-    Hidden_Layer fifth_hidden;
-    Hidden_Layer sixth_hidden;
     Hidden_Layer output_layer;
 
     //! Output computing and training algorithm;
-    for (int n = 0; n < 60; n++)
+    for (int n = 0; n < atoi(argv[1]); n++)
     {
-        input_layer.forward_pass(data);
-        first_hidden.forward_pass("linear", 1);
-        second_hidden.forward_pass("linear", 2);
-        third_hidden.forward_pass("sigmoid", 3);
-        fourth_hidden.forward_pass("sigmoid", 4);
-        fifth_hidden.forward_pass("sigmoid", 5);
-        sixth_hidden.forward_pass("sigmoid", 6);
-        output_layer.forward_pass("threshold", 7, true);
+        for (int k = 0; k < Data.size(); k++)
+        {
+            input_layer.forward_pass(Data[k]);
+            first_hidden.forward_pass("sigmoid", 1);
+            output_layer.forward_pass("sigmoid", 2, true);
 
-        // output_layer.RandomTraining(results);
-        output_layer.BackPropagation(results);
-        // cout << "Final output: " << outputs[weights.size()].transpose() << endl;
+            output_layer.BackPropagation(Results[k], 0.1);
+
+            if (n == atoi(argv[1]) - 1)
+            {
+                outputs[weights.size()][0] >= 0.5 ? FinalResult = 1 : FinalResult = 0;
+                FinalResult == Results[k] ? nn++ : 0;
+            }
+        }
     }
 
-    cout << "Final output: " << outputs[weights.size()].transpose() << endl;
-    cout << "Expected results: " << results.transpose() << endl;
+    cout << "\nAccuracy: " << nn / (double)169 << " " << nn << " " << Data.size() << endl;
+
+    //! Testing;
+    nn = 0;
+    Data.clear();
+    Results.setZero();
+
+    FillData("Monk_data/monks-2binary.test", Results, Data);
+
+    for (int k = 0; k < Data.size(); k++)
+    {
+        input_layer.forward_pass(Data[k]);
+        first_hidden.forward_pass("sigmoid", 1);
+        output_layer.forward_pass("sigmoid", 2, true);
+
+        outputs[weights.size()][0] >= 0.5 ? FinalResult = 1 : FinalResult = 0;
+        FinalResult == Results[k] ? nn++ : 0;
+    }
+
+    cout << "\nAccuracy: " << nn / (double)432 << " " << nn << " " << Data.size() << endl;
 
     // Counter stops and prints elapsed time;
     auto end = chrono::high_resolution_clock::now();

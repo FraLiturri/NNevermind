@@ -1,15 +1,7 @@
 #ifndef layer // Checks if unit isn't defined;
 #define layer // Define unit;
 
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
-#include <string>
-#include <algorithm>
-#include <chrono>
-#include <random>
-
+#include "lib.hpp"
 #include "activation_functions.hpp"
 #include "demiurge.hpp"
 
@@ -19,6 +11,7 @@ using namespace std;
 using namespace Eigen;
 
 vector<std::string> function_strings;
+VectorXd inputs;
 
 //! Input layer class;
 class Input_Layer
@@ -42,7 +35,7 @@ public:
         function_strings.push_back(choosen_function);
 
         isLast = isOutputLayer;
-        VectorXd inputs = next_inputs[depth - 1]; //! Has to be checked;
+        inputs = next_inputs[depth - 1]; //! Has to be checked;
 
         for (int k = 0; k < inputs.size(); k++)
         {
@@ -58,8 +51,8 @@ public:
         }
     }
 
-    void RandomTraining(VectorXd d);  // Random training;
-    void BackPropagation(VectorXd d); // BackProp. algorithm;
+    void RandomTraining(double d, double eta, double alpha, double lambda);  // Random training;
+    void BackPropagation(double d, double eta, double alpha, double lambda); // BackProp. algorithm;
 
 private:
     bool isLast; // Defined to access isOutputlayer's value;
