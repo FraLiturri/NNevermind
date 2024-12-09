@@ -51,8 +51,8 @@ public:
         }
     }
 
-    void RandomTraining(double d, double eta, double alpha, double lambda);  // Random training;
-    void BackPropagation(double d, double eta, double alpha, double lambda); // BackProp. algorithm;
+    void RandomTraining(double d, double eta, double alpha, double lambda);  // Random training: in this case takes a double (d) since monk is a class. problem;
+    void BackPropagation(double d, double eta, double alpha, double lambda); // BackProp. algorithm: in this case takes a double (d) since monk is a class. problem;
 
 private:
     bool isLast; // Defined to access isOutputlayer's value;

@@ -14,7 +14,7 @@ vector<VectorXd> TrainingData, TestData;
 VectorXd TrainingResults, TestResults;
 
 int training_accuracy = 0, test_accuracy = 0;
-double FinalResult; //auxiliary double; 
+double FinalResult; // auxiliary double;
 
 int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
 {
@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
 
             output_layer.BackPropagation(TrainingResults[k], 0.1);
 
-            if (n == atoi(argv[1]) - 1) //Accuracy calculator
+            if (n == atoi(argv[1]) - 1) // Accuracy calculator
             {
                 outputs[weights.size()][0] >= 0.5 ? FinalResult = 1 : FinalResult = 0;
                 FinalResult == TrainingResults[k] ? training_accuracy++ : 0;
