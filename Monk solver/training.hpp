@@ -47,7 +47,7 @@ void Hidden_Layer::BackPropagation(double d, double eta = 0.05, double alpha = 0
 
             update = delta * outputs[i - 1].transpose();
             weights[i - 1] = weights[i - 1] + eta * update;
-            //weights[i - 1].col(0).setConstant(1);
+            // weights[i - 1].col(0).setConstant(1);
 
             storer.push_back(delta);
         }
@@ -69,7 +69,7 @@ void Hidden_Layer::BackPropagation(double d, double eta = 0.05, double alpha = 0
 
             update = delta * outputs[i - 1].transpose();
             weights[i - 1] = weights[i - 1] + eta * update;
-            //weights[i - 1].col(0).setConstant(1);
+            // weights[i - 1].col(0).setConstant(1);
 
             storer.push_back(delta);
         }
@@ -86,9 +86,8 @@ void Hidden_Layer::BackPropagation(double d, double eta = 0.05, double alpha = 0
     };
 }
 
-void Hidden_Layer::RandomTraining(double d)
+void Hidden_Layer::RandomTraining(double d, double eta, double alpha = 0, double lambda = 0)
 {
-    double eta = 0.1;
     double delta_k = 0; // auxiliar double;
     MatrixXd update;
     int i = weights.size();
@@ -106,7 +105,7 @@ void Hidden_Layer::RandomTraining(double d)
 
     update = delta * outputs[i - 1].transpose();
     weights[i - 1] = weights[i - 1] + eta * update;
-    //weights[i - 1].col(0).setConstant(1);
+    // weights[i - 1].col(0).setConstant(1);
 
     function_strings.clear();
     outputs.clear();

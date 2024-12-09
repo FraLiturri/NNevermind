@@ -10,8 +10,9 @@ using namespace Eigen;
 
 vector<MatrixXd> weights; // i-th component is the weights matrix of i-th and i+1-th layer;
 vector<VectorXd> outputs; // i-th component is the output (with weights) of i-the layer;
-VectorXd units_output;    // auxiliary vector;
 vector<VectorXd> next_inputs;
+
+VectorXd units_output; // auxiliary vector;
 
 //! Demiurge class: the Creator;
 class Demiurge
@@ -22,6 +23,7 @@ public:
 
     Demiurge(int inputs_units, vector<int> hidden_units, int output_units)
     {
+        // Storing some important info about NN;
         in_units = inputs_units;
         out_units = output_units;
         hidden_and_out_units = hidden_units;

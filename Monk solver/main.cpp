@@ -12,7 +12,6 @@ using namespace std;
 
 vector<VectorXd> Data;
 VectorXd Results;
-std::string file_path = "Monk_data/monks-2binary.train";
 
 int nn = 0;
 double FinalResult;
@@ -23,11 +22,11 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
     auto start = chrono::high_resolution_clock::now();
 
     //! Data vector (inputs to Input_Layer);
-    FillData(file_path, Results, Data);
+    FillData("Monk_data/monks-2binary.train", Results, Data);
 
     //! Demiurge blows;
-    Demiurge NeuralNetwork(17, {4}, 1);    // Input units - hidden_units vector - output units;
-    Demiurge *pointerNN = &NeuralNetwork; // Pointer to NeuralNetwork, avoidable if not desired;
+    Demiurge NeuralNetwork(17, {4}, 1);   // Input units - hidden_units vector - output units;
+    Demiurge *pointerNN = &NeuralNetwork; // Pointer to NeuralNetwork for print_info, avoidable if not desired;
 
     // Printing NN general info: can be avoided if not desired;
     print_info(pointerNN);
@@ -52,12 +51,13 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
             {
                 outputs[weights.size()][0] >= 0.5 ? FinalResult = 1 : FinalResult = 0;
                 FinalResult == Results[k] ? nn++ : 0;
-                // cout << "\033[38;5;214mFinal output \033[0m(" << k + 1 << "): " << outputs[weights.size()].transpose() << endl;
             }
         }
     }
 
     cout << "\nAccuracy: " << nn / (double)169 << " " << nn << " " << Data.size() << endl;
+
+    //! Testing;
     nn = 0;
     Data.clear();
     Results.setZero();

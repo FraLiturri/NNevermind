@@ -39,7 +39,7 @@ double threshold_der(double x)
 double relu(double x)
 {
     double relu_res;
-    x >= 0 ? relu_res = 0.1*x : relu_res = x;
+    x >= 0 ? relu_res = 0.1 *x : relu_res = x;
     return relu_res;
 }
 double relu_der(double x)

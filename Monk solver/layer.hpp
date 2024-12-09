@@ -11,6 +11,7 @@ using namespace std;
 using namespace Eigen;
 
 vector<std::string> function_strings;
+VectorXd inputs;
 
 //! Input layer class;
 class Input_Layer
@@ -34,7 +35,7 @@ public:
         function_strings.push_back(choosen_function);
 
         isLast = isOutputLayer;
-        VectorXd inputs = next_inputs[depth - 1]; //! Has to be checked;
+        inputs = next_inputs[depth - 1]; //! Has to be checked;
 
         for (int k = 0; k < inputs.size(); k++)
         {
@@ -50,7 +51,7 @@ public:
         }
     }
 
-    void RandomTraining(double d);  // Random training;
+    void RandomTraining(double d, double eta, double alpha, double lambda);  // Random training;
     void BackPropagation(double d, double eta, double alpha, double lambda); // BackProp. algorithm;
 
 private:
