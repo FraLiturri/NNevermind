@@ -2,9 +2,8 @@ Ideas:
 For monk's problem, d as be setted as a double, in general has to be a vectorXd (change to d[k]
 ) where necessary; 
 
-TO DO: 
-Change some var names (single_output) to a clearer one;
-Create Backpropagation method;
+TO DO:
+Add Nesterov momentum and tikhonov reg.; 
 
 TO DO (info.py):
 Add questions;
