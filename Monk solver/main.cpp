@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
     // Counter starts;
     auto start = chrono::high_resolution_clock::now();
 
-    //! Data vector (inputs to Input_Layer);
+    //! Preparing data for training and test phases;
     FillData("Monk_data/monks-1binary.train", TrainingResults, TrainingData);
     FillData("Monk_data/monks-1binary.test", TestResults, TestData);
 
@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
 
             output_layer.BackPropagation(TrainingResults[k], 0.1);
 
-            if (n == atoi(argv[1]) - 1) // Accuracy calculator
+            if (n == atoi(argv[1]) - 1) // Accuracy calculator;
             {
                 outputs[weights.size()][0] >= 0.5 ? FinalResult = 1 : FinalResult = 0;
                 FinalResult == TrainingResults[k] ? training_accuracy++ : 0;
