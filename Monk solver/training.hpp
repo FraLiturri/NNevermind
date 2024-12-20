@@ -5,17 +5,17 @@
 #include "demiurge.hpp"
 #include "activation_functions.hpp"
 
-#include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
-
 #include <iostream>
 #include <vector>
+#include <cmath>
+
+#include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
 
 using namespace std;
 using namespace Eigen;
 
 VectorXd delta, net_t;
 vector<VectorXd> storer;
-vector<MatrixXd> prev_updates;
 
 VectorXd net_calculator(int layer_number)
 {
@@ -23,14 +23,16 @@ VectorXd net_calculator(int layer_number)
     return net;
 };
 
-void Hidden_Layer::BackPropagation(double d, double eta = 0.05, double alpha = 0, double lambda = 0)
+void Hidden_Layer::BackPropagation(double d, double eta, double alpha, double lambda)
 {
-    MatrixXd update, auxiliar;
+    MatrixXd update, auxiliar, prev_weight;
     double delta_k = 0;     // auxiliar double;
     int i = weights.size(); // Runs over wieghts matrices;
 
     while (i > 0)
     {
+        prev_weight = weights[i - 1]; // For Tikhonov regularization;
+
         if (i == weights.size())
         {
             delta.setZero();
@@ -44,10 +46,18 @@ void Hidden_Layer::BackPropagation(double d, double eta = 0.05, double alpha = 0
                 delta[k] = delta_k;
             }
 
-            update = delta * outputs[i - 1].transpose();
-            weights[i - 1] = weights[i - 1] + eta * update;
-            // weights[i - 1].col(0).setConstant(1);
+            if (prev_updates[0](0, 0) == 0)
+            {
+                update = eta * delta * outputs[i - 1].transpose() - lambda * prev_weight;
+            }
+            else
+            {
+                update = eta * delta * outputs[i - 1].transpose() - lambda * prev_weight + alpha * prev_updates[i - 1];
+            }
 
+            weights[i - 1] = weights[i - 1] + update;
+            weights[i - 1].col(0).setConstant(1);
+            prev_updates[i - 1] = update;
             storer.push_back(delta);
         }
 
@@ -66,9 +76,18 @@ void Hidden_Layer::BackPropagation(double d, double eta = 0.05, double alpha = 0
                 delta[k] = delta[k] * der_act_func(net_t[k]);
             }
 
-            update = delta * outputs[i - 1].transpose();
-            weights[i - 1] = weights[i - 1] + eta * update;
-            // weights[i - 1].col(0).setConstant(1);
+            if (prev_updates[0](0, 0) == 0)
+            {
+                update = eta * delta * outputs[i - 1].transpose() - lambda * prev_weight;
+            }
+            else
+            {
+                update = eta * delta * outputs[i - 1].transpose() - lambda * prev_weight + alpha * prev_updates[i - 1];
+            }
+
+            weights[i - 1] = weights[i - 1] + update;
+            weights[i - 1].col(0).setConstant(1);
+            prev_updates[i - 1] = update;
 
             storer.push_back(delta);
         }
@@ -80,14 +99,12 @@ void Hidden_Layer::BackPropagation(double d, double eta = 0.05, double alpha = 0
             function_strings.clear();
             storer.clear();
         }
-
         i--;
     };
 }
 
 void Hidden_Layer::RandomTraining(double d, double eta, double alpha = 0, double lambda = 0)
 {
-
     MatrixXd update;
     double delta_k = 0; // auxiliar double;
     int i = weights.size();
@@ -105,7 +122,7 @@ void Hidden_Layer::RandomTraining(double d, double eta, double alpha = 0, double
 
     update = delta * outputs[i - 1].transpose();
     weights[i - 1] = weights[i - 1] + eta * update;
-    // weights[i - 1].col(0).setConstant(1);
+    weights[i - 1].col(0).setConstant(1);
 
     function_strings.clear();
     outputs.clear();

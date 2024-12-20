@@ -1,0 +1,18 @@
+Ideas: 
+For monk's problem, d as be setted as a double, in general has to be a vectorXd (change to d[k]
+) where necessary; This may be improved in the package; 
+Add drop-out? 
+Add func for accuracy calc
+
+TO DO:
+    ☐ Add Nesterov momentum and tikhonov reg.; @critical 
+    ☐ Add Loss and file writing; @high 
+
+TO DO (info.py):
+    ☐ Add questions;
+    ☐ Add general info;
+
+
+Ctrl + Enter to add a new item; 
+"@" to assign a value to the task; 
+
