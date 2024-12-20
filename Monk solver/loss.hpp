@@ -7,60 +7,54 @@
 using namespace std;
 using namespace Eigen;
 
-double mse, bce;
+double aux = 0;
 
 double MSE(double x, double y)
 {
-    mse = pow((x - y), 2);
-    return mse;
+    aux = pow((x - y), 2);
+    return aux;
 }
 double BCE(double x, double y)
 {
-    return bce;
+    return aux;
 }
 
-double (*loss_func)(double, double);
+double (*choice)(double, double);
 
 class Loss
 {
 public:
-    void Calculator(string f, double NN_outputs, double targets)
+    double loss_value;
+    void calculator(string loss_function, double NN_outputs, double targets, double data_size)
     {
-        if (f == "MSE")
+        if (loss_function == "MSE")
         {
-            loss_func = MSE;
-            loss_func(NN_outputs, targets);
+            choice = MSE;
+            loss_value = choice(NN_outputs, targets) / data_size;
         }
-        else if (f == "BCE")
+        else if (loss_function == "BCE")
         {
-            loss_func = BCE;
+            choice = BCE;
+            loss_value += choice(NN_outputs, targets) / data_size;
         }
         else
         {
-            cout << "\nUnvailable choice as loss function." << endl;
+            cout << "\nUnvailable choice as loss function. " << endl;
         }
     };
 
-    void writer(string filepath, VectorXd data, int index)
+    void writer(string filepath)
     {
         ofstream outFile(filepath, std::ios::app);
         if (outFile.is_open())
         {
-            if (index = data.size()-1)
-            {
-                outFile << mse << endl;
-                outFile.close(); // Chiude il file
-            };
+            outFile << loss_value << endl;
+            outFile.close(); // Chiude il file
         }
         else
         {
-            std::cerr << "Impossible to open file." << filepath << std::endl;
+            std::cerr << "Impossible to open file. " << filepath << std::endl;
         }
-    };
-
-    void reset()
-    {
-        mse, bce = 0;
     };
 };
 

@@ -7,7 +7,7 @@
 using namespace std;
 using namespace Eigen;
 
-void FillData(const string fileinput, VectorXd &resultsVector, vector<VectorXd> &Inputs)
+void DataGetter(const string fileinput, VectorXd &resultsVector, vector<VectorXd> &Inputs)
 {
     string line; // declaring the std::string that will act as a placeholder for each line of the file;
     ifstream myfile_in(fileinput);

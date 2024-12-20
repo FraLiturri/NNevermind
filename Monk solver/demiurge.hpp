@@ -42,15 +42,13 @@ public:
             MatrixXd weight = MatrixXd::NullaryExpr(rows, cols, []()
                                                     { return Eigen::internal::random<double>(-2, 2); });
             MatrixXd ghost = MatrixXd::NullaryExpr(rows, cols, []()
-                                                    { return Eigen::internal::random<double>(0, 0); });
-
-            
+                                                   { return Eigen::internal::random<double>(0, 0); });
 
             weight.col(0).setConstant(1); //! Bias terms (Check);
             if (i != hidden_layers + 1)
             {
                 weights.push_back(weight); // Storing weights;
-                prev_updates.push_back(ghost); 
+                prev_updates.push_back(ghost);
             }
         }
     };

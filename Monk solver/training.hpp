@@ -23,7 +23,7 @@ VectorXd net_calculator(int layer_number)
     return net;
 };
 
-void Hidden_Layer::BackPropagation(double d, double eta, double alpha = 0, double lambda = 0)
+void Hidden_Layer::BackPropagation(double d, double eta, double alpha, double lambda)
 {
     MatrixXd update, auxiliar, prev_weight;
     double delta_k = 0;     // auxiliar double;
@@ -75,6 +75,7 @@ void Hidden_Layer::BackPropagation(double d, double eta, double alpha = 0, doubl
             {
                 delta[k] = delta[k] * der_act_func(net_t[k]);
             }
+
             if (prev_updates[0](0, 0) == 0)
             {
                 update = eta * delta * outputs[i - 1].transpose() - lambda * prev_weight;
@@ -104,7 +105,6 @@ void Hidden_Layer::BackPropagation(double d, double eta, double alpha = 0, doubl
 
 void Hidden_Layer::RandomTraining(double d, double eta, double alpha = 0, double lambda = 0)
 {
-
     MatrixXd update;
     double delta_k = 0; // auxiliar double;
     int i = weights.size();
