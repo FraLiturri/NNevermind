@@ -11,6 +11,7 @@ using namespace Eigen;
 vector<MatrixXd> weights; // i-th component is the weights matrix of i-th and i+1-th layer;
 vector<VectorXd> outputs; // i-th component is the output (with weights) of i-the layer;
 vector<VectorXd> next_inputs;
+vector<MatrixXd> prev_updates; // necessary for training;
 
 VectorXd units_output; // auxiliary vector;
 
@@ -39,12 +40,17 @@ public:
             i == hidden_layers + 1 ? rows = out_units : rows = hidden_and_out_units[i]; // Paying attention to last layer (output);
 
             MatrixXd weight = MatrixXd::NullaryExpr(rows, cols, []()
-                                                    { return Eigen::internal::random<double>(-1.5, 1.5); });
+                                                    { return Eigen::internal::random<double>(-2, 2); });
+            MatrixXd ghost = MatrixXd::NullaryExpr(rows, cols, []()
+                                                    { return Eigen::internal::random<double>(0, 0); });
+
+            
 
             weight.col(0).setConstant(1); //! Bias terms (Check);
             if (i != hidden_layers + 1)
             {
                 weights.push_back(weight); // Storing weights;
+                prev_updates.push_back(ghost); 
             }
         }
     };

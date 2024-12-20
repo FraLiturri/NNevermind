@@ -4,6 +4,7 @@
 #include "info.hpp"
 #include "training.hpp"
 #include "data_reader.hpp"
+#include "loss.hpp"
 
 #include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
 
@@ -24,10 +25,12 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
     //! Preparing data for training and test phases;
     FillData("Monk_data/monks-1binary.train", TrainingResults, TrainingData);
     FillData("Monk_data/monks-1binary.test", TestResults, TestData);
+    ofstream("NN_results/training_loss.txt", std::ios::trunc).close();
+    ofstream("NN_results/training_loss.txt", std::ios::trunc).close();
 
     //! Demiurge blows;
-    Demiurge NeuralNetwork(17, {4}, 1);   // Input units - hidden_units vector - output units;
-    Demiurge *pointerNN = &NeuralNetwork; // Pointer to NeuralNetwork for print_info, avoidable if not desired;
+    Demiurge NeuralNetwork(17, {3}, 1); // Input units - hidden_units vector - output units;
+    Demiurge *pointerNN = &NeuralNetwork;  // Pointer to NeuralNetwork for print_info, avoidable if not desired;
 
     // Printing NN general info: can be avoided if not desired;
     print_info(pointerNN);
@@ -36,6 +39,7 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
     Input_Layer input_layer;
     Hidden_Layer first_hidden;
     Hidden_Layer output_layer;
+    Loss TrainingLoss;
 
     //! Output computing and training algorithm;
     for (int n = 0; n < atoi(argv[1]); n++)
@@ -46,14 +50,14 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
             first_hidden.forward_pass("sigmoid", 1);
             output_layer.forward_pass("sigmoid", 2, true);
 
-            output_layer.BackPropagation(TrainingResults[k], 0.1);
+            output_layer.BackPropagation(TrainingResults[k], 0.05, 0.0001, 0.00001);
 
             if (n == atoi(argv[1]) - 1) // Accuracy calculator;
             {
                 outputs[weights.size()][0] >= 0.5 ? FinalResult = 1 : FinalResult = 0;
                 FinalResult == TrainingResults[k] ? training_accuracy++ : 0;
             }
-        }
+        };
     }
 
     //! Testing;
