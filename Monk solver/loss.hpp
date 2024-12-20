@@ -28,7 +28,7 @@ public:
     double loss_value;
     void calculator(string loss_function, string filepath, double NN_outputs, double targets, double data_size)
     {
-        if (counter == data_size - 1)
+        if (counter == data_size)
         {
             ofstream outFile(filepath, std::ios::app);
             if (outFile.is_open())

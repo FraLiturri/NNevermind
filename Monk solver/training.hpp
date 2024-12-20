@@ -14,21 +14,22 @@
 using namespace std;
 using namespace Eigen;
 
-VectorXd delta, net_t;
+VectorXd delta, net_t, net;
 vector<VectorXd> storer;
+MatrixXd update, auxiliar, prev_weight;
+
+double delta_k = 0; // auxiliar double;
+int i;              // Runs over wieghts matrices;
 
 VectorXd net_calculator(int layer_number)
 {
-    VectorXd net = weights[layer_number - 1] * outputs[layer_number - 1];
+    net = weights[layer_number - 1] * outputs[layer_number - 1];
     return net;
 };
 
 void Hidden_Layer::BackPropagation(double d, double eta, double alpha, double lambda)
 {
-    MatrixXd update, auxiliar, prev_weight;
-    double delta_k = 0;     // auxiliar double;
-    int i = weights.size(); // Runs over wieghts matrices;
-
+    i = weights.size();
     while (i > 0)
     {
         prev_weight = weights[i - 1]; // For Tikhonov regularization;
@@ -105,9 +106,7 @@ void Hidden_Layer::BackPropagation(double d, double eta, double alpha, double la
 
 void Hidden_Layer::RandomTraining(double d, double eta, double alpha = 0, double lambda = 0)
 {
-    MatrixXd update;
-    double delta_k = 0; // auxiliar double;
-    int i = weights.size();
+    i = weights.size();
     delta.setZero();
 
     func_choiser(function_strings[i - 1]);
