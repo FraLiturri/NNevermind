@@ -23,13 +23,13 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
     auto start = chrono::high_resolution_clock::now();
 
     //! Preparing data for training and test phases;
-    DataGetter("Monk_data/monks-1binary.train", TrainingResults, TrainingData);
-    DataGetter("Monk_data/monks-1binary.test", TestResults, TestData);
+    DataGetter("Monk_data/monks-2binary.train", TrainingResults, TrainingData);
+    DataGetter("Monk_data/monks-2binary.test", TestResults, TestData);
     ofstream("NN_results/training_loss.txt", std::ios::trunc).close();
     ofstream("NN_results/test_loss.txt", std::ios::trunc).close();
 
     //! Demiurge blows;
-    Demiurge NeuralNetwork(17, {3}, 1);   // Input units - hidden_units vector - output units;
+    Demiurge NeuralNetwork(17, {4}, 1);   // Input units - hidden_units vector - output units;
     Demiurge *pointerNN = &NeuralNetwork; // Pointer to NeuralNetwork for print_info, avoidable if not desired;
 
     //! Printing NN general info: can be avoided if not desired;
@@ -52,15 +52,14 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
             first_hidden.forward_pass("sigmoid", 1);
             output_layer.forward_pass("sigmoid", 2, true);
 
-            output_layer.BackPropagation(TrainingResults[k], 0.1, 0.01, 0);
+            output_layer.BackPropagation(TrainingResults[k], 0.1, 0.0, 0.00);
+            TrainingLoss.calculator("MSE", "NN_results/training_loss.txt", outputs[weights.size()][0], TrainingResults[k], TrainingResults.size());
+            //cout << TrainingLoss.loss_value << endl; 
 
             if (n == atoi(argv[1]) - 1) // Accuracy calculator;
             {
                 outputs[weights.size()][0] >= 0.5 ? FinalResult = 1 : FinalResult = 0;
                 FinalResult == TrainingResults[k] ? training_accuracy++ : 0;
-
-                TrainingLoss.calculator("MSE", outputs[weights.size()][0], TrainingResults[k], TrainingResults.size());
-                TrainingLoss.writer("NN_results/training_loss.txt");
             }
         };
     }
@@ -75,8 +74,7 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
         outputs[weights.size()][0] >= 0.5 ? FinalResult = 1 : FinalResult = 0;
         FinalResult == TestResults[k] ? test_accuracy++ : 0;
 
-        TestLoss.calculator("MSE", outputs[weights.size()][0], TestResults[k], TestResults.size());
-        TestLoss.writer("NN_results/test_loss.txt");
+        TestLoss.calculator("MSE", "NN_results/test_loss.txt", outputs[weights.size()][0], TestResults[k], TestResults.size());
     }
 
     cout << "Training accuracy: " << training_accuracy / (double)TrainingData.size() * 100 << "% (" << training_accuracy << "/" << TrainingData.size() << ")" << endl;

@@ -8,6 +8,7 @@ using namespace std;
 using namespace Eigen;
 
 double aux = 0;
+int counter = 0;
 
 double MSE(double x, double y)
 {
@@ -25,12 +26,29 @@ class Loss
 {
 public:
     double loss_value;
-    void calculator(string loss_function, double NN_outputs, double targets, double data_size)
+    void calculator(string loss_function, string filepath, double NN_outputs, double targets, double data_size)
     {
+        if (counter == data_size - 1)
+        {
+            ofstream outFile(filepath, std::ios::app);
+            if (outFile.is_open())
+            {
+                outFile << loss_value << endl;
+                outFile.close(); // Chiude il file
+            }
+            else
+            {
+                std::cerr << "Impossible to open file. " << filepath << std::endl;
+            }
+
+            loss_value = 0;
+            counter = 0;
+        }
+
         if (loss_function == "MSE")
         {
             choice = MSE;
-            loss_value = choice(NN_outputs, targets) / data_size;
+            loss_value += choice(NN_outputs, targets) / data_size;
         }
         else if (loss_function == "BCE")
         {
@@ -41,20 +59,7 @@ public:
         {
             cout << "\nUnvailable choice as loss function. " << endl;
         }
-    };
-
-    void writer(string filepath)
-    {
-        ofstream outFile(filepath, std::ios::app);
-        if (outFile.is_open())
-        {
-            outFile << loss_value << endl;
-            outFile.close(); // Chiude il file
-        }
-        else
-        {
-            std::cerr << "Impossible to open file. " << filepath << std::endl;
-        }
+        counter++;
     };
 };
 
