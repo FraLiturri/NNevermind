@@ -78,12 +78,12 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
 
     cout << "Training accuracy: " << training_accuracy / (double)TrainingData.size() * 100 << "% (" << training_accuracy << "/" << TrainingData.size() << ")" << endl;
     cout << "Test accuracy: " << test_accuracy / (double)TestData.size() * 100 << "% (" << test_accuracy << "/" << TestData.size() << ")" << endl;
-    cout << "Test loss is: " << TestLoss.loss_value << endl;
+    cout << "Test loss is: " << TestLoss.last_loss << endl;
 
     //! Counter stops and prints elapsed time;
     auto end = chrono::high_resolution_clock::now();
     chrono::duration<double> elapsed_time = end - start;
-    cout << "\nElapsed time: " << elapsed_time.count() << " seconds."
+    cout << "\nElapsed time: " << elapsed_time.count() << " seconds. \n"
          << endl;
 
     return 0;
