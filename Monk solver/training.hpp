@@ -33,7 +33,6 @@ void Hidden_Layer::BackPropagation(double d, double eta, double alpha, double la
     while (i > 0)
     {
         prev_weight = weights[i - 1]; // For Tikhonov regularization;
-
         if (i == weights.size())
         {
             delta.setZero();
@@ -47,9 +46,9 @@ void Hidden_Layer::BackPropagation(double d, double eta, double alpha, double la
                 delta[k] = delta_k;
             }
 
-            if (prev_updates[0](0, 0) == 0)
+            if (prev_updates[0](0, 0) == 0) //The first element is 0 only at initialization; after is always 1 (bias term); 
             {
-                update = eta * delta * outputs[i - 1].transpose() - lambda * prev_weight;
+                update = eta * delta * outputs[i - 1].transpose() - lambda * prev_weight; 
             }
             else
             {
@@ -69,7 +68,6 @@ void Hidden_Layer::BackPropagation(double d, double eta, double alpha, double la
 
             auxiliar = weights[i];
             net_t = net_calculator(i);
-
             delta = storer[weights.size() - (i + 1)].transpose() * auxiliar;
 
             for (int k = 0; k < delta.size(); k++)
