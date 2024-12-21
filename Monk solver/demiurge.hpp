@@ -40,7 +40,7 @@ public:
             i == hidden_layers + 1 ? rows = out_units : rows = hidden_and_out_units[i]; // Paying attention to last layer (output);
 
             MatrixXd weight = MatrixXd::NullaryExpr(rows, cols, []()
-                                                    { return Eigen::internal::random<double>(-2, 2); });
+                                                    { return Eigen::internal::random<double>(-1, 1); });
             MatrixXd ghost = MatrixXd::NullaryExpr(rows, cols, []()
                                                    { return Eigen::internal::random<double>(0, 0); });
 

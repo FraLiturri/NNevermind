@@ -26,6 +26,7 @@ class Loss
 {
 public:
     double loss_value;
+    double last_loss; 
     void calculator(string loss_function, string filepath, double NN_outputs, double targets, double data_size)
     {
         if (counter == data_size)
@@ -34,13 +35,13 @@ public:
             if (outFile.is_open())
             {
                 outFile << loss_value << endl;
-                outFile.close(); // Chiude il file
+                outFile.close();
             }
             else
             {
                 std::cerr << "Impossible to open file. " << filepath << std::endl;
             }
-
+            last_loss = loss_value; 
             loss_value = 0;
             counter = 0;
         }
