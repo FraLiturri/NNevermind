@@ -34,7 +34,7 @@ public:
             if (outFile.is_open())
             {
                 outFile << loss_value << endl;
-                outFile.close(); // Chiude il file
+                outFile.close(); // Chiude il file;
             }
             else
             {

@@ -23,8 +23,8 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
     auto start = chrono::high_resolution_clock::now();
 
     //! Preparing data for training and test phase;
-    DataGetter("Monk_data/monks-1binary.train", TrainingResults, TrainingData);
-    DataGetter("Monk_data/monks-1binary.test", TestResults, TestData);
+    DataGetter("Monk_data/monks-2binary.train", TrainingResults, TrainingData);
+    DataGetter("Monk_data/monks-2binary.test", TestResults, TestData);
     ofstream("NN_results/training_loss.txt", std::ios::trunc).close();
     ofstream("NN_results/test_loss.txt", std::ios::trunc).close();
 
@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
             first_hidden.forward_pass("sigmoid", 1);
             output_layer.forward_pass("sigmoid", 2, true);
 
-            output_layer.BackPropagation(TrainingResults[k], 0.1, 0.01, 0.0);
+            output_layer.BackPropagation(TrainingResults[k], 0.1, 0.00, 0.0);
             TrainingLoss.calculator("MSE", "NN_results/training_loss.txt", outputs[weights.size()][0], TrainingResults[k], TrainingResults.size());
 
             if (n == atoi(argv[1]) - 1) // Accuracy calculator;
