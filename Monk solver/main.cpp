@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
             first_hidden.forward_pass("sigmoid", 1);
             output_layer.forward_pass("sigmoid", 2, true);
 
-            output_layer.BackPropagation(TrainingResults[k], 0.1, 0.00, 0.0);
+            output_layer.BackPropagation(TrainingResults[k], 0.1, 0.0, 0.0);
             TrainingLoss.calculator("MSE", "NN_results/training_loss.txt", outputs[weights.size()][0], TrainingResults[k], TrainingResults.size());
 
             if (n == atoi(argv[1]) - 1) // Accuracy calculator;
