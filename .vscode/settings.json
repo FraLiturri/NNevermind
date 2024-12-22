@@ -74,6 +74,7 @@
         "xtr1common": "cpp",
         "chrono": "cpp",
         "forward_list": "cpp",
-        "iomanip": "cpp"
+        "iomanip": "cpp",
+        "variant": "cpp"
     }
 }
