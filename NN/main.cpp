@@ -14,9 +14,6 @@ using namespace std;
 vector<VectorXd> TrainingData, TestData;
 VectorXd TrainingResults, TestResults;
 
-int training_accuracy = 0, test_accuracy = 0;
-double FinalResult; // auxiliary double;
-
 int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
 {
     //! Counter starts;
