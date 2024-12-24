@@ -7,27 +7,71 @@
 using namespace std;
 using namespace Eigen;
 
-double aux = 0;
+double aux;
+VectorXd aux_vec;
 int counter = 0;
 
-double MSE(double x, double y)
+double MSE(variant<double, VectorXd> x, variant<double, VectorXd> y)
 {
-    aux = pow((x - y), 2);
+    if (holds_alternative<VectorXd>(x))
+    {
+        aux_vec = get<VectorXd>(x) - get<VectorXd>(y);
+        aux = pow(aux_vec.norm(), 2);
+    }
+    else if (holds_alternative<double>(x))
+    {
+        aux = pow(get<double>(x) - get<double>(y), 2);
+    }
+    else
+    {
+        cerr << "Type not accepted: please try with VectorXd or double" << endl;
+    }
     return aux;
 }
-double BCE(double x, double y)
+double BCE(variant<double, VectorXd> x, variant<double, VectorXd> y)
 {
+    if (holds_alternative<VectorXd>(x))
+    {
+        aux_vec = get<VectorXd>(x) - get<VectorXd>(y);
+        aux = pow(aux_vec.norm(), 2);
+    }
+    else if (holds_alternative<double>(x))
+    {
+        aux = pow(get<double>(x) - get<double>(y), 2);
+    }
+    else
+    {
+        cerr << "Type not accepted: please try with VectorXd or double" << endl;
+    }
+    return aux;
+}
+double MEE(variant<double, VectorXd> x, variant<double, VectorXd> y)
+{
+    if (holds_alternative<VectorXd>(x))
+    {
+        aux_vec = get<VectorXd>(x) - get<VectorXd>(y);
+        aux = aux_vec.norm();
+    }
+    else if (holds_alternative<double>(x))
+    {
+        aux = pow(get<double>(x) - get<double>(y), 2);
+        aux = pow(aux, 0.5);
+    }
+    else
+    {
+        cerr << "Type not accepted: please try with VectorXd or double" << endl;
+    }
     return aux;
 }
 
-double (*choice)(double, double);
+double (*choice)(variant<double, VectorXd> x, variant<double, VectorXd> y);
 
 class Loss
 {
 public:
     double loss_value;
-    double last_loss; 
-    void calculator(string loss_function, string filepath, double NN_outputs, double targets, double data_size)
+    double last_loss;
+    void calculator(string loss_function, string filepath, variant<double, VectorXd> NN_outputs, variant<double, VectorXd> targets, double data_size)
     {
         if (counter == data_size)
         {
@@ -41,7 +85,7 @@ public:
             {
                 std::cerr << "Impossible to open file. " << filepath << std::endl;
             }
-            last_loss = loss_value; 
+            last_loss = loss_value;
             loss_value = 0;
             counter = 0;
         }
@@ -54,6 +98,11 @@ public:
         else if (loss_function == "BCE")
         {
             choice = BCE;
+            loss_value += choice(NN_outputs, targets) / data_size;
+        }
+        else if (loss_function == "MEE")
+        {
+            choice = MEE;
             loss_value += choice(NN_outputs, targets) / data_size;
         }
         else

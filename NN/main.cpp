@@ -20,8 +20,8 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
     auto start = chrono::high_resolution_clock::now();
 
     //! Preparing data for training and test phase;
-    DataGetter("Monk_data/monks-2binary.train", TrainingResults, TrainingData);
-    DataGetter("Monk_data/monks-2binary.test", TestResults, TestData);
+    DataGetter("Monk_data/monks-1binary.train", TrainingResults, TrainingData);
+    DataGetter("Monk_data/monks-1binary.test", TestResults, TestData);
     ofstream("NN_results/training_loss.txt", std::ios::trunc).close();
     ofstream("NN_results/test_loss.txt", std::ios::trunc).close();
 
