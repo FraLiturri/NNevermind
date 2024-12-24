@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
     ofstream("NN_results/test_loss.txt", std::ios::trunc).close();
 
     //! Demiurge blows;
-    Demiurge NeuralNetwork(17, {4}, 1);   // Input units - hidden_units vector - output units;
+    Demiurge NeuralNetwork(17, {30}, 1);   // Input units - hidden_units vector - output units;
     Demiurge *pointerNN = &NeuralNetwork; // Pointer to NeuralNetwork for print_info, avoidable if not desired;
 
     //! Printing NN general info: can be avoided if not desired;
@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
             first_hidden.forward_pass("sigmoid", 1);
             output_layer.forward_pass("sigmoid", 2, true);
 
-            output_layer.BackPropagation(TrainingResults[k], 0.1, 0.0, 0.0);
+            output_layer.BackPropagation(TrainingResults[k], 0.1, 0.0, 0.00001);
             TrainingLoss.calculator("MSE", "NN_results/training_loss.txt", outputs[weights.size()][0], TrainingResults[k], TrainingResults.size());
 
             if (n == atoi(argv[1]) - 1) // Accuracy calculator;

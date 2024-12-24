@@ -83,7 +83,7 @@ public:
             }
             else
             {
-                std::cerr << "Impossible to open file. " << filepath << std::endl;
+                cerr << "Impossible to open file." << filepath << endl;
             }
             last_loss = loss_value;
             loss_value = 0;

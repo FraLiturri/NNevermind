@@ -43,4 +43,9 @@ void DataGetter(const string fileinput, VectorXd &resultsVector, vector<VectorXd
     }
 }
 
+void Splitter(){
+    
+}
+
+
 #endif
