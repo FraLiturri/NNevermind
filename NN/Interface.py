@@ -39,7 +39,7 @@ def submit_values():
                                                f"Lambda: [-1, 1]\n"
                                                f"Alpha: [-1, 1]\n"
                                                "Attenzione: potrebbero volerci qualche decina di secondi, i valori inseriti sono di default.")
-            command = ["./Interf","-1","1","-1","1","-1","1"]
+            command = ["./main.exe","-1","1","-1","1","-1","1"]
             result = subprocess.run(command, capture_output=True, text=True)
             print("Output:", result.stdout)
             print("Errori:", result.stderr)
@@ -56,7 +56,7 @@ def submit_values():
                                                f"Lambda: [{lambda_min}, {lambda_max}]\n"
                                                f"Alpha: [{alpha_min}, {alpha_max}]\n"
                                                "Attenzione: potrebbero volerci qualche decina di secondi.")
-            command = ["./Interf", str(eta_min),str(eta_max), str(lambda_min),str(lambda_max), str(alpha_min),str(alpha_max)]
+            command = ["./main.exe", str(eta_min),str(eta_max), str(lambda_min),str(lambda_max), str(alpha_min),str(alpha_max)]
             result = subprocess.run(command, capture_output=True, text=True)
             print("Output:", result.stdout)
             print("Errori:", result.stderr)
