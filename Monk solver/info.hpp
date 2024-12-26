@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "layer.hpp"
+#include "/home/calisse/eigen-3.4.0/Eigen/Dense"
 
 Demiurge *pointer;
 

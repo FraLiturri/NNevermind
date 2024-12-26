@@ -2,7 +2,9 @@
 #define data_reader
 
 #include "lib.hpp"
-#include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
+#include "/home/calisse/eigen-3.4.0/Eigen/Dense"
+
+//#include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
 
 using namespace std;
 using namespace Eigen;
