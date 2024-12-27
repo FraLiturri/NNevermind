@@ -30,48 +30,73 @@ for eta, lambd, alpha in combinations:
 import tkinter as tk
 from tkinter import messagebox
 
-
+IsCompilationGood =False
 
 def submit_values():
-    try:
-        #metti dei valori di default se non e' specificato nulla
-        if(not eta_min_entry.get())&(not eta_max_entry.get())&(not lambda_min_entry.get())&(not lambda_max_entry.get())&(not alpha_min_entry.get())&(not alpha_max_entry.get())&(not steps_entry.get()):
-            messagebox.showinfo("Valori Inseriti di default: ", f"Eta: [-1, 1]\n"
-                                               f"Lambda: [-1, 1]\n"
-                                               f"Alpha: [-1, 1]\n"
-                                               f"Steps: [{2}]\n"
-                                               "Attenzione: potrebbero volerci qualche decina di secondi, i valori inseriti sono di default.")
-            command = ["./main.exe","-1","1","-1","1","-1","1", "2"]
-            result = subprocess.run(command, capture_output=True, text=True)
-            print("Output:", result.stdout)
-            print("Errori:", result.stderr)
-        #metti i valori inseriti dall'utente
-        else:
-            # Legge i valori inseriti
-            eta_min = float(eta_min_entry.get())
-            eta_max = float(eta_max_entry.get())
-            lambda_min = float(lambda_min_entry.get())
-            lambda_max = float(lambda_max_entry.get())
-            alpha_min = float(alpha_min_entry.get())
-            alpha_max = float(alpha_max_entry.get())
-            steps = float(steps_entry.get())
-            messagebox.showinfo("Valori Inseriti", f"Eta: [{eta_min}, {eta_max}]\n"
+    global IsCompilationGood
+    if IsCompilationGood:
+        try:
+            #metti dei valori di default se non e' specificato nulla
+            if(not eta_min_entry.get())&(not eta_max_entry.get())&(not lambda_min_entry.get())&(not lambda_max_entry.get())&(not alpha_min_entry.get())&(not alpha_max_entry.get())&(not steps_entry.get())&(not training_steps_entry.get()):
+                messagebox.showinfo("Valori Inseriti di default: ", f"Eta: [-1, 1]\n"
+                                                   f"Lambda: [-1, 1]\n"
+                                                   f"Alpha: [-1, 1]\n"
+                                                   f"Steps: [2]\n"
+                                                   f"Training Steps: [600]\n"
+
+                                                   "Attenzione: potrebbero volerci qualche decina di secondi, i valori inseriti sono di default.")
+                command = ["./main.exe","0.01","0.1","0","0","0","0", "2", "600"]
+                result = subprocess.run(command, capture_output=True, text=True)
+                print("Output:", result.stdout)
+                print("Errori:", result.stderr)
+            #metti i valori inseriti dall'utente
+            else:
+                # Legge i valori inseriti
+                eta_min = float(eta_min_entry.get())
+                eta_max = float(eta_max_entry.get())
+                lambda_min = float(lambda_min_entry.get())
+                lambda_max = float(lambda_max_entry.get())
+                alpha_min = float(alpha_min_entry.get())
+                alpha_max = float(alpha_max_entry.get())
+                steps = float(steps_entry.get())
+                training_steps = float(training_steps_entry.get())
+                messagebox.showinfo("Valori Inseriti", f"Eta: [{eta_min}, {eta_max}]\n"
                                                f"Lambda: [{lambda_min}, {lambda_max}]\n"
                                                f"Alpha: [{alpha_min}, {alpha_max}]\n"
                                                f"Steps: [{steps}]\n"
+                                               f"Training Steps: [{training_steps}]\n"
                                                "Attenzione: potrebbero volerci qualche decina di secondi.")
-            command = ["./main.exe", str(eta_min),str(eta_max), str(lambda_min),str(lambda_max), str(alpha_min),str(alpha_max), str(steps_entry)]
-            result = subprocess.run(command, capture_output=True, text=True)
-            print("Output:", result.stdout)
-            print("Errori:", result.stderr)
+                command = ["./main.exe", str(eta_min),str(eta_max), str(lambda_min),str(lambda_max), str(alpha_min),str(alpha_max), str(steps_entry), str(training_steps)]
+                result = subprocess.run(command, capture_output=True, text=True)
+                print("Output:", result.stdout)
+                print("Errori:", result.stderr)
             #assicurati che i valori inseriti siano consistenti...
-            if (eta_min>eta_max)|(lambda_min > lambda_max)|(alpha_min>alpha_max):
-                raise ValueError
-            if(steps<0):
-                raise ValueError
-    except ValueError:
-        messagebox.showerror("Errore", "Inserisci valori numerici validi.")
+                if (eta_min>eta_max)|(lambda_min > lambda_max)|(alpha_min>alpha_max):
+                    raise ValueError
+                if(steps<0):
+                    raise ValueError
+                if(training_steps<0):
+                    raise ValueError
+        except ValueError:
+            messagebox.showerror("Errore", "Inserisci valori numerici validi.")
+    else:
+        messagebox.showinfo("Compilazione non riuscita", "Assicurati di aver corretto il codice e poi riesegui la compilazione.")
 
+
+def recompile():
+    global IsCompilationGood
+    try:
+        process = subprocess.run(["g++",  "-fopenmp", "-o", "main.exe", "main.cpp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text = True, check = True)
+        IsCompilationGood = True
+    except FileNotFoundError:
+        logger.error("Errore fatale: file main non trovato")
+        messagebox.showerror("Errore", "La compilazione non ha avuto buon fine: leggi l'errore da terminale dopo aver premuto Ok.")
+        IsCompilationGood = False
+    except subprocess.CalledProcessError as e:
+        logger.error("Errore fatale: la compilazione del main ha prodotto un errore.")
+        messagebox.showerror("Errore", "La compilazione non ha avuto buon fine: leggi l'errore da terminale dopo aver premuto Ok.")
+        IsCompilationGood = False
+        print(e.stderr)
 
 def navigate(event):
     """Naviga tra i campi con le frecce della tastiera."""
@@ -89,13 +114,17 @@ root = tk.Tk()
 root.title("Intervalli di Parametri")
 try:
     process = subprocess.run(["g++",  "-fopenmp", "-o", "main.exe", "main.cpp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text = True, check = True)
+    IsCompilationGood = True
 except FileNotFoundError:
     logger.error("Errore fatale: file main non trovato")
-    sys.exit()
+    messagebox.showerror("Errore", "La compilazione non ha avuto buon fine: leggi l'errore da terminale dopo aver premuto Ok.")
+    IsCompilationGood = False
 except subprocess.CalledProcessError as e:
     logger.error("Errore fatale: la compilazione del main ha prodotto un errore.")
+    messagebox.showerror("Errore", "La compilazione non ha avuto buon fine: leggi l'errore da terminale dopo aver premuto Ok.")
+    IsCompilationGood = False
     print(e.stderr)
-    sys.exit()
+
 # Sezione per il parametro eta
 tk.Label(root, text="Eta Min:").grid(row=0, column=0, padx=5, pady=5)
 eta_min_entry = tk.Entry(root)
@@ -129,10 +158,18 @@ steps_entry = tk.Entry(root)
 steps_entry.grid(row=3, column=1, padx=5, pady=5)
 
 
+#Sezione per specificare il numero di iterazioni di training
+tk.Label(root, text="Training Steps:").grid(row=3, column=2, padx=5, pady=5)
+training_steps_entry = tk.Entry(root)
+training_steps_entry.grid(row=3, column=3, padx=5, pady=5)
+
+
 # Pulsante per avviare il training, da migliorare
 submit_button = tk.Button(root, text="Conferma", command=submit_values)
 submit_button.grid(row=4, column=0, columnspan=4, pady=10)
 
+recompile_button = tk.Button(root, text = "Ricompila", command = recompile)
+recompile_button.grid(row =4, column = 3, columnspan = 4, pady = 10)
 
 # Piccolo improvement della qualita' di vita...
 for widget in [eta_min_entry, eta_max_entry, lambda_min_entry, lambda_max_entry, alpha_min_entry, alpha_max_entry, steps_entry]:

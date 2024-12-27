@@ -4,29 +4,6 @@ import sys
 from itertools import product
 from loguru import logger
 import multiprocessing as mp
-"""
-Eta_hyperparameter = np.linspace(-1,1,2)
-Lambda_hyperparameter = np.linspace(-1,1,2)
-Alpha_hyperparameter =np.linspace(-1,1,2)
-
-
-
-# Genera tutte le combinazioni
-combinations = product(Eta_hyperparameter, Lambda_hyperparameter, Alpha_hyperparameter)
-subprocess.run(["g++", "Main.cpp", "-o", "Main"], check=True)
-# Esegui il comando per ogni combinazione
-
-for eta, lambd, alpha in combinations:
-    command = ["./Main", str(eta), str(lambd), str(alpha)]
-    result = subprocess.run(command, capture_output=True, text=True)
-    print(f"Parametri: eta={eta}, lambda={lambd}, alpha={alpha}")
-    print("Output:", result.stdout)
-    print("Errori:", result.stderr)
-
-
-
-
-"""
 import tkinter as tk
 from tkinter import messagebox
 
@@ -71,8 +48,6 @@ def submit_values():
     except ValueError:
         messagebox.showerror("Errore", "Inserisci valori numerici validi.")
 
-
-
 def navigate(event):
     """Naviga tra i campi con le frecce della tastiera."""
     widget = event.widget
@@ -91,11 +66,11 @@ try:
     process = subprocess.run(["g++",  "-fopenmp", "-o", "main.exe", "main.cpp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text = True, check = True)
 except FileNotFoundError:
     logger.error("Errore fatale: file main non trovato")
-    sys.exit()
+    messagebox.showerror("Errore", "La compilazione non ha avuto buon fine: leggi l'errore da terminale dopo aver premuto Ok.")
 except subprocess.CalledProcessError as e:
     logger.error("Errore fatale: la compilazione del main ha prodotto un errore.")
+    messagebox.showerror("Errore", "La compilazione non ha avuto buon fine: leggi l'errore da terminale dopo aver premuto Ok.")
     print(e.stderr)
-    sys.exit()
 # Sezione per il parametro eta
 tk.Label(root, text="Eta Min:").grid(row=0, column=0, padx=5, pady=5)
 eta_min_entry = tk.Entry(root)
@@ -133,9 +108,8 @@ steps_entry.grid(row=3, column=1, padx=5, pady=5)
 submit_button = tk.Button(root, text="Conferma", command=submit_values)
 submit_button.grid(row=4, column=0, columnspan=4, pady=10)
 
-
 # Piccolo improvement della qualita' di vita...
-for widget in [eta_min_entry, eta_max_entry, lambda_min_entry, lambda_max_entry, alpha_min_entry, alpha_max_entry, ste]:
+for widget in [eta_min_entry, eta_max_entry, lambda_min_entry, lambda_max_entry, alpha_min_entry, alpha_max_entry, steps_entry]:
     widget.bind("<Up>", navigate)
     widget.bind("<Down>", navigate)
 
