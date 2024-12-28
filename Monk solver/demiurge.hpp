@@ -16,6 +16,8 @@ vector<MatrixXd> prev_updates; // necessary for training;
 
 VectorXd units_output; // auxiliary vector;
 
+int last_units; 
+
 //! Demiurge class: the Creator;
 class Demiurge
 {
@@ -28,6 +30,7 @@ public:
         // Storing some important info about NN;
         in_units = inputs_units;
         out_units = output_units;
+        last_units = output_units; 
         hidden_and_out_units = hidden_units;
         hidden_and_out_units.push_back(output_units); // Adds output's units to vector;
         hidden_layers = hidden_units.size();

@@ -160,8 +160,7 @@ void Hidden_Layer::RandomTraining(variant<double, VectorXd> d, double eta, doubl
     next_inputs.clear();
     units_output.setZero();
 }
-
-void Hidden_Layer::Rprop(variant<double, VectorXd> d, double eta, double alpha, double lambda)
+void Hidden_Layer::RMSprop(variant<double, VectorXd> d, double eta, double alpha, double lambda)
 {
     i = weights.size();
     while (i > 0)
@@ -190,10 +189,6 @@ void Hidden_Layer::Rprop(variant<double, VectorXd> d, double eta, double alpha, 
                     delta_k = (get<VectorXd>(d)[k] - outputs[i][k]) * der_act_func(net_t[k]);
                     delta[k] = delta_k;
                 }
-            }
-            else
-            {
-                throw runtime_error("Backpropagation accepts only double or VectorXd as first input.");
             }
 
             if (prev_updates[0](0, 0) == 0) // The first element is 0 only at initialization; after is always 1 (bias term);

@@ -6,15 +6,17 @@
 #include "data_reader.hpp"
 #include "loss.hpp"
 
+#include <typeinfo>
+
 #include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
 
 using namespace Eigen;
 using namespace std;
 
-vector<VectorXd> TrainingData, TestData;
-VectorXd TrainingResults, TestResults;
+vector<VectorXd> TrainingData, TestData, ValidationData;
+VectorXd TrainingResults, TestResults, ValidationResults;
 
-int training_accuracy = 0, test_accuracy = 0;
+int training_accuracy = 0, test_accuracy = 0, validation_accuracy = 0;
 double FinalResult; // auxiliary double;
 
 int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
@@ -22,15 +24,13 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
     //! Counter starts;
     auto start = chrono::high_resolution_clock::now();
 
-    //! Preparing data for training and test phase;
-    DataGetter("Monk_data/monks-2binary.train", TrainingResults, TrainingData);
-    DataGetter("Monk_data/monks-2binary.test", TestResults, TestData);
-    ofstream("NN_results/training_loss.txt", std::ios::trunc).close();
-    ofstream("NN_results/test_loss.txt", std::ios::trunc).close();
-
     //! Demiurge blows;
-    Demiurge NeuralNetwork(17, {30}, 1);   // Input units - hidden_units vector - output units;
+    Demiurge NeuralNetwork(17, {10}, 1);  // Input units - hidden_units vector - output units;
     Demiurge *pointerNN = &NeuralNetwork; // Pointer to NeuralNetwork for print_info, avoidable if not desired;
+
+    //! Preparing data for training (and validation) and test phase;
+    DataGetter("Monk_data/monks-1binary.train", TrainingResults, TrainingData);
+    DataGetter("Monk_data/monks-1binary.test", TestResults, TestData);
 
     //! Printing NN general info: can be avoided if not desired;
     print_info(pointerNN);
@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
             first_hidden.forward_pass("sigmoid", 1);
             output_layer.forward_pass("sigmoid", 2, true);
 
-            output_layer.BackPropagation(TrainingResults[k], 0.1, 0.0, 0.00001);
+            output_layer.BackPropagation(TrainingResults[k], 0.3, 0.001, 0.00001);
             TrainingLoss.calculator("MSE", "NN_results/training_loss.txt", outputs[weights.size()][0], TrainingResults[k], TrainingResults.size());
 
             if (n == atoi(argv[1]) - 1) // Accuracy calculator;

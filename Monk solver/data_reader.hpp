@@ -2,12 +2,13 @@
 #define data_reader
 
 #include "lib.hpp"
+#include "demiurge.hpp"
 #include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
 
 using namespace std;
 using namespace Eigen;
 
-void DataGetter(const string fileinput, VectorXd &resultsVector, vector<VectorXd> &Inputs)
+void DataGetter(const string fileinput, VectorXd &resultsVector, vector<VectorXd> &Inputs) //, double splitting_index = 124)
 {
     string line; // declaring the std::string that will act as a placeholder for each line of the file;
     ifstream myfile_in(fileinput);
@@ -42,10 +43,5 @@ void DataGetter(const string fileinput, VectorXd &resultsVector, vector<VectorXd
         resultsVector[i] = Results[i];
     }
 }
-
-void Splitter(){
-    
-}
-
 
 #endif
