@@ -6,10 +6,6 @@ Add drop-out?
 TO DO:
     ✔ Add Nesterov momentum and tikhonov reg.; @critical @done (12/20/2024, 3:13:41 PM)
     ✔ Add Loss and file writing; @high @done (12/20/2024, 3:13:35 PM)
-    ☐ Convert double in MSE, BCE, Loss to variant;
-    ☐ New data reader for NN (has to be general); 
-    ☐ If possibile add accuracy calculator; 
-    ☐ 
 
 TO DO (info.py):
     ☐ Add questions;

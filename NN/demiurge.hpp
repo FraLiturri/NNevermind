@@ -3,6 +3,7 @@
 
 #include "lib.hpp"
 #include "activation_functions.hpp"
+
 #include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
 
 using namespace std;
@@ -15,6 +16,8 @@ vector<MatrixXd> prev_updates; // necessary for training;
 
 VectorXd units_output; // auxiliary vector;
 
+int first_units, last_units;
+
 //! Demiurge class: the Creator;
 class Demiurge
 {
@@ -22,14 +25,18 @@ public:
     int in_units, out_units, hidden_layers, rows, cols;
     vector<int> hidden_and_out_units;
 
-    Demiurge(int inputs_units, vector<int> hidden_units, int output_units)
+    Demiurge(int input_units, vector<int> hidden_units, int output_units)
     {
         // Storing some important info about NN;
-        in_units = inputs_units;
+        in_units = input_units;
         out_units = output_units;
+
         hidden_and_out_units = hidden_units;
         hidden_and_out_units.push_back(output_units); // Adds output's units to vector;
         hidden_layers = hidden_units.size();
+
+        first_units = input_units;
+        last_units = output_units;
 
         for (int i = 0; i < hidden_layers + 2; i++) // This cycle creates weights matrices;
         {
@@ -40,7 +47,7 @@ public:
             i == hidden_layers + 1 ? rows = out_units : rows = hidden_and_out_units[i]; // Paying attention to last layer (output);
 
             MatrixXd weight = MatrixXd::NullaryExpr(rows, cols, []()
-                                                    { return Eigen::internal::random<double>(-1, 1); });
+                                                    { return Eigen::internal::random<double>(-0.5, 0.5); });
             MatrixXd ghost = MatrixXd::NullaryExpr(rows, cols, []()
                                                    { return Eigen::internal::random<double>(0, 0); });
 

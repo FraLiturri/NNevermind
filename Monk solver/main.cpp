@@ -29,8 +29,8 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
     Demiurge *pointerNN = &NeuralNetwork; // Pointer to NeuralNetwork for print_info, avoidable if not desired;
 
     //! Preparing data for training (and validation) and test phase;
-    DataGetter("Monk_data/monks-1binary.train", TrainingResults, TrainingData);
-    DataGetter("Monk_data/monks-1binary.test", TestResults, TestData);
+    DataGetter("Monk_data/monks-1binary.train", TrainingData, TrainingResults);
+    DataGetter("Monk_data/monks-1binary.test", TestData, TestResults);
 
     //! Printing NN general info: can be avoided if not desired;
     print_info(pointerNN);
