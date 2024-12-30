@@ -71,8 +71,9 @@ class Loss
 public:
     double loss_value;
     double last_loss;
-    void calculator(string loss_function, string filepath, variant<double, VectorXd> NN_outputs, variant<double, VectorXd> targets, double data_size)
+    void calculator(string loss_function, string filepath, variant<double, VectorXd> NN_outputs, variant<double, VectorXd> targets, int data_size)
     {
+        counter++; 
         if (counter == data_size)
         {
             ofstream outFile(filepath, std::ios::app);
@@ -93,23 +94,22 @@ public:
         if (loss_function == "MSE")
         {
             choice = MSE;
-            loss_value += choice(NN_outputs, targets) / data_size;
+            loss_value += choice(NN_outputs, targets) /(double) data_size;
         }
         else if (loss_function == "BCE")
         {
             choice = BCE;
-            loss_value += choice(NN_outputs, targets) / data_size;
+            loss_value += choice(NN_outputs, targets) /(double) data_size;
         }
         else if (loss_function == "MEE")
         {
             choice = MEE;
-            loss_value += choice(NN_outputs, targets) / data_size;
+            loss_value += choice(NN_outputs, targets) /(double) data_size;
         }
         else
         {
             cout << "\nUnvailable choice as loss function. " << endl;
         }
-        counter++;
     };
 };
 

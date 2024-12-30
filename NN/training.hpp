@@ -120,6 +120,7 @@ void Hidden_Layer::BackPropagation(variant<double, VectorXd> d, double eta, doub
         i--;
     };
 }
+
 void Hidden_Layer::RandomTraining(variant<double, VectorXd> d, double eta, double alpha = 0, double lambda = 0)
 {
     i = weights.size();
@@ -160,6 +161,7 @@ void Hidden_Layer::RandomTraining(variant<double, VectorXd> d, double eta, doubl
     next_inputs.clear();
     units_output.setZero();
 }
+
 void Hidden_Layer::RMSprop(variant<double, VectorXd> d, double eta, double alpha, double lambda)
 {
     i = weights.size();

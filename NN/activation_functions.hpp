@@ -49,6 +49,15 @@ double relu_der(double x)
     return relu_res;
 }
 
+double tangent(double x)
+{
+    return tanh(x);
+}
+double tan_der(double x)
+{
+    double res = 1 / (double)cosh(x);
+    return res * res;
+}
 // Defining pointer to activation function(s) and derivative(s);
 double (*act_func)(double);     // pointer to f;
 double (*der_act_func)(double); // pointer to f';
@@ -75,6 +84,11 @@ void func_choiser(std::string choice)
     {
         act_func = relu;
         der_act_func = relu_der;
+    }
+    else if (choice == "tanh")
+    {
+        act_func = tangent;
+        der_act_func = tan_der;
     }
     else
     {

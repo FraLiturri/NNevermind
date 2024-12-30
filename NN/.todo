@@ -1,7 +1,4 @@
 Ideas: 
-For monk's problem, d as be setted as a double, in general has to be a vectorXd (change to d[k]
-) where necessary; This may be improved in the package; 
-Add drop-out? 
 
 TO DO:
     ✔ Add Nesterov momentum and tikhonov reg.; @critical @done (12/20/2024, 3:13:41 PM)

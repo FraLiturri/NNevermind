@@ -17,7 +17,7 @@ public:
         vector<VectorXd> res_aux(resultsVector.begin(), resultsVector.begin() + val_size);
 
         vector<VectorXd> val_data_aux(Inputs.begin() + val_size, Inputs.end());
-        vector<VectorXd> val_res_aux(Inputs.begin() + val_size, Inputs.end());
+        vector<VectorXd> val_res_aux(resultsVector.begin() + val_size, resultsVector.end());
 
         Inputs = data_aux;
         resultsVector = res_aux;
