@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
     ofstream("NN_results/val_loss.txt", std::ios::trunc).close();
 
     //! Demiurge blows;
-    Demiurge NeuralNetwork(12, {60, 60}, 3); // Input units - hidden_units vector - output units;
+    Demiurge NeuralNetwork(12, {200, 200}, 3); // Input units - hidden_units vector - output units;
     Demiurge *pointerNN = &NeuralNetwork;    // Pointer to NeuralNetwork for print_info, avoidable if not desired;
 
     //! Preparing data;
@@ -37,18 +37,14 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
 
     //! Splitting data for validation part;
     Validation Validator;
-    Validator.HoldOut(TrainingData, TrainingResults, ValidationData, ValidationResults, 210);
+    Validator.HoldOut(TrainingData, TrainingResults, ValidationData, ValidationResults, 200);
 
     //! Printing NN general info: can be avoided if not desired;
     print_info(pointerNN);
 
     //! Neural network construction;
     Input_Layer input_layer;
-    Hidden_Layer first_hidden;
-    Hidden_Layer second_hidden;
-    Hidden_Layer third_hidden;
-    Hidden_Layer fourth_hidden;
-    Hidden_Layer output_layer;
+    Hidden_Layer first_hidden, second_hidden, third_hidden, output_layer;
 
     Loss TrainingLoss, TestLoss, ValidationLoss;
 
@@ -58,13 +54,11 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
         for (int k = 0; k < TrainingData.size(); k++)
         {
             input_layer.forward_pass(TrainingData[k]);
-            first_hidden.forward_pass("tanh", 1);
-            second_hidden.forward_pass("tanh", 2);
-            // third_hidden.forward_pass("tanh", 3);
-            //  fourth_hidden.forward_pass("tanh", 4);
+            first_hidden.forward_pass("leaky_relu", 1);
+            second_hidden.forward_pass("leaky_relu", 2);
             output_layer.forward_pass("linear", 3, true);
 
-            output_layer.BackPropagation(TrainingResults[k], 0.0001, 0.000001, 0.00001);
+            output_layer.BackPropagation(TrainingResults[k], 0.01);
             TrainingLoss.calculator("MEE", "NN_results/training_loss.txt", outputs[weights.size()], TrainingResults[k], TrainingResults.size());
         };
 
@@ -72,10 +66,8 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
         for (int k = 0; k < ValidationData.size(); k++)
         {
             input_layer.forward_pass(ValidationData[k]);
-            first_hidden.forward_pass("tanh", 1);
-            second_hidden.forward_pass("tanh", 2);
-            // third_hidden.forward_pass("tanh", 3);
-            //  fourth_hidden.forward_pass("tanh", 4);
+            first_hidden.forward_pass("leaky_relu", 1);
+            second_hidden.forward_pass("leaky_relu", 2);
             output_layer.forward_pass("linear", 3, true);
 
             ValidationLoss.calculator("MEE", "NN_results/val_loss.txt", outputs[weights.size()], ValidationResults[k], ValidationResults.size());

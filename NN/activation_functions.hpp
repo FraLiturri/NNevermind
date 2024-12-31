@@ -5,6 +5,7 @@
 #include <string>
 
 using namespace std;
+double leaky_coeff = 0.1;
 
 // Defining activation functions and their derivatives (needed for Backpropagation);
 double sigmoid(double x)
@@ -58,6 +59,20 @@ double tan_der(double x)
     double res = 1 / (double)cosh(x);
     return res * res;
 }
+
+double leaky_relu(double x)
+{
+    double res;
+    x < 0 ? res = leaky_coeff * x : x;
+    return res;
+}
+double leaky_der(double x)
+{
+    double der_res;
+    x < 0 ? der_res = leaky_coeff : 1;
+    return der_res; 
+}
+
 // Defining pointer to activation function(s) and derivative(s);
 double (*act_func)(double);     // pointer to f;
 double (*der_act_func)(double); // pointer to f';
@@ -89,6 +104,11 @@ void func_choiser(std::string choice)
     {
         act_func = tangent;
         der_act_func = tan_der;
+    }
+    else if (choice == "leaky_relu")
+    {
+        act_func = leaky_relu;
+        der_act_func = leaky_der;
     }
     else
     {
