@@ -11,19 +11,18 @@
 
 using namespace Eigen;
 using namespace std;
+
 vector<VectorXd> TrainingData, TestData;
 VectorXd TrainingResults, TestResults;
 
 int training_accuracy = 0, test_accuracy = 0;
 double FinalResult; // auxiliary double;
 
-
-//to test the code
+// to test the code
 double PlaceHolderMain(HyperParameters params)
 {
     return 1.1;
 };
-
 
 // int main(int argc, char* argv[]) //
 
@@ -32,15 +31,12 @@ double TrueMain(HyperParameters params, int TrainingIterations) //
     training_accuracy = 0;
     test_accuracy = 0;
     //! Counter starts;
-    
     auto start = chrono::high_resolution_clock::now();
     //! Demiurge blows;
     Demiurge NeuralNetwork(17, {4}, 1);   // Input units - hidden_units vector - output units;
     Demiurge *pointerNN = &NeuralNetwork; // Pointer to NeuralNetwork for print_info, avoidable if not desired;
-
     //! Printing NN general info: can be avoided if not desired;
     print_info(pointerNN);
-
     //! Neural network construction;
     Input_Layer input_layer;
     Hidden_Layer first_hidden;
@@ -48,27 +44,24 @@ double TrueMain(HyperParameters params, int TrainingIterations) //
     Loss TrainingLoss;
     Loss TestLoss;
     //! Output computing and training algorithm;
-    for (int n = 0; n < TrainingIterations /*atoi(argv[1])*/; n++)
+    for (int n = 0; n < TrainingIterations; n++)
     {
         for (int k = 0; k < TrainingData.size(); k++)
         {
             input_layer.forward_pass(TrainingData[k]);
             first_hidden.forward_pass("sigmoid", 1);
             output_layer.forward_pass("sigmoid", 2, true);
-            //output_layer.BackPropagation(TrainingResults[k], params.eta, params.alpha, params.lambda);
+            // output_layer.BackPropagation(TrainingResults[k], params.eta, params.alpha, params.lambda);
             output_layer.BackPropagation(TrainingResults[k], 0.2, 0.001, 0.00001);
-
             TrainingLoss.calculator("MSE", "NN_results/training_loss.txt", outputs[weights.size()][0], TrainingResults[k], TrainingResults.size());
             if (n == TrainingIterations - 1) // Accuracy calculator;
             {
                 outputs[weights.size()][0] >= 0.5 ? FinalResult = 1 : FinalResult = 0;
                 FinalResult == TrainingResults[k] ? training_accuracy++ : 0;
-                cout << outputs[weights.size()][0]<<" " << FinalResult << " "<< TrainingResults[k]<<endl;
-
+                cout << outputs[weights.size()][0] << " " << FinalResult << " " << TrainingResults[k] << endl;
             }
         }
     }
-
     //! Test;
     for (int k = 0; k < TestData.size(); k++)
     {
@@ -78,7 +71,7 @@ double TrueMain(HyperParameters params, int TrainingIterations) //
 
         outputs[weights.size()][0] >= 0.5 ? FinalResult = 1 : FinalResult = 0;
         FinalResult == TestResults[k] ? test_accuracy++ : 0;
-
+        cout << outputs[weights.size()][0] << " " << FinalResult << " " << TestResults[k] << endl;
         TestLoss.calculator("MSE", "NN_results/test_loss.txt", outputs[weights.size()][0], TestResults[k], TestResults.size());
     }
 
@@ -115,13 +108,10 @@ int main(int argc, char *argv[])
     for (int k = 0; k < RandomIndices.size(); k++)
     {
         ParamIndexAndLoss[k] = (std::make_pair(RandomIndices[k], TrueMain(grid[RandomIndices[k]], std::stoi(argv[8]))));
-
         //! resetting variables.
         counter = 0;
         aux = 0;
-        
         delta.resize(0);
-
         storer.clear();
         function_strings.clear();
         weights.clear();
@@ -135,7 +125,6 @@ int main(int argc, char *argv[])
         net_t.resize(0);
         delta.resize(0);
         net.resize(0);
-        
     }
 
     std::vector<double> LossesVector(RandomIndices.size());
@@ -150,9 +139,9 @@ int main(int argc, char *argv[])
     int LowestLossIndex = RandomIndices[std::distance(LossesVector.begin(), std::min_element(LossesVector.begin(), LossesVector.end()))]; // indice dei parametri della griglia con la loss piu' bassa'
     HyperParameters BestParamsFromGridSearch = grid[LowestLossIndex];
     double LowestLoss = LossesVector[std::distance(LossesVector.begin(), std::min_element(LossesVector.begin(), LossesVector.end()))];
-    for(auto x: LossesVector)
+    for (auto x : LossesVector)
     {
-        cout<<x<<endl;
+        cout << x << endl;
     }
     std::cout << "La loss migliore e' :" << LowestLoss << " ed e' data dall'elemento " << LowestLossIndex << " della griglia." << std::endl;
 
