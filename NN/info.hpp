@@ -17,7 +17,7 @@ void print_info(Demiurge *myNN)
 
     for (int k = 0; k < pointer->hidden_layers; k++)
     {
-        cout << pointer->hidden_and_out_units[k] << " ";
+        cout << hidden_and_out_units[k] << " ";
     }
 
     cout << "\nOut. units: " << pointer->out_units << endl;

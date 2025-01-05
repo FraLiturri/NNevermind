@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
     ofstream("NN_results/val_loss.txt", std::ios::trunc).close();
 
     //! Demiurge blows;
-    Demiurge NeuralNetwork(12, {200, 200}, 3); // Input units - hidden_units vector - output units;
+    Demiurge NeuralNetwork(12, {20, 20}, 3); // Input units - hidden_units vector - output units;
     Demiurge *pointerNN = &NeuralNetwork;    // Pointer to NeuralNetwork for print_info, avoidable if not desired;
 
     //! Preparing data;
@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
 
     //! Splitting data for validation part;
     Validation Validator;
-    Validator.HoldOut(TrainingData, TrainingResults, ValidationData, ValidationResults, 200);
+    Validator.HoldOut(TrainingData, TrainingResults, ValidationData, ValidationResults, 220);
 
     //! Printing NN general info: can be avoided if not desired;
     print_info(pointerNN);
@@ -45,7 +45,6 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
     //! Neural network construction;
     Input_Layer input_layer;
     Hidden_Layer first_hidden, second_hidden, third_hidden, output_layer;
-
     Loss TrainingLoss, TestLoss, ValidationLoss;
 
     //! Output computing and training algorithm;
@@ -58,8 +57,9 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
             second_hidden.forward_pass("leaky_relu", 2);
             output_layer.forward_pass("linear", 3, true);
 
-            output_layer.BackPropagation(TrainingResults[k], 0.01);
+            output_layer.BackPropagation(TrainingResults[k], 0.00001, 0, 0);
             TrainingLoss.calculator("MEE", "NN_results/training_loss.txt", outputs[weights.size()], TrainingResults[k], TrainingResults.size());
+            outputs.clear();
         };
 
         //! Validation;
@@ -71,6 +71,7 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
             output_layer.forward_pass("linear", 3, true);
 
             ValidationLoss.calculator("MEE", "NN_results/val_loss.txt", outputs[weights.size()], ValidationResults[k], ValidationResults.size());
+            outputs.clear();
         }
     }
 

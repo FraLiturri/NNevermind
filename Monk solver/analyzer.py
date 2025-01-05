@@ -26,7 +26,7 @@ def run_exe(file_path, n):
 if str(sys.argv[1]) == "plot":
     training_loss_path = "NN_results/training_loss.txt"
     tr_loss = np.loadtxt(training_loss_path)
-    x_tr = np.linspace(0, len(tr_loss), len(tr_loss))
+    x_tr = np.linspace(1, len(tr_loss), len(tr_loss))
     plt.errorbar(x_tr, tr_loss, fmt="--", label="Training loss")
     plt.grid(ls="dashed", axis="both")
     plt.xlabel("Epochs")

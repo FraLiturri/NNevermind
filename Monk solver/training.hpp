@@ -82,12 +82,8 @@ void Hidden_Layer::BackPropagation(variant<double, VectorXd> d, double eta, doub
 
         else
         {
-            delta.setZero();
-            func_choiser(function_strings[i - 1]);
-
-            auxiliar = weights[i];
             net_t = net_calculator(i);
-            delta = storer[weights.size() - (i + 1)].transpose() * auxiliar;
+            delta = weights[i].transpose() * delta;
 
             for (int k = 0; k < delta.size(); k++)
             {
@@ -106,7 +102,6 @@ void Hidden_Layer::BackPropagation(variant<double, VectorXd> d, double eta, doub
             weights[i - 1] = weights[i - 1] + update;
             weights[i - 1].col(0).setConstant(1);
             prev_updates[i - 1] = update;
-
             storer.push_back(delta);
         }
 
