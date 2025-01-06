@@ -6,6 +6,7 @@
 #include "data_reader.hpp"
 #include "loss.hpp"
 #include "validation.hpp"
+#include "estimator.hpp"
 
 #include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
 
@@ -26,7 +27,7 @@ int main(int argc, char *argv[])
 
     //! Demiurge blows;
     Demiurge NeuralNetwork(12, {25, 20}, 3); // Input units - hidden_units vector - output units;
-    Demiurge *pointerNN = &NeuralNetwork;    // Pointer to NeuralNetwork for print_info, avoidable if not desired;
+    Demiurge *pointerNN = &NeuralNetwork;      // Pointer to NeuralNetwork for print_info, avoidable if not desired;
 
     //! Preparing data;
     DataReader Getter;
@@ -35,14 +36,17 @@ int main(int argc, char *argv[])
 
     //! Splitting data for validation part;
     Validation Validator;
-    Validator.HoldOut(TrainingData, TrainingResults, ValidationData, ValidationResults, TestData, TestResults, 180, 220);
+    Validator.HoldOut(TrainingData, TrainingResults, ValidationData, ValidationResults, TestData, TestResults, 200, 240);
 
     //! Printing NN general info: can be avoided if not desired;
     print_info(pointerNN);
 
+    Estimator(atoi(argv[1]));
+    cout << "Estimated time: " << ex_time << " seconds." << endl;
+
     //! Neural network construction;
     Input_Layer input_layer;
-    Hidden_Layer first_hidden, second_hidden, third_hidden, output_layer;
+    Hidden_Layer first_hidden, second_hidden, output_layer;
 
     Loss TrainingLoss, TestLoss, ValidationLoss;
 
@@ -74,6 +78,7 @@ int main(int argc, char *argv[])
         }
     }
 
+    //! Test; 
     for (int k = 0; k < TestData.size(); k++)
     {
         input_layer.forward_pass(TestData[k]);

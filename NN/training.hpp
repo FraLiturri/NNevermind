@@ -114,7 +114,6 @@ void Hidden_Layer::BackPropagation(variant<double, VectorXd> d, double eta, doub
     next_inputs.clear();
     units_output.setZero();
 }
-
 void Hidden_Layer::RandomTraining(variant<double, VectorXd> d, double eta, double alpha = 0, double lambda = 0)
 {
     i = weights.size();

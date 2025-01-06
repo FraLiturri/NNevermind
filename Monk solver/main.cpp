@@ -60,7 +60,6 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
 
             if (n == atoi(argv[1]) - 1) // Accuracy calculator;
             {
-                cout << outputs[weights.size()][0] << endl; 
                 outputs[weights.size()][0] >= 0.5 ? FinalResult = 1 : FinalResult = 0;
                 FinalResult == TrainingResults[k] ? training_accuracy++ : 0;
             }

@@ -30,8 +30,6 @@ public:
 
         test_data = test_data_aux;
         test_res = test_res_aux;
-
-        //? Cleaning auxiliar vectors;
     }
 };
 
