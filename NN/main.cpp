@@ -14,10 +14,7 @@ using namespace std;
 
 vector<VectorXd> TrainingData, TestData, ValidationData, TrainingResults, TestResults, ValidationResults;
 
-int training_accuracy = 0, test_accuracy = 0, validation_accuracy = 0;
-double FinalResult; // auxiliary double;
-
-int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
+int main(int argc, char *argv[])
 {
     //! Counter starts;
     auto start = chrono::high_resolution_clock::now();
@@ -25,9 +22,10 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
     //? Cleaning data from previous runs;
     ofstream("NN_results/training_loss.txt", std::ios::trunc).close();
     ofstream("NN_results/val_loss.txt", std::ios::trunc).close();
+    ofstream("NN_results/test_loss.txt", std::ios::trunc).close();
 
     //! Demiurge blows;
-    Demiurge NeuralNetwork(12, {20, 20}, 3); // Input units - hidden_units vector - output units;
+    Demiurge NeuralNetwork(12, {25, 20}, 3); // Input units - hidden_units vector - output units;
     Demiurge *pointerNN = &NeuralNetwork;    // Pointer to NeuralNetwork for print_info, avoidable if not desired;
 
     //! Preparing data;
@@ -37,7 +35,7 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
 
     //! Splitting data for validation part;
     Validation Validator;
-    Validator.HoldOut(TrainingData, TrainingResults, ValidationData, ValidationResults, 220);
+    Validator.HoldOut(TrainingData, TrainingResults, ValidationData, ValidationResults, TestData, TestResults, 180, 220);
 
     //! Printing NN general info: can be avoided if not desired;
     print_info(pointerNN);
@@ -45,6 +43,7 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
     //! Neural network construction;
     Input_Layer input_layer;
     Hidden_Layer first_hidden, second_hidden, third_hidden, output_layer;
+
     Loss TrainingLoss, TestLoss, ValidationLoss;
 
     //! Output computing and training algorithm;
@@ -57,7 +56,7 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
             second_hidden.forward_pass("leaky_relu", 2);
             output_layer.forward_pass("linear", 3, true);
 
-            output_layer.BackPropagation(TrainingResults[k], 0.00001, 0, 0);
+            output_layer.BackPropagation(TrainingResults[k], 0.0001);
             TrainingLoss.calculator("MEE", "NN_results/training_loss.txt", outputs[weights.size()], TrainingResults[k], TrainingResults.size());
             outputs.clear();
         };
@@ -75,13 +74,21 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
         }
     }
 
-    cout << "Training loss is: " << TrainingLoss.last_loss << endl;
-    cout << "Validation loss is: " << ValidationLoss.last_loss << endl;
+    for (int k = 0; k < TestData.size(); k++)
+    {
+        input_layer.forward_pass(TestData[k]);
+        first_hidden.forward_pass("leaky_relu", 1);
+        second_hidden.forward_pass("leaky_relu", 2);
+        output_layer.forward_pass("linear", 3, true);
+
+        ValidationLoss.calculator("MEE", "NN_results/test_loss.txt", outputs[weights.size()], TestResults[k], TestResults.size());
+        outputs.clear();
+    }
 
     //! Counter stops and prints elapsed time;
     auto end = chrono::high_resolution_clock::now();
     chrono::duration<double> elapsed_time = end - start;
-    cout << "\nElapsed time: " << elapsed_time.count() << " seconds. \n"
+    cout << "Elapsed time: " << elapsed_time.count() << " seconds. \n"
          << endl;
 
     return 0;

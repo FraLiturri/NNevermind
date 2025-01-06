@@ -70,7 +70,6 @@ double (*choice)(variant<double, VectorXd> x, variant<double, VectorXd> y);
 class Loss
 {
 public:
-    double last_loss;
     double loss_value;
     void calculator(string loss_function, string filepath, variant<double, VectorXd> NN_outputs, variant<double, VectorXd> targets, int data_size)
     {
@@ -108,7 +107,6 @@ public:
             {
                 cerr << "Impossible to open file." << filepath << endl;
             }
-            last_loss = loss_value;
             counter = 0;
         }
     };

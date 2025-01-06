@@ -26,9 +26,17 @@ def run_exe(file_path, n):
 if str(sys.argv[1]) == "plot":
     training_loss_path = "NN_results/training_loss.txt"
     val_loss_path = "NN_results/val_loss.txt"
-    
+    test_loss_path = "NN_results/test_loss.txt"
+
+    with open(test_loss_path, 'r') as file:
+        test_loss = file.readline().strip()
+
     val_loss = np.loadtxt(val_loss_path)
     tr_loss = np.loadtxt(training_loss_path)
+
+    print(f"Training loss converges to: {tronca_decimal(tr_loss[len(tr_loss)-1], 4)}.")
+    print(f"Validation loss converges to: {tronca_decimal(val_loss[len(val_loss)-1], 4)}.")
+    print(f"Test loss is: {tronca_decimal(test_loss, 4)}.\n")
 
     x_val = np.linspace(1, len(val_loss), len(val_loss))
     x_tr = np.linspace(1, len(tr_loss), len(tr_loss))
@@ -44,6 +52,7 @@ if str(sys.argv[1]) == "plot":
     plt.legend(loc="best")
 
     plt.show()
+
 
 elif str(sys.argv[1]) == "loss_mean":
     filepath = "NN_results/loss_collection.txt"
