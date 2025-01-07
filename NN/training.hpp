@@ -18,10 +18,12 @@ using namespace Eigen;
 
 VectorXd delta, net_t, net, vec_aux;
 vector<VectorXd> storer;
-MatrixXd update, auxiliar, prev_weight;
+MatrixXd update, auxiliar, gradient, gradient_square, sqrt_v, epsilon, M_hat, V_hat;
 
 double delta_k; // auxiliar double;
 int i, size;
+
+double beta_1 = 0.9, beta_2 = 0.999;
 
 VectorXd net_calculator(int layer_number)
 {
@@ -34,7 +36,6 @@ void Hidden_Layer::BackPropagation(variant<double, VectorXd> d, double eta, doub
     i = weights.size();
     while (i > 0)
     {
-        prev_weight = weights[i - 1]; // For Tikhonov regularization;
         if (i == weights.size())
         {
             func_choiser(function_strings[i - 1]);
@@ -65,11 +66,11 @@ void Hidden_Layer::BackPropagation(variant<double, VectorXd> d, double eta, doub
 
             if (prev_updates[0](0, 0) == 0) // The first element is 0 only at initialization; after is always 1 (bias term);
             {
-                update = eta * delta * outputs[i - 1].transpose() - lambda * prev_weight;
+                update = eta * delta * outputs[i - 1].transpose() - lambda * weights[i - 1];
             }
             else
             {
-                update = eta * delta * outputs[i - 1].transpose() - lambda * prev_weight + alpha * prev_updates[i - 1];
+                update = eta * delta * outputs[i - 1].transpose() - lambda * weights[i - 1] + alpha * prev_updates[i - 1];
             }
 
             update = eta * delta * outputs[i - 1].transpose();
@@ -94,11 +95,11 @@ void Hidden_Layer::BackPropagation(variant<double, VectorXd> d, double eta, doub
 
             if (prev_updates[0](0, 0) == 0)
             {
-                update = eta * delta * outputs[i - 1].transpose() - lambda * prev_weight;
+                update = eta * delta * outputs[i - 1].transpose() - lambda * weights[i - 1];
             }
             else
             {
-                update = eta * delta * outputs[i - 1].transpose() - lambda * prev_weight + alpha * prev_updates[i - 1];
+                update = eta * delta * outputs[i - 1].transpose() - lambda * weights[i - 1] + alpha * prev_updates[i - 1];
             }
 
             weights[i - 1] = weights[i - 1] + update;
@@ -113,11 +114,11 @@ void Hidden_Layer::BackPropagation(variant<double, VectorXd> d, double eta, doub
     function_strings.clear();
     next_inputs.clear();
     units_output.setZero();
+    storer.clear();
 }
 void Hidden_Layer::RandomTraining(variant<double, VectorXd> d, double eta, double alpha = 0, double lambda = 0)
 {
     i = weights.size();
-    prev_weight = weights[i - 1]; // For Tikhonov regularization;
     if (i == weights.size())
     {
         func_choiser(function_strings[i - 1]);
@@ -148,11 +149,11 @@ void Hidden_Layer::RandomTraining(variant<double, VectorXd> d, double eta, doubl
 
         if (prev_updates[0](0, 0) == 0) // The first element is 0 only at initialization; after is always 1 (bias term);
         {
-            update = eta * delta * outputs[i - 1].transpose() - lambda * prev_weight;
+            update = eta * delta * outputs[i - 1].transpose() - lambda * weights[i - 1];
         }
         else
         {
-            update = eta * delta * outputs[i - 1].transpose() - lambda * prev_weight + alpha * prev_updates[i - 1];
+            update = eta * delta * outputs[i - 1].transpose() - lambda * weights[i - 1] + alpha * prev_updates[i - 1];
         }
 
         weights[i - 1] = weights[i - 1] + update;
@@ -166,91 +167,102 @@ void Hidden_Layer::RandomTraining(variant<double, VectorXd> d, double eta, doubl
     next_inputs.clear();
     units_output.setZero();
 }
-void Hidden_Layer::RMSprop(variant<double, VectorXd> d, double eta, double alpha, double lambda)
+void Hidden_Layer::Adam(variant<double, VectorXd> d, double eta)
 {
     i = weights.size();
     while (i > 0)
     {
-        prev_weight = weights[i - 1]; // For Tikhonov regularization;
         if (i == weights.size())
         {
-            delta.setZero();
             func_choiser(function_strings[i - 1]);
             net_t = net_calculator(i);
 
             if (holds_alternative<double>(d))
             {
+                delta.conservativeResize(1);
                 for (int k = 0; k < 1; k++)
                 {
-                    delta.conservativeResize(k + 1);
                     delta_k = (get<double>(d) - outputs[i][k]) * der_act_func(net_t[k]);
                     delta[k] = delta_k;
                 }
             }
             else if (holds_alternative<VectorXd>(d))
             {
+                delta.conservativeResize(get<VectorXd>(d).size());
                 for (int k = 0; k < get<VectorXd>(d).size(); k++)
                 {
-                    delta.conservativeResize(k + 1);
                     delta_k = (get<VectorXd>(d)[k] - outputs[i][k]) * der_act_func(net_t[k]);
                     delta[k] = delta_k;
                 }
             }
-
-            if (prev_updates[0](0, 0) == 0) // The first element is 0 only at initialization; after is always 1 (bias term);
-            {
-                update = eta * delta * outputs[i - 1].transpose() - lambda * prev_weight;
-            }
             else
             {
-                update = eta * delta * outputs[i - 1].transpose() - lambda * prev_weight + alpha * prev_updates[i - 1];
+                throw runtime_error("Backpropagation accepts only double or VectorXd as first input.");
             }
 
-            weights[i - 1] = weights[i - 1] + update;
+            gradient = delta * outputs[i - 1].transpose();
+            gradient_square = (gradient.array().square()).matrix();
+            epsilon.conservativeResize(gradient.rows(), gradient.cols());
+
+            if (counters[i-1] == 0)
+            {
+                epsilon.setConstant(pow(10, -8));
+            }
+
+            M_t[i - 1] = M_t[i - 1] * beta_1 + (1 - beta_1) * gradient;
+            V_t[i - 1] = V_t[i - 1] * beta_2 + (1 - beta_2) * gradient_square;
+
+            M_hat = M_t[i - 1] / (1 - pow(beta_1, counters[i-1]+1));
+            V_hat = V_t[i - 1] / (1 - pow(beta_2, counters[i-1]+1));
+
+            sqrt_v = (V_t[i - 1].array().sqrt()).matrix();
+            sqrt_v = sqrt_v + epsilon;
+
+            update = (M_t[i - 1].array() / sqrt_v.array()).matrix();
+
+            weights[i - 1] = weights[i - 1] + eta * update;
             weights[i - 1].col(0).setConstant(1);
-            prev_updates[i - 1] = update;
-            storer.push_back(delta);
+
+            counters[i-1]++; 
         }
 
         else
         {
-            delta.setZero();
+           /*  net_t = net_calculator(i);
             func_choiser(function_strings[i - 1]);
-
-            auxiliar = weights[i];
-            net_t = net_calculator(i);
-            delta = storer[weights.size() - (i + 1)].transpose() * auxiliar;
+            delta = weights[i].transpose() * delta;
 
             for (int k = 0; k < delta.size(); k++)
             {
                 delta[k] = delta[k] * der_act_func(net_t[k]);
             }
 
-            if (prev_updates[0](0, 0) == 0)
-            {
-                update = eta * delta * outputs[i - 1].transpose() - lambda * prev_weight;
-            }
-            else
-            {
-                update = eta * delta * outputs[i - 1].transpose() - lambda * prev_weight + alpha * prev_updates[i - 1];
-            }
+            gradient = delta * outputs[i - 1].transpose();
+            gradient_square = (gradient.array().square()).matrix();
+            epsilon.conservativeResize(gradient.rows(), gradient.cols());
 
-            weights[i - 1] = weights[i - 1] + update;
+            M_t[i - 1] = M_t[i - 1] * beta_1 + (1 - beta_1) * gradient;
+            V_t[i - 1] = V_t[i - 1] * beta_2 + (1 - beta_2) * gradient_square;
+
+            M_hat = M_t[i - 1] / (double)(1 - pow(beta_1, counters[i-1]+1));
+            V_hat = V_t[i - 1] / (double)(1 - pow(beta_2, counters[i-1]+1));
+
+            sqrt_v = (V_hat.array().sqrt()).matrix();
+            sqrt_v = sqrt_v + epsilon;
+
+            update = (M_hat.array() / sqrt_v.array()).matrix();
+
+            weights[i - 1] = weights[i - 1] + eta * update;
             weights[i - 1].col(0).setConstant(1);
-            prev_updates[i - 1] = update;
 
-            storer.push_back(delta);
-        }
-
-        if (i == 1)
-        {
-            outputs.clear();
-            next_inputs.clear();
-            function_strings.clear();
-            storer.clear();
+            counters[i-1]++;  */
         }
         i--;
     };
+
+    function_strings.clear();
+    next_inputs.clear();
+    units_output.setZero();
 }
 
 #endif

@@ -26,8 +26,8 @@ int main(int argc, char *argv[])
     ofstream("NN_results/test_loss.txt", std::ios::trunc).close();
 
     //! Demiurge blows;
-    Demiurge NeuralNetwork(12, {25, 20}, 3); // Input units - hidden_units vector - output units;
-    Demiurge *pointerNN = &NeuralNetwork;      // Pointer to NeuralNetwork for print_info, avoidable if not desired;
+    Demiurge NeuralNetwork(12, {20, 20}, 3); // Input units - hidden_units vector - output units;
+    Demiurge *pointerNN = &NeuralNetwork;    // Pointer to NeuralNetwork for print_info, avoidable if not desired;
 
     //! Preparing data;
     DataReader Getter;
@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
 
     //! Splitting data for validation part;
     Validation Validator;
-    Validator.HoldOut(TrainingData, TrainingResults, ValidationData, ValidationResults, TestData, TestResults, 200, 240);
+    Validator.HoldOut(TrainingData, TrainingResults, ValidationData, ValidationResults, TestData, TestResults, 180, 210);
 
     //! Printing NN general info: can be avoided if not desired;
     print_info(pointerNN);
@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    //! Test; 
+    //! Test;
     for (int k = 0; k < TestData.size(); k++)
     {
         input_layer.forward_pass(TestData[k]);

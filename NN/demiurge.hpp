@@ -13,10 +13,11 @@ vector<MatrixXd> weights; // i-th component is the weights matrix of i-th and i+
 vector<VectorXd> outputs; // i-th component is the output (with weights) of i-the layer;
 vector<VectorXd> next_inputs;
 
-vector<MatrixXd> prev_updates; // necessary for training;
+vector<MatrixXd> prev_updates; // necessary for training: Nesterov;
+vector<MatrixXd> V_t, M_t;     // neceessary for Adam training;
 
-vector<int> hidden_and_out_units;
-VectorXd units_output; // auxiliary vector;
+vector<int> hidden_and_out_units, counters;
+VectorXd units_output; // auxiliar vector;
 
 int first_units, last_units;
 
@@ -50,12 +51,20 @@ public:
                                                     { return Eigen::internal::random<double>(-0.1, 0.1); });
             MatrixXd ghost = MatrixXd::NullaryExpr(rows, cols, []()
                                                    { return Eigen::internal::random<double>(0, 0); });
+            MatrixXd m_aux = MatrixXd::NullaryExpr(rows, cols, []()
+                                                   { return Eigen::internal::random<double>(0, 0); });
+            MatrixXd v_aux = MatrixXd::NullaryExpr(rows, cols, []()
+                                                   { return Eigen::internal::random<double>(0, 0); });
 
             weight.col(0).setConstant(1); //! Bias terms (Check);
+
             if (i != hidden_layers + 1)
             {
-                weights.push_back(weight); // Storing weights;
+                weights.push_back(weight);
                 prev_updates.push_back(ghost);
+                V_t.push_back(v_aux);
+                M_t.push_back(m_aux);
+                counters.push_back(0); 
             }
         }
     };
