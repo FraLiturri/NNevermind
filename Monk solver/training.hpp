@@ -9,7 +9,7 @@
 #include <vector>
 #include <cmath>
 
-#include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
+#include "EigenPath.hpp"
 
 using namespace std;
 using namespace Eigen;
@@ -93,7 +93,7 @@ void Hidden_Layer::BackPropagation(double d, double eta, double alpha, double la
 
         if (i == 1)
         {
-            outputs.clear();
+            //outputs.clear();
             next_inputs.clear();
             function_strings.clear();
             storer.clear();

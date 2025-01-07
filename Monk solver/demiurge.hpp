@@ -3,7 +3,7 @@
 
 #include "lib.hpp"
 #include "activation_functions.hpp"
-#include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
+#include "EigenPath.hpp"
 
 using namespace std;
 using namespace Eigen;

@@ -2,7 +2,7 @@
 #define data_reader
 
 #include "lib.hpp"
-#include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
+#include "EigenPath.hpp"
 
 using namespace std;
 using namespace Eigen;
