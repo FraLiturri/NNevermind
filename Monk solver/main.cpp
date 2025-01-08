@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
     const std::string NameOfOutputFile = "InfoOnStuff.txt";
 
     std::ostringstream oss;\
-    oss<< argv[1] << " "<<argv[2] << " "<<argv[3] << " " <<training_accuracy / (double)TrainingData.size() << " " << test_accuracy / (double)TestData.size()<< "\n";
+    oss<< argv[1] << " "<<argv[2] << " "<<argv[3] << " " <<training_accuracy / (double)TrainingData.size() << " " << test_accuracy / (double)TestData.size()<< " "<<TestLoss.loss_value <<"\n";
     const std::string Information  = oss.str();
     writeToFileSafely(NameOfOutputFile, Information);
 

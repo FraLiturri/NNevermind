@@ -15,15 +15,15 @@ NomeFileDaCompilare = "main.cpp"
 
 #parametri standard griglia
 Eta_Min_Default = 0.01
-Eta_Max_Default = 0.1
+Eta_Max_Default = 0.5
 Lambda_Min_Default = 0
 Lambda_Max_Default = 0
 Alpha_Min_Default = 0
 Alpha_Max_Default = 0
-Step1_Default = 2
-Step2_Default = 4
+Step1_Default = 100
+Step2_Default = 1
 Step3_Default = 1
-Training_Steps_Default = 1000
+Training_Steps_Default = 200
 CPU_Number = os.cpu_count()
 
 
@@ -60,6 +60,7 @@ def BuildGrid(eta_1, eta_2, lambda_1, lambda_2, alpha_1, alpha_2, step1, step2, 
 def submit_values():
     global IsCompilationGood
     if IsCompilationGood:
+        subprocess.run(["rm" ,"InfoOnStuff.txt"], capture_output=True, text=True)
         try:
             #metti dei valori di default se non e' specificato nulla
             if(not eta_min_entry.get())&(not eta_max_entry.get())&(not lambda_min_entry.get())&(not lambda_max_entry.get())&(not alpha_min_entry.get())&(not alpha_max_entry.get())&(not steps_eta_entry.get())&(not steps_lambda_entry.get())&(not steps_alpha_entry.get())&(not training_steps_entry.get()):
@@ -114,6 +115,7 @@ def submit_values():
 def submit_values_for_single_training():
     global IsCompilationGood
     if IsCompilationGood:
+        subprocess.run(["rm","InfoOnStuff.txt"], capture_output=True, text=True)
         try:
             if((not single_eta_entry.get())&(not single_lambda_entry.get())&(not single_alpha_entry.get())&(not single_training_steps_entry.get())):
                 messagebox.showinfo("Valori Inseriti di default: ", f"Eta: {Eta_single}\n"
