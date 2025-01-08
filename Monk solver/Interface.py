@@ -11,6 +11,8 @@ import multiprocessing as mp
 import os
 IsCompilationGood =False
 
+NomeFileDaCompilare = "main.cpp"
+
 #parametri standard griglia
 Eta_Min_Default = 0.01
 Eta_Max_Default = 0.1
@@ -26,9 +28,9 @@ CPU_Number = os.cpu_count()
 
 
 #parametri standard single training
-Eta_single = 0.01
-Lambda_single = 0
-Alpha_single = 0
+Eta_single = 0.2
+Lambda_single = 0.001
+Alpha_single = 0.00001
 
 def CallMain(Inputs):
     command = ["./main.exe",str(Inputs[0]),str(Inputs[1]),str(Inputs[2]),str(Inputs[3])]
@@ -40,7 +42,7 @@ def CallMain(Inputs):
 def Compile():
     global IsCompilationGood
     try:
-        process = subprocess.run(["g++", "-o", "main.exe", "main.cpp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text = True, check = True)
+        process = subprocess.run(["g++", "-o", "main.exe", NomeFileDaCompilare], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text = True, check = True)
         IsCompilationGood = True
     except FileNotFoundError:
         logger.error("Errore fatale: file main non trovato")
@@ -127,6 +129,12 @@ def submit_values_for_single_training():
                 lambdaH = float(single_lambda_entry.get())
                 alphaH = float(single_alpha_entry.get())
                 training_Steps = float(single_training_steps_entry.get())
+                messagebox.showinfo("Valori Inseriti di default: ", f"Eta: {etaH}\n"
+                                                       f"Lambda: {lambdaH}\n"
+                                                       f"Alpha: {alphaH}\n"
+                                                       f"Training Steps: [{training_Steps}]\n"
+
+                                                       "Attenzione: potrebbero volerci qualche decina di secondi.")
                 Inputs = [etaH, lambdaH, alphaH, training_Steps]
                 if(training_Steps<0):
                     raise ValueError
@@ -195,7 +203,7 @@ def open_single_value_window():
 root = tk.Tk()
 root.title("Intervalli di Parametri")
 try:
-    process = subprocess.run(["g++", "-o", "main.exe", "main.cpp"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text = True, check = True)
+    process = subprocess.run(["g++", "-o", "main.exe", NomeFileDaCompilare], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text = True, check = True)
     IsCompilationGood = True
 except FileNotFoundError:
     logger.error("Errore fatale: file main non trovato")

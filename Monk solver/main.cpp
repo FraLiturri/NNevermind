@@ -23,8 +23,8 @@ int main(int argc, char *argv[])
     auto start = chrono::high_resolution_clock::now();
 
     //! Preparing data for training and test phase;
-    DataGetter("Monk_data/monks-1binary.train", TrainingResults, TrainingData);
-    DataGetter("Monk_data/monks-1binary.test", TestResults, TestData);
+    DataGetter("Monk_data/monks-2binary.train", TrainingResults, TrainingData);
+    DataGetter("Monk_data/monks-2binary.test", TestResults, TestData);
     ofstream("NN_results/training_loss.txt", std::ios::trunc).close();
     ofstream("NN_results/test_loss.txt", std::ios::trunc).close();
 
@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 
     Loss TrainingLoss;
     Loss TestLoss;
-    cout<< argv[1] << " "<<argv[2] <<" "<< argv[3] << " "<<argv[4] << endl;
+    cout<< stod(argv[1]) << " "<<stod(argv[2]) <<" "<< stod(argv[3]) << " "<<atoi(argv[4]) << endl;
     //! Output computing and training algorithm;
     for (int n = 0; n < atoi(argv[4]); n++)
     {
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
             first_hidden.forward_pass("sigmoid", 1);
             output_layer.forward_pass("sigmoid", 2, true);
 
-            output_layer.BackPropagation(TrainingResults[k], atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
+            output_layer.BackPropagation(TrainingResults[k], stod(argv[1]), stod(argv[2]), stod(argv[3]));
             TrainingLoss.calculator("MSE", "NN_results/training_loss.txt", outputs[weights.size()][0], TrainingResults[k], TrainingResults.size());
 
             if (n == atoi(argv[4]) - 1) // Accuracy calculator;
@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
 
     cout << "Training accuracy: " << training_accuracy / (double)TrainingData.size() * 100 << "% (" << training_accuracy << "/" << TrainingData.size() << ")" << endl;
     cout << "Test accuracy: " << test_accuracy / (double)TestData.size() * 100 << "% (" << test_accuracy << "/" << TestData.size() << ")" << endl;
-    cout << "Test loss is: " << TestLoss.last_loss << endl;
+    cout << "Test loss is: " << TestLoss.loss_value << endl;
 
     //! Counter stops and prints elapsed time;
     auto end = chrono::high_resolution_clock::now();
