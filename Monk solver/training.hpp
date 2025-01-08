@@ -11,7 +11,7 @@
 #include <cmath>
 #include <stdexcept>
 
-#include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
+#include "EigenPath.hpp"
 
 using namespace std;
 using namespace Eigen;
@@ -107,7 +107,6 @@ void Hidden_Layer::BackPropagation(variant<double, VectorXd> d, double eta, doub
 
         if (i == 1)
         {
-            outputs.clear();
             next_inputs.clear();
             function_strings.clear();
             storer.clear();

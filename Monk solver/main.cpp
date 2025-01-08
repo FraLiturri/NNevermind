@@ -5,10 +5,8 @@
 #include "training.hpp"
 #include "data_reader.hpp"
 #include "loss.hpp"
-
-#include <typeinfo>
-
-#include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
+#include "Utils.hpp"
+#include "EigenPath.hpp"
 
 using namespace Eigen;
 using namespace std;
@@ -45,9 +43,9 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
 
     Loss TrainingLoss;
     Loss TestLoss;
-
+    cout<< stod(argv[1]) << " "<<stod(argv[2]) <<" "<< stod(argv[3]) << " "<<atoi(argv[4]) << endl;
     //! Output computing and training algorithm;
-    for (int n = 0; n < atoi(argv[1]); n++)
+    for (int n = 0; n < atoi(argv[4]); n++)
     {
         for (int k = 0; k < TrainingData.size(); k++)
         {
@@ -55,14 +53,16 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
             first_hidden.forward_pass("sigmoid", 1);
             output_layer.forward_pass("sigmoid", 2, true);
 
-            output_layer.BackPropagation(TrainingResults[k], 0.3, 0.001, 0.00001);
+            output_layer.BackPropagation(TrainingResults[k], stod(argv[1]), stod(argv[2]), stod(argv[3]));
             TrainingLoss.calculator("MSE", "NN_results/training_loss.txt", outputs[weights.size()][0], TrainingResults[k], TrainingResults.size());
 
-            if (n == atoi(argv[1]) - 1) // Accuracy calculator;
+            if (n == atoi(argv[4]) - 1) // Accuracy calculator;
             {
                 outputs[weights.size()][0] >= 0.5 ? FinalResult = 1 : FinalResult = 0;
                 FinalResult == TrainingResults[k] ? training_accuracy++ : 0;
             }
+            outputs.clear();
+
         };
     }
 
@@ -77,6 +77,7 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
         FinalResult == TestResults[k] ? test_accuracy++ : 0;
 
         TestLoss.calculator("MSE", "NN_results/test_loss.txt", outputs[weights.size()][0], TestResults[k], TestResults.size());
+
     }
 
     cout << "Training accuracy: " << training_accuracy / (double)TrainingData.size() * 100 << "% (" << training_accuracy << "/" << TrainingData.size() << ")" << endl;
@@ -88,6 +89,12 @@ int main(int argc, char *argv[]) // Add int argc, char *argv[] in parenthesis;
     chrono::duration<double> elapsed_time = end - start;
     cout << "\nElapsed time: " << elapsed_time.count() << " seconds. \n"
          << endl;
+    const std::string NameOfOutputFile = "InfoOnStuff.txt";
+
+    std::ostringstream oss;\
+    oss<< argv[1] << " "<<argv[2] << " "<<argv[3] << " " <<training_accuracy / (double)TrainingData.size() << " " << test_accuracy / (double)TestData.size()<< " "<<TestLoss.loss_value <<"\n";
+    const std::string Information  = oss.str();
+    writeToFileSafely(NameOfOutputFile, Information);
 
     return 0;
 }
