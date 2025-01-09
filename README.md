@@ -9,7 +9,7 @@ This package offers an easy-to-use MLP with many different training choices such
 The available choice between activation and loss functions is various, for more info see the next sections. It's provided a Python script for getting general info, 
 data plotting, mean calculator and a user-friendly interface for parallelized grid search. 
 
-## Installation
+## ⬇️ Installation
 The download is available via GitHub or equivalently, in the terminal, you can type
 ```
 git clone https://github.com/FraLiturri/NNeverMind.git
@@ -20,12 +20,12 @@ git clone https://gitlab.com/libeigen/eigen.git
 ```
 as usually.
 
-## Platforms
+## ⚙️ Platforms
 The entire package works perfectly in any OS, exception made for parallelized grid search, available for now only on: 
 - Linux Mint
 - Windows
 
 We do not guarantee its working on other platforms.
 
-## Initialization
+## 🏃 Initialization
 
