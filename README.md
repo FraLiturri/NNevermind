@@ -20,5 +20,12 @@ git clone https://gitlab.com/libeigen/eigen.git
 ```
 as usually.
 
+## Platforms
+The entire package works perfectly in any OS, exception made for parallelized grid search, available for now only on: 
+- Linux Mint
+- Windows
+
+We do not guarantee its working on other platforms.
+
 ## Initialization
 
