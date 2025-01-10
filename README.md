@@ -18,6 +18,8 @@ The entire package works perfectly in any OS, with the exception made for parall
   
 we do not guarantee its working on other platforms.
 
+## 📖 Benchmark
+
 ## ⬇️ Installation 
 The download is available via GitHub or by typing
 ```
