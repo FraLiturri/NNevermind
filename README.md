@@ -34,11 +34,11 @@ Run....
 
 ## Objects
 
-| Object type | Description | Implementation | 
-| --- | --- | --- |
+| Object type | Description | Implementation | Parameters |
+| --- | --- | --- | --- |
 | `Demiurge` | Initializes the weights and auxiliary matrices | `Demiurge(int input_units, vector<int> hidden_units, int output_units)` |
 | `Input_Layer` | Calculates the outputs and stores them in the first component of `outputs` | `Input_Layer.forward_pass(VectorXd input)` |
-| `Hidden_Layer` | Calculates the outputs and stores them in the components of `outputs`; activation functions can be chosen between: `linear`, `relu`, `leaky_relu`, `sigmoid` and `tangent` | `forward_pass(string choosen_function, int depth, bool isOutputLayer = false)` |
+| `Hidden_Layer` | Calculates the outputs and stores them in the components of `outputs` | `forward_pass(string choosen_function, int depth, bool isOutputLayer = false)` | `choosen_function` sets layer's activation function. Available choices: `linear`, `relu`, `leaky_relu`, `sigmoid` and `tangent`. `Depth` is the layer number, for the last one `isOutputLayer` has to be `true`( `false` by default).|
 
 ```ruby
 using namespace Eigen;
