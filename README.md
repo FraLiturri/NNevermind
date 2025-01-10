@@ -36,9 +36,9 @@ Run....
 
 | Object type | Description | Implementation | Parameters |
 | --- | --- | --- | --- |
-| `Demiurge` | Initializes the weights and auxiliary matrices | `Demiurge(int input_units, vector<int> hidden_units, int output_units)` | `input_units` are the number of nodes in the first layer, `hidden_units` defines the number of nodes in each hidden. `outputs_units` sets the nodes in the last layer. |
-| `Input_Layer` | Calculates the outputs and stores them in the first component of `outputs` | `Input_Layer.forward_pass(VectorXd input)` | `input` contains the feeding data to the NN. |
-| `Hidden_Layer` | Calculates the outputs and stores them in the components of `outputs` | `Hidden_Layer.forward_pass(string choosen_function, int depth, bool isOutputLayer = false)` | `choosen_function` sets layer's activation function. Available choices: `linear`, `relu`, `leaky_relu`, `sigmoid` and `tangent`. `Depth` is the layer number, for the last one `isOutputLayer` has to be `true`( `false` by default).|
+| `Demiurge` | Initializes the weights and auxiliary matrices | `Demiurge(int input_units, vector<int> hidden_units, int output_units)` | <ul><li>`input_units`: number of nodes in the first layer </li><li> `hidden_units` defines the number of nodes in each hidden. </li><li>`outputs_units` number of nodes in the last layer.</li></ul> |
+| `Input_Layer` | Calculates the outputs and stores them in the first component of `outputs` | `Input_Layer.forward_pass(VectorXd input)` | <ul><li>`input`: the feeding data to the NN.</li></ul> |
+| `Hidden_Layer` | Calculates the outputs and stores them in the components of `outputs` | `Hidden_Layer.forward_pass(string choosen_function, int depth, bool isOutputLayer = false)` | <ul><li>`choosen_function` sets layer's activation function. Available choices: `linear`, `relu`, `leaky_relu`, `sigmoid` and `tangent`. </li><li> `Depth` is the layer number, for the last one `isOutputLayer` has to be `true`(`false` by default). </li></ul>|
 
 ## Example
 
