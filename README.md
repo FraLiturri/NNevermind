@@ -1,7 +1,7 @@
 # NNeverMind
 
 
-## A quick look
+## ⏩ A quick look
 This package offers an easy-to-use MLP with many different training choices such as: 
 - Backpropagation
 - Random Training
@@ -10,14 +10,14 @@ This package offers an easy-to-use MLP with many different training choices such
 The available choices between activation and loss functions are various (see the next sections). It's also provided a Python script for getting general info, 
 data plotting, mean calculator, and a user-friendly interface for parallelized grid search. 
 
-## Platforms
+## ⚙️ Platforms
 The entire package works perfectly in any OS, with the exception made for parallelized grid search, available for now only on: 
 - Linux Mint
 - Windows
   
 we do not guarantee its working on other platforms.
 
-## Installation 
+## ⬇️ Installation 
 The download is available via GitHub or by typing
 ```
 git clone https://github.com/FraLiturri/NNeverMind.git
@@ -29,10 +29,10 @@ git clone https://gitlab.com/libeigen/eigen.git
 ```
 as usually.
 
-## Starting engines
+## 🚀 Starting engines
 Run....
 
-## Objects
+## 🧰 Objects
 
 | Object type | Description | Implementation | Parameters |
 | --- | --- | --- | --- |
@@ -40,7 +40,7 @@ Run....
 | `Input_Layer` | Calculates the outputs and stores them in the first component of `outputs` | `Input_Layer.forward_pass(VectorXd input)` | <ul><li>`input`: the feeding data to the NN.</li></ul> |
 | `Hidden_Layer` | Calculates the outputs and stores them in the components of `outputs` | `Hidden_Layer.forward_pass(string choosen_function, int depth, bool isOutputLayer = false)` | <ul><li>`choosen_function` sets layer's activation function. Available choices: `linear`, `relu`, `leaky_relu`, `sigmoid` and `tangent`. </li><li> `Depth` is the layer number, for the last one `isOutputLayer` has to be `true`(`false` by default). </li></ul>|
 
-## Example
+## 📑 Example
 
 ```ruby
 using namespace Eigen;
