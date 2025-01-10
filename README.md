@@ -29,16 +29,22 @@ git clone https://gitlab.com/libeigen/eigen.git
 ```
 as usually.
 
+
 ## 🚀 Starting engines
-Run....
+Before starting to build your NN, it's necessary to set up file paths. Open the terminal and run
+```
+python Copilot.py initialize
+```
+then type Eigen's path, your main path (if not specified, Python will search in NNeverMind's directory) and lastly the destination directory for training and general results.  
 
 ## 🛠️ Objects
+Here there's a list of useful objects.  
 
 | Object type | Description | Implementation | Parameters |
 | --- | --- | --- | --- |
-| `Demiurge` | Initializes the weights and auxiliary matrices | `Demiurge(int input_units, vector<int> hidden_units, int output_units)` | <ul><li>`input_units`: number of nodes in the first layer </li><li> `hidden_units` defines the number of nodes in each hidden. </li><li>`outputs_units` number of nodes in the last layer.</li></ul> |
-| `Input_Layer` | Calculates the outputs and stores them in the first component of `outputs` | `Input_Layer.forward_pass(VectorXd input)` | <ul><li>`input`: the feeding data to the NN.</li></ul> |
-| `Hidden_Layer` | Calculates the outputs and stores them in the components of `outputs` | `Hidden_Layer.forward_pass(string choosen_function, int depth, bool isOutputLayer = false)` | <ul><li>`choosen_function` sets layer's activation function. Available choices: `linear`, `relu`, `leaky_relu`, `sigmoid` and `tangent`. </li><li> `Depth` is the layer number, for the last one `isOutputLayer` has to be `true`(`false` by default). </li></ul>|
+| `Demiurge` | Initializes the weights and auxiliary matrices | `Demiurge NeuralNetwork(int input_units, vector<int> hidden_units, int output_units)` | <ul><li>`input_units`: number of nodes in the first layer </li><li> `hidden_units` defines the number of nodes in each hidden. </li><li>`outputs_units` number of nodes in the last layer.</li></ul> |
+| `Input_Layer` | Calculates the outputs and stores them in the first component of `outputs` | `Input_Layer input_layer;` <br /> `input_layer.forward_pass(VectorXd input)` | <ul><li>`input`: the feeding data to the NN.</li></ul> |
+| `Hidden_Layer` | Calculates the outputs and stores them in the components of `outputs` | `Hidden_Layer first_hidden;` <be /> `Hidden_Layer.forward_pass(string choosen_function, int depth, bool isOutputLayer = false)` | <ul><li>`choosen_function` sets layer's activation function. Available choices: `linear`, `relu`, `leaky_relu`, `sigmoid` and `tangent`. </li><li> `Depth` is the layer number, for the last one `isOutputLayer` has to be `true` (`false` by default). </li></ul>|
 
 ## 📑 Additional info 
 <details>
