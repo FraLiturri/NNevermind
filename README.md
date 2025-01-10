@@ -40,7 +40,7 @@ Run....
 | `Input_Layer` | Calculates the outputs and stores them in the first component of `outputs` | `Input_Layer.forward_pass(VectorXd input)` |
 | `Hidden_Layer` | Calculates the outputs and stores them in the components of `outputs`; activation functions can be chosen between: `linear`, `relu`, `leaky_relu`, `sigmoid` and `tangent` | `forward_pass(string choosen_function, int depth, bool isOutputLayer = false)` |
 
-```
+```ruby
 using namespace Eigen;
 using namespace std;
 
