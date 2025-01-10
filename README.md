@@ -1,5 +1,6 @@
 # NNeverMind
 
+
 ## ⏩ A quick look
 This package offers an easy-to-use MLP with many different training choices such as: 
 - Backpropagation
@@ -16,8 +17,7 @@ The entire package works perfectly in any OS, with the exception made for parall
   
 we do not guarantee its working on other platforms.
 
-## ⬇️ Installation
-### Step 1
+## ⬇️ Installation 
 The download is available via GitHub or by typing
 ```
 git clone https://github.com/FraLiturri/NNeverMind.git
@@ -28,6 +28,8 @@ This package also requires Eigen, which can be installed from the official websi
 git clone https://gitlab.com/libeigen/eigen.git
 ```
 as usually.
+
+## 🚀 Starting engines
 
 
 
