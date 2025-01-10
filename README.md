@@ -40,10 +40,10 @@ Run....
 | `Input_Layer` | Calculates the outputs and stores them in the first component of `outputs` | `Input_Layer.forward_pass(VectorXd input)` | <ul><li>`input`: the feeding data to the NN.</li></ul> |
 | `Hidden_Layer` | Calculates the outputs and stores them in the components of `outputs` | `Hidden_Layer.forward_pass(string choosen_function, int depth, bool isOutputLayer = false)` | <ul><li>`choosen_function` sets layer's activation function. Available choices: `linear`, `relu`, `leaky_relu`, `sigmoid` and `tangent`. </li><li> `Depth` is the layer number, for the last one `isOutputLayer` has to be `true`(`false` by default). </li></ul>|
 
-
+## 📑 Additional info 
 <details>
-  <summary> 📑 Implementation example </summary>
-
+  <summary> Implementation example </summary><br />
+  
 ```ruby
 using namespace Eigen;
 using namespace std;
