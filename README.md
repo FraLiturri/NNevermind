@@ -1,4 +1,5 @@
-# NNeverMind
+<h1 align="center"> NNeverMind
+</h1>
 
 
 ## ⏩ A quick look
