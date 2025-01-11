@@ -34,28 +34,27 @@ as usually.
 
 
 ## 🚀 Starting engines
-Before starting to build your NN, it's necessary to set up file paths. Open the terminal and run
+Before starting to build your NN, setting up file paths is necessary. Open the terminal and run
 ```
 python Copilot.py initialize
 ```
 then type Eigen's path, your main path (if not specified, Python will search in NNeverMind's directory) and lastly the destination directory for training and general results.  
 
 ## 🛠️ Objects
-Here there's a list of useful objects.  
 
-| Object type | Implementation | Parameters |
+| Object type | Definition and Implementation | Parameters |
 | --- | --- |--- |
-| `Demiurge` |  `Demiurge NeuralNetwork(int input_units, vector<int> hidden_units, int output_units)` | <ul><li>`input_units`: number of nodes in the first layer </li><li> `hidden_units` defines the number of nodes in each hidden. </li><li>`outputs_units` number of nodes in the last layer.</li></ul> |
-| `Input_Layer` | `Input_Layer input_layer;` <br /> `input_layer.forward_pass(VectorXd input)` | <ul><li>`input`: the feeding data to the NN.</li></ul> |
-| `Hidden_Layer.forward_pass()` | `Hidden_Layer first_hidden;` <be /> `Hidden_Layer.forward_pass(string choosen_function, int depth, bool isOutputLayer = false)` | <ul><li>`choosen_function` sets layer's activation function. Available choices: `linear`, `relu`, `leaky_relu`, `sigmoid` and `tangent`. </li><li> `Depth` is the layer number, for the last one `isOutputLayer` has to be `true` (`false` by default). </li></ul>|
-| `Hidden_Layer.Backpropagation()` |  `Hidden_Layer output_layer;` <be />`output_layer.Backpropagation(variant<double, VectorXd> targets_results, eta, alpha = 0, lambda = 0)` | <ul><li>`target_results`: target values; </li><li> `eta`: learning rate;  `alpha`: for Nesterov momentum (0 by default); </li><li> `lambda`: for L2 regularization. </li></ul>|
-| `Loss` | `Loss TrainingLoss;` <br />  `TrainingLoss.calculator(string loss_function, string file_path, variant<double, VectorXd> target_values, data_size` | <ul><li> `loss_function`: `MEE` (mean euclidean error), `MSE` (mean square error) and `BCE` (binary cross entropy); </li><li> `file_path`: desired path where loss results have to be stored; </li><li> `target_values`: these are the targets values to be reached by the NN; can be double (typically for classifications tasks) or VectorXd. </li><li> `data_size`: size of the data used. </li></ul>  |
+| `Demiurge` | `Demiurge NeuralNetwork(int input_units, vector<int> hidden_units, int output_units);` | ➤ `input_units`: number of nodes in the first layer; <br /> ➤ `hidden_units` defines the number of nodes in each hidden; <br /> ➤  `outputs_units` number of nodes in the last layer. |
+| `Input_Layer` | `Input_Layer input_layer;` <br /> <br /> `input_layer.forward_pass(VectorXd input);` | ➤ `input`: the feeding data to the NN.|
+| `Hidden_Layer.forward_pass()` | `Hidden_Layer first_hidden;` <br /> &#x2003; &#x2003; &#x22EE; <br /> `Hidden_Layer.forward_pass(string choosen_function, int depth, bool isOutputLayer = false);` | ➤ `choosen_function` sets layer's activation function. Available choices: `linear`, `relu`, `leaky_relu`, `sigmoid` and `tangent`. <br /> ➤ `Depth` is the layer number, for the last one `isOutputLayer` has to be `true` (`false` by default).|
+| `Hidden_Layer.Backpropagation()` |  `Hidden_Layer output_layer;` <br /> <br />`output_layer.Backpropagation(variant<double, VectorXd> targets_results, eta, alpha = 0, lambda = 0);` | <ul><li>`target_results`: target values; </li><li> `eta`: learning rate;  `alpha`: for Nesterov momentum (0 by default); </li><li> `lambda`: for L2 regularization. </li></ul>|
+| `Loss` | `Loss TrainingLoss;` <br /> <br /> `TrainingLoss.calculator(string loss_function, string file_path, variant<double, VectorXd> target_values, data_size);` | <ul><li> `loss_function`: `MEE` (mean euclidean error), `MSE` (mean square error) and `BCE` (binary cross entropy); </li><li> `file_path`: desired path where loss results have to be stored; </li><li> `target_values`: these are the targets values to be reached by the NN; can be double (typically for classifications tasks) or VectorXd. </li><li> `data_size`: size of the data used. </li></ul>  |
 
 ## 📑 Additional info 
 <details>
   <summary> Implementation example </summary><br />
   
-```ruby
+```C++
 using namespace Eigen;
 using namespace std;
 
