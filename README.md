@@ -1,6 +1,5 @@
-<h1 align="center"> NNeverMind
+<h1 align="center"> NNeverMind (Alpha testing)
 </h1>
-
 
 ## ⏩ A quick look
 This package offers an easy-to-use MLP with many different training choices such as: 
@@ -45,10 +44,10 @@ then type Eigen's path, your main path (if not specified, Python will search in 
 | Object type | Definition and Implementation | Parameters |
 | --- | --- |--- |
 | `Demiurge` | `Demiurge NeuralNetwork(int input_units, vector<int> hidden_units, int output_units);` | ➤ `input_units`: number of nodes in the first layer; <br /> ➤ `hidden_units` defines the number of nodes in each hidden; <br /> ➤  `outputs_units` number of nodes in the last layer. |
-| `Input_Layer` | `Input_Layer input_layer;` <br /> <br /> `input_layer.forward_pass(VectorXd input);` | ➤ `input`: the feeding data to the NN.|
-| `Hidden_Layer.forward_pass()` | `Hidden_Layer first_hidden;` <br /> &#x2003; &#x2003; &#x22EE; <br /> `Hidden_Layer.forward_pass(string choosen_function, int depth, bool isOutputLayer = false);` | ➤ `choosen_function` sets layer's activation function. Available choices: `linear`, `relu`, `leaky_relu`, `sigmoid` and `tangent`. <br /> ➤ `Depth` is the layer number, for the last one `isOutputLayer` has to be `true` (`false` by default).|
-| `Hidden_Layer.Backpropagation()` |  `Hidden_Layer output_layer;` <br /> <br />`output_layer.Backpropagation(variant<double, VectorXd> targets_results, eta, alpha = 0, lambda = 0);` | <ul><li>`target_results`: target values; </li><li> `eta`: learning rate;  `alpha`: for Nesterov momentum (0 by default); </li><li> `lambda`: for L2 regularization. </li></ul>|
-| `Loss` | `Loss TrainingLoss;` <br /> <br /> `TrainingLoss.calculator(string loss_function, string file_path, variant<double, VectorXd> target_values, data_size);` | <ul><li> `loss_function`: `MEE` (mean euclidean error), `MSE` (mean square error) and `BCE` (binary cross entropy); </li><li> `file_path`: desired path where loss results have to be stored; </li><li> `target_values`: these are the targets values to be reached by the NN; can be double (typically for classifications tasks) or VectorXd. </li><li> `data_size`: size of the data used. </li></ul>  |
+| `Input_Layer` | `Input_Layer input_layer;` <br /> &#x2003; &#x2003; &#x22EE; <br /> `input_layer.forward_pass(VectorXd input);` | ➤ `input`: the feeding data to the NN.|
+| `Hidden_Layer` | `Hidden_Layer first_hidden;` <br /> &#x2003; &#x2003; &#x22EE; <br /> `Hidden_Layer.forward_pass(string choosen_function, int depth, bool isOutputLayer = false);` | ➤ `choosen_function` sets layer's activation function. Available choices: `linear`, `relu`, `leaky_relu`, `sigmoid` and `tangent`. <br /> ➤ `Depth` is the layer number, for the last one `isOutputLayer` has to be `true` (`false` by default).|
+| `Hidden_Layer` |  `Hidden_Layer output_layer;` <br /> &#x2003; &#x2003; &#x22EE; <br />`output_layer.Backpropagation(variant<double, VectorXd> targets_results, eta, alpha = 0, lambda = 0);` | ➤ `target_results`: target values; <br /> ➤ `eta`: learning rate;  <br /> ➤ `alpha`: for Nesterov momentum (0 by default); <br /> ➤ `lambda`: for L2 regularization (0 by default).|
+| `Loss` | `Loss TrainingLoss;` <br /> &#x2003; &#x2003; &#x22EE; <br /> `TrainingLoss.calculator(string loss_function, string file_path, variant<double, VectorXd> target_values, data_size);` | ➤ `loss_function`: `MEE` (mean euclidean error), `MSE` (mean square error) and `BCE` (binary cross entropy);  <br /> ➤ `file_path`: desired path where loss results have to be stored;  <br /> ➤ `target_values`: these are the targets values to be reached by the NN; can be double (typically for classifications tasks) or VectorXd. <br /> ➤ `data_size`: size of the data used.|
 
 ## 📑 Additional info 
 <details>
