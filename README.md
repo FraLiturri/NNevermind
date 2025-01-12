@@ -18,6 +18,11 @@ The entire package works perfectly in any OS, with the exception made for parall
 we do not guarantee its working on other platforms.
 
 ## 📖 Benchmark
+The tests were executed on 100-byte data sets, using an 11th-generation Intel(R) Core(TM) i7-1165G7 @ 2.80GHz. Time may vary on different devices.  
+| Network size | Grid size | Iterations | Time (seconds) |
+| --- | --- |--- | --- |
+| 1 x 10 x 1 | 1 | 100 | 1.21 |
+| 1 x 10 x 1 | 1 | 1000 | 14.83 |
 
 ## ⬇️ Installation 
 The download is available via GitHub or by typing
