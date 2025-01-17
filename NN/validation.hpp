@@ -2,7 +2,6 @@
 #define validation
 
 #include "lib.hpp"
-#include "demiurge.hpp"
 
 using namespace std;
 using namespace Eigen;

@@ -1,12 +1,4 @@
-#include "lib.hpp"
-#include "layer.hpp"
-#include "activation_functions.hpp"
-#include "info.hpp"
-#include "training.hpp"
-#include "data_reader.hpp"
-#include "loss.hpp"
-#include "validation.hpp"
-#include "eigen_path.hpp"
+#include "NN/lib.hpp"
 
 using namespace Eigen;
 using namespace std;
@@ -18,10 +10,10 @@ int main(int argc, char *argv[])
     //! Counter starts;
     auto start = chrono::high_resolution_clock::now();
 
-    //? Cleaning data from previous runs;
-    ofstream("../results/training_loss.txt", std::ios::trunc).close();
-    ofstream("../results/val_loss.txt", std::ios::trunc).close();
-    ofstream("../results/test_loss.txt", std::ios::trunc).close();
+    //! Cleaning data from previous runs;
+    ofstream("results/training_loss.txt", std::ios::trunc).close();
+    ofstream("results/val_loss.txt", std::ios::trunc).close();
+    ofstream("results/test_loss.txt", std::ios::trunc).close();
 
     //! Demiurge blows;
     Demiurge NeuralNetwork(12, {20, 20}, 3); // Input units - hidden_units vector - output units;
@@ -29,7 +21,7 @@ int main(int argc, char *argv[])
 
     //! Preparing data;
     DataReader Getter;
-    Getter.VecAndVec("../data/regression.csv", TrainingData, TrainingResults);
+    Getter.VecAndVec("data/regression.csv", TrainingData, TrainingResults);
 
     //! Splitting data for validation part;
     Validation Validator;
@@ -54,8 +46,8 @@ int main(int argc, char *argv[])
             second_hidden.forward_pass("leaky_relu", 2);
             output_layer.forward_pass("linear", 3, true);
 
-            output_layer.BackPropagation(TrainingResults[k], atoi(argv[1]),  atoi(argv[2]),  atoi(argv[3]));
-            TrainingLoss.calculator("MEE", "../results/training_loss.txt", outputs[weights.size()], TrainingResults[k], TrainingResults.size());
+            output_layer.BackPropagation(TrainingResults[k], stod(argv[1]), stod(argv[2]), stod(argv[3]));
+            TrainingLoss.calculator("MEE", "results/training_loss.txt", outputs[weights.size()], TrainingResults[k], TrainingResults.size());
             outputs.clear();
         };
 
@@ -67,7 +59,7 @@ int main(int argc, char *argv[])
             second_hidden.forward_pass("leaky_relu", 2);
             output_layer.forward_pass("linear", 3, true);
 
-            ValidationLoss.calculator("MEE", "../results/val_loss.txt", outputs[weights.size()], ValidationResults[k], ValidationResults.size());
+            ValidationLoss.calculator("MEE", "results/val_loss.txt", outputs[weights.size()], ValidationResults[k], ValidationResults.size());
             outputs.clear();
         }
     }
@@ -80,14 +72,14 @@ int main(int argc, char *argv[])
         second_hidden.forward_pass("leaky_relu", 2);
         output_layer.forward_pass("linear", 3, true);
 
-        ValidationLoss.calculator("MEE", "../results/test_loss.txt", outputs[weights.size()], TestResults[k], TestResults.size());
+        ValidationLoss.calculator("MEE", "results/test_loss.txt", outputs[weights.size()], TestResults[k], TestResults.size());
         outputs.clear();
     }
 
     //! Counter stops and prints elapsed time;
     auto end = chrono::high_resolution_clock::now();
     chrono::duration<double> elapsed_time = end - start;
-    cout << "Elapsed time: " << elapsed_time.count() << " seconds. \n"
+    cout << "Elapsed time: " << elapsed_time.count() << " seconds."
          << endl;
 
     return 0;

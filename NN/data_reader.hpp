@@ -85,7 +85,7 @@ public:
             }
         }
     }
-    
+
     void VecAndVec_Blind(const string fileinput, vector<VectorXd> &Inputs)
     {
         string line; // declaring the std::string that will act as a placeholder for each line of the file;

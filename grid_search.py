@@ -1,6 +1,6 @@
 # %%
 import multiprocessing as mp
-import parameters as param
+import NN.parameters as param
 import subprocess
 from itertools import product
 from loguru import logger
@@ -9,7 +9,6 @@ import multiprocessing as mp
 import os
 from customtkinter import *
 import customtkinter as ctk
-
 
 IsCompilationGood = False
 NomeFileDaCompilare = "main.cpp"
@@ -44,6 +43,7 @@ def CallMain(Inputs):
     result = subprocess.run(command, capture_output=True, text=True)
     print(result.stdout)
 
+
 def Compile():
     global IsCompilationGood
     try:
@@ -71,22 +71,21 @@ def Compile():
         IsCompilationGood = False
         print(e.stderr)
 
-def BuildGrid(
-    eta_1, eta_2, lambda_1, lambda_2, alpha_1, alpha_2, step1, step2, step3
-):
+
+def BuildGrid(eta_1, eta_2, lambda_1, lambda_2, alpha_1, alpha_2, step1, step2, step3):
     MyGrid = param.Grid(
         eta_1, eta_2, lambda_1, lambda_2, alpha_1, alpha_2, step1, step2, step3
     )
     return MyGrid
 
+
 if __name__ == "__main__":
+
     def submit_values():
 
         global IsCompilationGood
         if IsCompilationGood:
-            subprocess.run(
-                ["rm", "grid_results.txt"], capture_output=True, text=True
-            )
+            subprocess.run(["rm", "grid_results.txt"], capture_output=True, text=True)
             try:
                 if (
                     (not eta_min_entry.get())
@@ -151,8 +150,7 @@ if __name__ == "__main__":
                         step3,
                     )
                     Inputs = [
-                        [x.Eta, x.Lambda, x.Alpha, training_steps]
-                        for x in MyGrid.Grid
+                        [x.Eta, x.Lambda, x.Alpha, training_steps] for x in MyGrid.Grid
                     ]
                     with mp.Pool(processes=CPU_Number) as pool:
                         results = pool.map(CallMain, Inputs)
@@ -165,9 +163,7 @@ if __name__ == "__main__":
     def submit_values_for_single_training():
         global IsCompilationGood
         if IsCompilationGood:
-            subprocess.run(
-                ["rm", "grid_results.txt"], capture_output=True, text=True
-            )
+            subprocess.run(["rm", "grid_results.txt"], capture_output=True, text=True)
             try:
                 if (
                     (not single_eta_entry.get())
@@ -218,9 +214,7 @@ if __name__ == "__main__":
         messagebox.showerror("Error")
         IsCompilationGood = False
     except subprocess.CalledProcessError as e:
-        logger.error(
-            "Errore fatale: la compilazione del main ha prodotto un errore."
-        )
+        logger.error("Errore fatale: la compilazione del main ha prodotto un errore.")
         messagebox.showerror(
             "Errore",
             "La compilazione non ha avuto buon fine: leggi l'errore da terminale dopo aver premuto Ok.",
@@ -234,7 +228,7 @@ if __name__ == "__main__":
 
     # Create the main application window
     root = ctk.CTk()
-    root.title("Grid Search and Single Run")
+    root.title("Grid search and single run")
 
     # Create a tab view
     tab_view = ctk.CTkTabview(root)

@@ -63,7 +63,7 @@ public:
                 prev_updates.push_back(ghost);
                 V_t.push_back(v_aux);
                 M_t.push_back(m_aux);
-                counters.push_back(0); 
+                counters.push_back(0);
             }
         }
     };

@@ -63,14 +63,14 @@ double tan_der(double x)
 double leaky_relu(double x)
 {
     double res;
-    x < 0 ? res = leaky_coeff * x : res = x;
+    x < 0 ? res = leaky_coeff *x : res = x;
     return res;
 }
 double leaky_der(double x)
 {
     double der_res;
     x < 0 ? der_res = leaky_coeff : der_res = 1;
-    return der_res; 
+    return der_res;
 }
 
 // Defining pointer to activation function(s) and derivative(s);
