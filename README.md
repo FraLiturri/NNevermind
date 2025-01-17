@@ -40,9 +40,9 @@ as usually.
 ## 🚀 Starting engines
 Before starting to build your NN, setting up file paths is necessary. Open the terminal and run
 ```
-python Copilot.py initialize
+python copilot.py initialize
 ```
-then type Eigen's path, your main path (if not specified, Python will search in NNeverMind's directory) and lastly the destination directory for training and general results.  
+then type Eigen's path: `C:/User/.../your_path_to_eigen/Eigen/Dense` (remember to add `Eigen/Dense` and to use `/` to specify sub-directories).  
 
 ## 🛠️ Objects
 
