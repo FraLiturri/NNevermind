@@ -11,11 +11,7 @@ The available choices between activation and loss functions are various (see the
 data plotting, mean calculator, and a user-friendly interface for parallelized grid search. 
 
 ## ⚙️ Platforms
-The entire package works perfectly in any OS, with the exception made for parallelized grid search, available for now only on: 
-- Linux Mint
-- Windows
-  
-we do not guarantee its working on other platforms.
+The entire package should work perfectly in any OS. Report an issue if any incompatibility pops up!
 
 ## 📖 Benchmark
 The tests were executed on 100-byte data sets, using an 11th-generation Intel(R) Core(TM) i7-1165G7 @ 2.80GHz. Time may vary on different devices.  
