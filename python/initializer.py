@@ -1,12 +1,11 @@
-file_name = "C:/Users/franc/OneDrive/Desktop/ML-Project/ML-Project/Monk solver/eigen_path.hpp"
+import sys
 
-
-def create_hpp_file(include_path):
+def create_hpp_file(file_name, include_path):
     try:
         # Apri il file in modalità scrittura
         with open(file_name, "w") as file:
             # Scrivi la direttiva #include con il percorso specificato
             file.write(f'#include "{include_path}"\n')
-        print(f"File '{file_name}' created with success!")
+        print(f"\nPath added to '{file_name}' successfully!\n")
     except Exception as e:
         print(f"Error: {e}")

@@ -3,7 +3,6 @@
 
 #include "lib.hpp"
 #include <iomanip>
-#include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
 
 using namespace std;
 using namespace Eigen;

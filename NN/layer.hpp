@@ -4,7 +4,6 @@
 #include "lib.hpp"
 #include "activation_functions.hpp"
 #include "demiurge.hpp"
-#include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
 
 #include <variant>
 

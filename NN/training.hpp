@@ -4,14 +4,13 @@
 #include "layer.hpp"
 #include "demiurge.hpp"
 #include "activation_functions.hpp"
+#include "eigen_path.hpp"
 
 #include <any>
 #include <iostream>
 #include <vector>
 #include <cmath>
 #include <stdexcept>
-
-#include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
 
 using namespace std;
 using namespace Eigen;

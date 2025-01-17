@@ -6,9 +6,7 @@
 #include "data_reader.hpp"
 #include "loss.hpp"
 #include "validation.hpp"
-#include "estimator.hpp"
-
-#include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
+#include "eigen_path.hpp"
 
 using namespace Eigen;
 using namespace std;
@@ -21,9 +19,9 @@ int main(int argc, char *argv[])
     auto start = chrono::high_resolution_clock::now();
 
     //? Cleaning data from previous runs;
-    ofstream("NN_results/training_loss.txt", std::ios::trunc).close();
-    ofstream("NN_results/val_loss.txt", std::ios::trunc).close();
-    ofstream("NN_results/test_loss.txt", std::ios::trunc).close();
+    ofstream("../results/training_loss.txt", std::ios::trunc).close();
+    ofstream("../results/val_loss.txt", std::ios::trunc).close();
+    ofstream("../results/test_loss.txt", std::ios::trunc).close();
 
     //! Demiurge blows;
     Demiurge NeuralNetwork(12, {20, 20}, 3); // Input units - hidden_units vector - output units;
@@ -31,8 +29,7 @@ int main(int argc, char *argv[])
 
     //! Preparing data;
     DataReader Getter;
-    Getter.VecAndVec("Data/ML-CUP24-TR.csv", TrainingData, TrainingResults);
-    Getter.VecAndVec_Blind("Data/ML-CUP24-TS.csv", TestData);
+    Getter.VecAndVec("../data/regression.csv", TrainingData, TrainingResults);
 
     //! Splitting data for validation part;
     Validation Validator;
@@ -41,9 +38,6 @@ int main(int argc, char *argv[])
     //! Printing NN general info: can be avoided if not desired;
     print_info(pointerNN);
 
-    Estimator(atoi(argv[1]));
-    cout << "Estimated time: " << ex_time << " seconds." << endl;
-
     //! Neural network construction;
     Input_Layer input_layer;
     Hidden_Layer first_hidden, second_hidden, output_layer;
@@ -51,7 +45,7 @@ int main(int argc, char *argv[])
     Loss TrainingLoss, TestLoss, ValidationLoss;
 
     //! Output computing and training algorithm;
-    for (int n = 0; n < atoi(argv[1]); n++)
+    for (int n = 0; n < atoi(argv[4]); n++)
     {
         for (int k = 0; k < TrainingData.size(); k++)
         {
@@ -60,8 +54,8 @@ int main(int argc, char *argv[])
             second_hidden.forward_pass("leaky_relu", 2);
             output_layer.forward_pass("linear", 3, true);
 
-            output_layer.BackPropagation(TrainingResults[k], 0.0001);
-            TrainingLoss.calculator("MEE", "NN_results/training_loss.txt", outputs[weights.size()], TrainingResults[k], TrainingResults.size());
+            output_layer.BackPropagation(TrainingResults[k], atoi(argv[1]),  atoi(argv[2]),  atoi(argv[3]));
+            TrainingLoss.calculator("MEE", "../results/training_loss.txt", outputs[weights.size()], TrainingResults[k], TrainingResults.size());
             outputs.clear();
         };
 
@@ -73,7 +67,7 @@ int main(int argc, char *argv[])
             second_hidden.forward_pass("leaky_relu", 2);
             output_layer.forward_pass("linear", 3, true);
 
-            ValidationLoss.calculator("MEE", "NN_results/val_loss.txt", outputs[weights.size()], ValidationResults[k], ValidationResults.size());
+            ValidationLoss.calculator("MEE", "../results/val_loss.txt", outputs[weights.size()], ValidationResults[k], ValidationResults.size());
             outputs.clear();
         }
     }
@@ -86,7 +80,7 @@ int main(int argc, char *argv[])
         second_hidden.forward_pass("leaky_relu", 2);
         output_layer.forward_pass("linear", 3, true);
 
-        ValidationLoss.calculator("MEE", "NN_results/test_loss.txt", outputs[weights.size()], TestResults[k], TestResults.size());
+        ValidationLoss.calculator("MEE", "../results/test_loss.txt", outputs[weights.size()], TestResults[k], TestResults.size());
         outputs.clear();
     }
 
@@ -97,6 +91,4 @@ int main(int argc, char *argv[])
          << endl;
 
     return 0;
-
-    
 }

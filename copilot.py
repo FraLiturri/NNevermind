@@ -1,8 +1,9 @@
-#%%
+# %%
 import sys
 import python.info as info
 import python.analyzer as analyzer
 import python.initializer as initializer
+import NN.grid_search as grid_search
 
 
 def main():
@@ -14,14 +15,11 @@ def main():
             f" 2. {info.StringPainter("blue", "iterate file_path N")}: to iterate the execution of a .exe file N times. \n"
         )
 
-    elif str(sys.argv[1]) == "initialize": #C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
-        Eigen_path = str(input("Insert Eigen path here: "))
-        initializer.create_hpp_file(
-            Eigen_path
-        )
-
-    elif str(sys.argv[1]) == "grid search":    
-        print("grid search")
+    elif (
+        str(sys.argv[1]) == "initialize"
+    ):  # C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
+        Eigen_path = str(input("\nInsert Eigen path here: "))
+        initializer.create_hpp_file("NN/eigen_path.hpp", Eigen_path)
 
     elif str(sys.argv[1]) == "help":  # No parameter passed;
         for q in info.questions:
@@ -35,9 +33,6 @@ def main():
         print(
             f"Note: ask question typing its number after\033[94m python info.py \033[0min the terminal. If you want to get general info type {info.StringPainter('blue', '0')}. \n"
         )
-
-    elif str(sys.argv[1]) == "iterate":
-        analyzer.iterate()
 
     elif str(sys.argv[1]) == "plot":
         analyzer.plot()
