@@ -19,7 +19,7 @@ class Input_Layer
 public:
     void forward_pass(VectorXd input)
     {
-        units_output = weights[0]* input;
+        units_output = weights[0] * input;
         outputs.insert(outputs.begin(), input);
         next_inputs.insert(next_inputs.begin(), units_output);
     };
@@ -32,10 +32,9 @@ public:
     void forward_pass(string choosen_function, int depth, bool isOutputLayer = false)
     {
         func_choiser(choosen_function);
-        function_strings.resize(depth+1); 
-        function_strings[depth - 1] = choosen_function;  
-        //function_strings.push_back(choosen_function); 
-        
+        function_strings.resize(depth + 1);
+        function_strings[depth - 1] = choosen_function;
+
         isLast = isOutputLayer;
         inputs = next_inputs[depth - 1]; //! Has to be checked;
 
@@ -51,11 +50,17 @@ public:
             units_output = weights[depth] * inputs;                        // Calculating outputs vector;
             next_inputs.insert(next_inputs.begin() + depth, units_output); // Storing outputs;
         }
-    }
+    };
+
+    void create(string act_function, double depth) {
+        func_choiser(act_function);
+        function_strings.resize(depth);
+        function_strings[depth - 1] = act_function;
+    };
 
     void RandomTraining(variant<double, VectorXd> d, double eta, double alpha, double lambda);  // Random training: in this case takes a double (d) since monk is a class. problem;
     void BackPropagation(variant<double, VectorXd> d, double eta, double alpha, double lambda); // BackProp. algorithm: in this case takes a double (d) since monk is a class. problem;
-    void Adam(variant<double, VectorXd> d, double eta, double alpha, double lambda);                                         // Adam algorithm;
+    void Adam(variant<double, VectorXd> d, double eta, double alpha, double lambda);            // Adam algorithm;
 
 private:
     bool isLast; // Defined to access isOutputlayer's value;

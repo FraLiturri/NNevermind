@@ -1,4 +1,4 @@
-#include "NN/lib.hpp"
+#include "NN_final/lib.hpp"
 
 using namespace Eigen;
 using namespace std;
@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     ofstream("results/test_loss.txt", std::ios::trunc).close();
 
     //! Demiurge blows;
-    Demiurge NeuralNetwork(12, {20, 10}, 3); // Input units - hidden_units vector - output units;
+    Demiurge NeuralNetwork(12, {1, 1}, 3); // Input units - hidden_units vector - output units;
     Demiurge *pointerNN = &NeuralNetwork;    // Pointer to NeuralNetwork for print_info, avoidable if not desired;
 
     //! Preparing data;
@@ -36,8 +36,13 @@ int main(int argc, char *argv[])
 
     Loss TrainingLoss, TestLoss, ValidationLoss;
 
+    //!Initializing; 
+    first_hidden.create("leaky_relu", 1); 
+    second_hidden.create("leaky_relu", 2); 
+    output_layer.create("linear", 3); 
+
     //! Output computing and training algorithm;
-    for (int n = 0; n < atoi(argv[4]); n++)
+    /* for (int n = 0; n < atoi(argv[4]); n++)
     {
         for (int k = 0; k < TrainingData.size(); k++)
         {
@@ -74,7 +79,7 @@ int main(int argc, char *argv[])
 
         ValidationLoss.calculator("MEE", "results/test_loss.txt", outputs[weights.size()], TestResults[k], TestResults.size());
         outputs.clear();
-    }
+    } */
 
     //! Counter stops and prints elapsed time;
     auto end = chrono::high_resolution_clock::now();

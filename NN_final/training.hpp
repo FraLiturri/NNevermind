@@ -21,7 +21,6 @@ MatrixXd update, auxiliar, gradient, gradient_square, sqrt_v, epsilon, M_hat, V_
 
 double delta_k; // auxiliar double;
 int i, size;
-
 double beta_1 = 0.9, beta_2 = 0.999;
 
 VectorXd net_calculator(int layer_number)
@@ -30,7 +29,7 @@ VectorXd net_calculator(int layer_number)
     return net;
 };
 
-void Hidden_Layer::BackPropagation(variant<double, VectorXd> d, double eta, double alpha = 0, double lambda = 0)
+void BackPropagation(variant<double, VectorXd> d, double eta, double alpha = 0, double lambda = 0)
 {
     i = weights.size();
     while (i > 0)
@@ -109,13 +108,9 @@ void Hidden_Layer::BackPropagation(variant<double, VectorXd> d, double eta, doub
         }
         i--;
     };
-
-    //function_strings.clear();
-    next_inputs.clear();
-    units_output.setZero();
-    storer.clear();
 }
-void Hidden_Layer::RandomTraining(variant<double, VectorXd> d, double eta, double alpha = 0, double lambda = 0)
+
+void RandomTraining(variant<double, VectorXd> d, double eta, double alpha = 0, double lambda = 0)
 {
     i = weights.size();
     if (i == weights.size())
@@ -161,12 +156,9 @@ void Hidden_Layer::RandomTraining(variant<double, VectorXd> d, double eta, doubl
         prev_updates[i - 1] = update;
         storer.push_back(delta);
     }
-
-    function_strings.clear();
-    next_inputs.clear();
-    units_output.setZero();
 }
-void Hidden_Layer::Adam(variant<double, VectorXd> d, double eta, double alpha, double lambda)
+
+void Adam(variant<double, VectorXd> d, double eta, double alpha, double lambda)
 {
     i = weights.size();
     while (i > 0)
@@ -258,10 +250,6 @@ void Hidden_Layer::Adam(variant<double, VectorXd> d, double eta, double alpha, d
         }
         i--;
     };
-
-    function_strings.clear();
-    next_inputs.clear();
-    units_output.setZero();
 }
 
 #endif
