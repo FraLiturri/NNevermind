@@ -16,8 +16,9 @@ int main(int argc, char *argv[])
     ofstream("results/test_loss.txt", std::ios::trunc).close();
 
     //! Demiurge blows;
-    Demiurge NeuralNetwork(12, {1, 1}, 3); // Input units - hidden_units vector - output units;
-    Demiurge *pointerNN = &NeuralNetwork;    // Pointer to NeuralNetwork for print_info, avoidable if not desired;
+    Demiurge MLP(12, {200, 200}, 3); // Input units - hidden_units vector - output units;
+    Demiurge *pointer = &MLP;        // Pointer to NeuralNetwork for print_info, avoidable if not desired;
+    NN NeuralNetwork;
 
     //! Preparing data;
     DataReader Getter;
@@ -28,63 +29,27 @@ int main(int argc, char *argv[])
     Validator.HoldOut(TrainingData, TrainingResults, ValidationData, ValidationResults, TestData, TestResults, 180, 210);
 
     //! Printing NN general info: can be avoided if not desired;
-    print_info(pointerNN);
+    print_info(pointer);
+
+    //! Loss definition;
+    Loss TrainingLoss, TestLoss, ValidationLoss;
 
     //! Neural network construction;
     Input_Layer input_layer;
     Hidden_Layer first_hidden, second_hidden, output_layer;
 
-    Loss TrainingLoss, TestLoss, ValidationLoss;
+    first_hidden.create("leaky_relu");
+    second_hidden.create("leaky_relu");
+    output_layer.create("linear");
 
-    //!Initializing; 
-    first_hidden.create("leaky_relu", 1); 
-    second_hidden.create("leaky_relu", 2); 
-    output_layer.create("linear", 3); 
-
-    //! Output computing and training algorithm;
-    /* for (int n = 0; n < atoi(argv[4]); n++)
-    {
-        for (int k = 0; k < TrainingData.size(); k++)
-        {
-            input_layer.forward_pass(TrainingData[k]);
-            first_hidden.forward_pass("leaky_relu", 1);
-            second_hidden.forward_pass("leaky_relu", 2);
-            output_layer.forward_pass("linear", 3, true);
-
-            output_layer.BackPropagation(TrainingResults[k], stod(argv[1]), stod(argv[2]), stod(argv[3]));
-            TrainingLoss.calculator("MEE", "results/training_loss.txt", outputs[weights.size()], TrainingResults[k], TrainingResults.size());
-            outputs.clear();
-        };
-
-        //! Validation;
-        for (int k = 0; k < ValidationData.size(); k++)
-        {
-            input_layer.forward_pass(ValidationData[k]);
-            first_hidden.forward_pass("leaky_relu", 1);
-            second_hidden.forward_pass("leaky_relu", 2);
-            output_layer.forward_pass("linear", 3, true);
-
-            ValidationLoss.calculator("MEE", "results/val_loss.txt", outputs[weights.size()], ValidationResults[k], ValidationResults.size());
-            outputs.clear();
-        }
-    }
-
-    //! Test;
-    for (int k = 0; k < TestData.size(); k++)
-    {
-        input_layer.forward_pass(TestData[k]);
-        first_hidden.forward_pass("leaky_relu", 1);
-        second_hidden.forward_pass("leaky_relu", 2);
-        output_layer.forward_pass("linear", 3, true);
-
-        ValidationLoss.calculator("MEE", "results/test_loss.txt", outputs[weights.size()], TestResults[k], TestResults.size());
-        outputs.clear();
-    } */
+    //! Training, Validation and Test;
+    NeuralNetwork.train("BP", TrainingLoss, "results/training_loss.txt", TrainingData, TrainingResults, stod(argv[1]), stod(argv[2]), stod(argv[3]), atoi(argv[4]));
+    //  MLP.test();
 
     //! Counter stops and prints elapsed time;
     auto end = chrono::high_resolution_clock::now();
     chrono::duration<double> elapsed_time = end - start;
-    cout << "Elapsed time: " << elapsed_time.count() << " seconds."
+    cout << "Elapsed time: " << elapsed_time.count() << " seconds.\n"
          << endl;
 
     return 0;

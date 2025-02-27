@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     ofstream("results/test_loss.txt", std::ios::trunc).close();
 
     //! Demiurge blows;
-    Demiurge NeuralNetwork(12, {20, 10}, 3); // Input units - hidden_units vector - output units;
+    Demiurge NeuralNetwork(12, {200, 200}, 3); // Input units - hidden_units vector - output units;
     Demiurge *pointerNN = &NeuralNetwork;    // Pointer to NeuralNetwork for print_info, avoidable if not desired;
 
     //! Preparing data;

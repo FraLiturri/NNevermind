@@ -28,15 +28,16 @@ X = df_results.iloc[:, 1:13].to_numpy()
 callback = keras.callbacks.EarlyStopping(monitor='loss',
                                              patience=200)
 inputs=keras.layers.Input(shape=(12,))
-hidden=keras.layers.Dense(100,activation="relu")(inputs) #FILL HERE# create a new Dense layer with 500 nodes taking "inputs" as input , what is the most appropriate activation?
-outputs = keras.layers.Dense(3, activation='linear')(hidden) #FILL THE DOTS# what is the most appropriate activation for the final node of a classifier?
+hidden=keras.layers.Dense(2000,activation="relu")(inputs) #FILL HERE# create a new Dense layer with 500 nodes taking "inputs" as input , what is the most appropriate activation?
+hidden2=keras.layers.Dense(2000,activation="relu")(hidden)
+outputs = keras.layers.Dense(3, activation='linear')(hidden2) #FILL THE DOTS# what is the most appropriate activation for the final node of a classifier?
 model = keras.models.Model(inputs=inputs, outputs=outputs)
 
 #model.compile(loss='MEE', optimizer=optimizer)
 model.compile(loss=mee_loss, optimizer=optimizer)
 model.summary()
 
-history=model.fit(X,Y,validation_split=0.5,epochs=500, verbose=1) #FILL THE DOTS# What is the name of the keras function to train a model
+history=model.fit(X,Y,validation_split=0,epochs=300, verbose=0) #FILL THE DOTS# What is the name of the keras function to train a model
 
 print(history.history.keys())
 #print(history.history['loss'])

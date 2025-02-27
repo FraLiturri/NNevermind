@@ -52,10 +52,9 @@ public:
         }
     };
 
-    void create(string act_function, double depth) {
+    void create(string act_function) {
         func_choiser(act_function);
-        function_strings.resize(depth);
-        function_strings[depth - 1] = act_function;
+        function_strings.push_back(act_function);
     };
 
     void RandomTraining(variant<double, VectorXd> d, double eta, double alpha, double lambda);  // Random training: in this case takes a double (d) since monk is a class. problem;

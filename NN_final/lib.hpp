@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <omp.h>
 
+#include "NN.hpp"
 #include "layer.hpp"
 #include "activation_functions.hpp"
 #include "info.hpp"
