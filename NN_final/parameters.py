@@ -1,6 +1,5 @@
 import numpy as np
 
-
 class HyperParameters:
     def __init__(self, EtaParam, LambdaParam, AlphaParam):
         self.Eta = EtaParam

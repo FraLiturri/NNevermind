@@ -10,7 +10,6 @@
 using namespace std;
 using namespace Eigen;
 
-vector<std::string> function_strings;
 VectorXd inputs;
 
 //! Input layer class;
@@ -32,7 +31,6 @@ public:
     void forward_pass(string choosen_function, int depth, bool isOutputLayer = false)
     {
         func_choiser(choosen_function);
-        function_strings.resize(depth + 1);
         function_strings[depth - 1] = choosen_function;
 
         isLast = isOutputLayer;
@@ -43,7 +41,7 @@ public:
             inputs[k] = act_func(inputs[k]); // Making act_function act on input for each unit;
         }
 
-        outputs.insert(outputs.begin() + depth, inputs);
+        outputs[depth] = inputs;
 
         if (!isLast)
         {
@@ -52,9 +50,10 @@ public:
         }
     };
 
-    void create(string act_function) {
+    void create(string act_function, int index)
+    {
         func_choiser(act_function);
-        function_strings.push_back(act_function);
+        function_strings[index - 1] = act_function;
     };
 
     void RandomTraining(variant<double, VectorXd> d, double eta, double alpha, double lambda);  // Random training: in this case takes a double (d) since monk is a class. problem;

@@ -10,7 +10,9 @@ using namespace Eigen;
 
 vector<MatrixXd> weights; // i-th component is the weights matrix of i-th and i+1-th layer;
 vector<VectorXd> outputs; // i-th component is the output (with weights) of i-the layer;
+
 vector<VectorXd> next_inputs;
+vector<std::string> function_strings;
 
 vector<MatrixXd> prev_updates; // necessary for training: Nesterov;
 vector<MatrixXd> V_t, M_t;     // neceessary for Adam training;
@@ -38,6 +40,17 @@ public:
         first_units = input_units;
         last_units = output_units;
 
+        //! Resizing vectors;
+        function_strings.resize(hidden_layers + 1); // resizing collector of activation functions;
+        next_inputs.resize(hidden_layers + 1);
+        outputs.resize(hidden_layers + 2);
+
+        //! Reserving space for vectors: no initialization;
+        weights.reserve(hidden_layers);
+        M_t.reserve(hidden_layers); 
+        V_t.reserve(hidden_layers);
+        prev_updates.reserve(hidden_layers); 
+
         for (int i = 0; i < hidden_layers + 2; i++) // This cycle creates weights matrices;
         {
             unsigned seed = std::chrono::system_clock::now().time_since_epoch().count(); // Defining seed for different random numbers;
@@ -55,14 +68,14 @@ public:
             MatrixXd v_aux = MatrixXd::NullaryExpr(rows, cols, []()
                                                    { return Eigen::internal::random<double>(0, 0); });
 
-            weight.col(0).setConstant(1); //! Bias terms (Check);
-
             if (i != hidden_layers + 1)
             {
                 weights.push_back(weight);
                 prev_updates.push_back(ghost);
+
                 V_t.push_back(v_aux);
                 M_t.push_back(m_aux);
+
                 counters.push_back(0);
             }
         }

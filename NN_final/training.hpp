@@ -72,12 +72,9 @@ void BackPropagation(variant<double, VectorXd> d, double eta, double alpha = 0, 
             }
 
             update = eta * delta * outputs[i - 1].transpose();
-
             weights[i - 1] = weights[i - 1] + update;
-            weights[i - 1].col(0).setConstant(1);
 
             prev_updates[i - 1] = update;
-            storer.push_back(delta);
         }
 
         else
@@ -101,10 +98,7 @@ void BackPropagation(variant<double, VectorXd> d, double eta, double alpha = 0, 
             }
 
             weights[i - 1] = weights[i - 1] + update;
-            weights[i - 1].col(0).setConstant(1);
-
             prev_updates[i - 1] = update;
-            storer.push_back(delta);
         }
         i--;
     };
@@ -151,10 +145,7 @@ void RandomTraining(variant<double, VectorXd> d, double eta, double alpha = 0, d
         }
 
         weights[i - 1] = weights[i - 1] + update;
-        weights[i - 1].col(0).setConstant(1);
-
         prev_updates[i - 1] = update;
-        storer.push_back(delta);
     }
 }
 

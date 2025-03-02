@@ -3,6 +3,7 @@
 #include "loss.hpp"
 #include "demiurge.hpp"
 #include "training.hpp"
+
 #include <variant>
 #include <optional>
 
@@ -12,14 +13,13 @@ using namespace Eigen;
 void InputPass(VectorXd input)
 {
     units_output = weights[0] * input;
-    outputs.insert(outputs.begin(), input);
-    next_inputs.insert(next_inputs.begin(), units_output);
+    outputs[0] = input;
+    next_inputs[0] = units_output;
 }
 
 void HiddenPass(double depth)
 {
     func_choiser(function_strings[depth - 1]);
-
     inputs = next_inputs[depth - 1]; //! Has to be checked;
 
     for (int k = 0; k < inputs.size(); k++)
@@ -27,12 +27,12 @@ void HiddenPass(double depth)
         inputs[k] = act_func(inputs[k]); // Making act_function act on input for each unit;
     }
 
-    outputs.insert(outputs.begin() + depth, inputs);
+    outputs[depth] = inputs;
 
     if (depth < hidden_and_out_units.size())
     {
-        units_output = weights[depth] * inputs;                        // Calculating outputs vector;
-        next_inputs.insert(next_inputs.begin() + depth, units_output); // Storing outputs;
+        units_output = weights[depth] * inputs; // Calculating outputs vector;
+        next_inputs[depth] = units_output;
     }
 };
 
@@ -45,14 +45,15 @@ public:
         {
             for (int data_index = 0; data_index < Data.size(); data_index++)
             {
-                for (int i = 0; i < hidden_and_out_units.size() + 1; i++)
+                InputPass(Data[data_index]);
+                for (int i = 1; i <= hidden_and_out_units.size(); i++)
                 {
-                    i == 0 ? InputPass(Data[data_index]) : HiddenPass(i);
+                    HiddenPass(i);
                 }
 
-                if (tr_alg == "BP")
+                if (tr_alg == "BackPropagation")
                 {
-                    //BackPropagation(Targets[data_index], eta, alpha, lambda);
+                    BackPropagation(Targets[data_index], eta, alpha, lambda);
                 }
                 else if (tr_alg == "Random")
                 {
