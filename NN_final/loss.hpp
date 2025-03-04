@@ -1,15 +1,25 @@
 #ifndef loss
 #define loss
 
-#include "lib.hpp"
+#include "layer.hpp"
+#include "activation_functions.hpp"
+#include "info.hpp"
+#include "training.hpp"
+#include "data_reader.hpp"
+#include "validation.hpp"
+#include "eigen_path.hpp"
+
+#include <iostream>
 #include <iomanip>
-#include "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense"
+#include <fstream>
+#include <sstream>
 
 using namespace std;
 using namespace Eigen;
 
 double aux;
 int counter = 0;
+
 VectorXd aux_vec;
 
 double MSE(variant<double, VectorXd> x, variant<double, VectorXd> y)
@@ -71,20 +81,26 @@ class Loss
 {
 public:
     double loss_value;
-    void calculator(string loss_function, string filepath, variant<double, VectorXd> NN_outputs, variant<double, VectorXd> targets, int data_size)
+    string choosen_loss;
+    string path;
+    Loss(string loss_function, string filepath)
     {
-        counter == 0 ? loss_value = 0 : 1;
-        if (loss_function == "MSE")
+        choosen_loss = loss_function;
+        path = filepath;
+    };
+    void calculator(variant<double, VectorXd> NN_outputs, variant<double, VectorXd> targets, int data_size)
+    {
+        if (choosen_loss == "MSE")
         {
             choice = MSE;
             loss_value += choice(NN_outputs, targets) / (double)data_size;
         }
-        else if (loss_function == "BCE")
+        else if (choosen_loss == "BCE")
         {
             choice = BCE;
             loss_value += choice(NN_outputs, targets) / (double)data_size;
         }
-        else if (loss_function == "MEE")
+        else if (choosen_loss == "MEE")
         {
             choice = MEE;
             loss_value += choice(NN_outputs, targets) / (double)data_size;
@@ -96,19 +112,20 @@ public:
         counter++;
         if (counter == data_size)
         {
-            ofstream outFile(filepath, std::ios::app);
-            if (outFile.is_open())
+            ofstream outputFile("results/tr_loss.txt", ios::app);
+            if (outputFile.is_open())
             {
-                outFile << fixed << setprecision(15);
-                outFile << loss_value << endl;
-                outFile.close();
+                outputFile << loss_value << endl;
+                outputFile.close();
             }
             else
             {
-                cerr << "Impossible to open file." << filepath << endl;
+                cerr << "Errore: impossibile aprire il file " << path << endl;
             }
             counter = 0;
+            loss_value = 0;
         }
+        cout << counter << endl;
     };
 };
 
