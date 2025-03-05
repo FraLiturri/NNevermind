@@ -1,0 +1,6 @@
+# Ignora la cartella build (ma continua a vederla in VS Code)
+build/
+
+# Ignora file di VS Code, ma non la cartella
+.vscode/*
+!.vscode/settings.json  # Se vuoi mantenere settings.json
