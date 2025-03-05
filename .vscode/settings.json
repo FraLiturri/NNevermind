@@ -6,14 +6,6 @@
     "iosfwd": "cpp",
     "fstream": "cpp"
   },
-  "files.exclude": {
-    "build/": true, 
-    ".vscode/": true, 
-  },
-  "search.exclude": {
-    "build/":true, 
-    ".vscode/": true, 
-  },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",
   "C_Cpp_Runner.debuggerPath": "gdb",
