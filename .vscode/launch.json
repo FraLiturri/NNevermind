@@ -1,24 +1,32 @@
 {
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "C/C++ Runner: Debug Session",
-      "type": "cppdbg",
-      "request": "launch",
-      "args": [],
-      "stopAtEntry": false,
-      "externalConsole": true,
-      "cwd": "c:/Users/franc/OneDrive/Desktop/NNeverMind",
-      "program": "c:/Users/franc/OneDrive/Desktop/NNeverMind/build/NN_final/final.cpp",
-      "MIMode": "gdb",
-      "miDebuggerPath": "gdb",
-      "setupCommands": [
+    "version": "0.2.0",
+    "configurations": [
         {
-          "description": "Enable pretty-printing for gdb",
-          "text": "-enable-pretty-printing",
-          "ignoreFailures": true
+            "name": "C/C++ Runner: Debug Session",
+            "type": "cppdbg",
+            "request": "launch",
+            "args": [],
+            "stopAtEntry": false,
+            "externalConsole": true,
+            "environment": [],
+            "cwd": "C:/Users/franc/OneDrive/Desktop/NNeverMind",
+            "program": "C:/Users/franc/OneDrive/Desktop/NNeverMind/NN_final/final.exe",
+            "MIMode": "gdb",
+            "miDebuggerPath": "gdb",
+            "symbolLoadInfo": {
+                "loadAll": true
+            },
+            "logging": {
+                "trace": true,
+                "traceResponse": true
+            },
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ]
 }
