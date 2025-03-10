@@ -18,9 +18,9 @@ jobs:
 
       - name: Controllare la posizione di Eigen
         run: |
-          echo "📂 Contenuto di /usr/include/eigen3:"
+          echo "Contenuto di /usr/include/eigen3:"
           ls -l /usr/include/eigen3
-          echo "📂 Contenuto di /usr/include:"
+          echo "Contenuto di /usr/include:"
           ls -l /usr/include | grep eigen
 
       - name: Creare la cartella build
@@ -30,10 +30,6 @@ jobs:
         run: |
           g++ -Wall -O3 -std=c++17 -fopenmp -I/usr/include/eigen3 main.cpp -o build/main.exe
         continue-on-error: true
-
-      - name: Stampare eventuali errori di compilazione
-        if: failure()
-        run: echo "❌ Errore di compilazione: verifica gli include di Eigen"
         
       - name: Verificare la presenza dell'eseguibile
         run: ls -l build/
