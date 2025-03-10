@@ -1,7 +1,13 @@
 <h1 align="center"> NNeverMind (Alpha testing: work in progress)
 </h1>
 
-## ⏩ A quick look
+<p align="center">
+  <a href="https://github.com/FraLiturri/NNeverMind/actions/workflows/ci.yml">
+    <img src="https://github.com/FraLiturri/NNeverMind/actions/workflows/ci.yml/badge.svg?branch=main" alt="C++ Build & Test (Linux)">
+  </a>
+</p>
+
+  ## ⏩ A quick look
 This package offers an easy-to-use MLP with many different training choices such as: 
 - Backpropagation
 - Random Training
