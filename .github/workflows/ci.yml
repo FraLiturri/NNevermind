@@ -26,4 +26,4 @@ jobs:
 
       - name: Testare l'eseguibile
         run: |
-          ./build/main 0.01 0 0 100 || { echo "❌ Errore durante l'esecuzione"; exit 1; }
+          ./build/main.exe 0.01 0 0 100 || { echo "❌ Errore durante l'esecuzione"; exit 1; }
