@@ -3,13 +3,13 @@
 
 <p align="center">
   <a href="https://github.com/FraLiturri/NNeverMind/actions/workflows/linux.yml">
-    <img src="https://github.com/FraLiturri/NNeverMind/actions/workflows/ci.yml/badge.svg?branch=main" alt="Linux test">
+    <img src="https://github.com/FraLiturri/NNeverMind/actions/workflows/ci.yml/badge.svg?branch=Development" alt="Linux test">
   </a>
     <a href="https://github.com/FraLiturri/NNeverMind/actions/workflows/windows.yml">
-    <img src="https://github.com/FraLiturri/NNeverMind/actions/workflows/ci.yml/badge.svg?branch=main" alt="Windows test">
+    <img src="https://github.com/FraLiturri/NNeverMind/actions/workflows/ci.yml/badge.svg?branch=Development" alt="Windows test">
   </a>
     <a href="https://github.com/FraLiturri/NNeverMind/actions/workflows/macos.yml">
-    <img src="https://github.com/FraLiturri/NNeverMind/actions/workflows/ci.yml/badge.svg?branch=main" alt="macOS test">
+    <img src="https://github.com/FraLiturri/NNeverMind/actions/workflows/ci.yml/badge.svg?branch=Development" alt="macOS test">
   </a>
 </p>
 
