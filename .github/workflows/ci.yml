@@ -1,55 +1,27 @@
-name: C++ Build & Test
+name: C++ Build & Test (Linux)
 
 on: [push, pull_request]
 
 jobs:
   build:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Repository checkout
+      - name: Checkout del repository
         uses: actions/checkout@v4
 
-      - name: Linux installing
-        if: runner.os == 'Linux'
-        run: sudo apt update && sudo apt install -y g++ make 
+      # Installazione di Eigen su Linux
+      - name: Installare Eigen
         run: sudo apt update && sudo apt install -y libeigen3-dev
 
-      - name: MacOs installing
-        if: runner.os == 'macOS'
-        run: brew install gcc make
-        run: brew install eigen
+      # Creazione della cartella build
+      - name: Creare la cartella build
+        run: mkdir -p build
 
-      - name: Windows installing
-        if: runner.os == 'Windows'
-        run: choco install mingw
-        run: |
-          choco install eigen
-          echo "EIGEN_PATH=C:\ProgramData\chocolatey\lib\eigen\include\eigen3" >> $GITHUB_ENV
+      # Compilazione con flag ottimizzate e OpenMP
+      - name: Compilare il codice
+        run: g++ -Wall -O3 -std=c++17 -fopenmp -I/usr/include/eigen3 main.cpp -o build/main
 
-      - name: compilation on Linux/MacOs
-       run: |
-          EIGEN_INCLUDE=""
-          if [ "$RUNNER_OS" == "Linux" ]; then
-            EIGEN_INCLUDE="/usr/include/eigen3"
-          elif [ "$RUNNER_OS" == "macOS" ]; then
-            EIGEN_INCLUDE="/usr/local/include/eigen3"
-          fi
-          g++ -Wall -O3 -std=c++17 -fopenmp -I$EIGEN_INCLUDE main.cpp -o build/main
-        shell: bash
-
-      - name: Compilation on Windows
-        if: runner.os == 'Windows'
-        run: g++ -Wall -O3 -std=c++17 -fopenmp -I"%EIGEN_PATH%" src/main.cpp -o build/main.exe
-
-      - name: Testing
-        if: runner.os != 'Windows'
-        run: ./build/main.exe 0.01 0 0 1000
-
-      - name: Eseguire il test con argomenti da terminale (Windows)
-        if: runner.os == 'Windows'
-        run: ./build/main.exe 0.01 0 0 1000
+      # Eseguire il test con argomenti da terminale
+      - name: Eseguire il test
+        run: ./build/main 0.001 0 0 1000
