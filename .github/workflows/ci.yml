@@ -1,0 +1,38 @@
+name: C++ Build & Test
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v4
+
+      - name: Linux installing
+        if: runner.os == 'Linux'
+        run: sudo apt update && sudo apt install -y g++ make
+
+      - name: MacOs installing
+        if: runner.os == 'macOS'
+        run: brew install gcc make
+
+      - name: Windows installing
+        if: runner.os == 'Windows'
+        run: choco install mingw
+
+      - name: compilation
+        run: g++ main.cpp -fopenmp -O3 -o build/main.exe
+
+      - name: Testing
+        if: runner.os != 'Windows'
+        run: ./build/main.exe 0.01 0 0 1000
+
+      - name: Eseguire il test con argomenti da terminale (Windows)
+        if: runner.os == 'Windows'
+        run: ./build/main.exe 0.01 0 0 1000

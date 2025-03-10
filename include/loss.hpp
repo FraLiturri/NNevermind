@@ -83,13 +83,16 @@ public:
     double loss_value;
     string choosen_loss;
     string path;
+
     Loss(string loss_function, string filepath)
     {
         choosen_loss = loss_function;
         path = filepath;
     };
+
     void calculator(variant<double, VectorXd> NN_outputs, variant<double, VectorXd> targets, int data_size)
     {
+        #pragma omp critical
         if (choosen_loss == "MSE")
         {
             choice = MSE;
@@ -112,7 +115,7 @@ public:
         counter++;
         if (counter == data_size)
         {
-            ofstream outputFile("results/tr_loss.txt", ios::app);
+            ofstream outputFile(path, ios::app);
             if (outputFile.is_open())
             {
                 outputFile << loss_value << endl;
@@ -125,7 +128,6 @@ public:
             counter = 0;
             loss_value = 0;
         }
-        cout << counter << endl;
     };
 };
 

@@ -2,9 +2,9 @@
 #define info
 
 #include <iostream>
-#include "layer.hpp"
+#include "demiurge.hpp"
 
-Demiurge *pointer;
+Demiurge *pointer = nullptr;
 
 // Setting info to print in main.cpp;
 void print_info(Demiurge *myNN)

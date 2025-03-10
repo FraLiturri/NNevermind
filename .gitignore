@@ -1,6 +1,9 @@
-# Ignora la cartella build (ma continua a vederla in VS Code)
+# Ignoring build/, results/; 
 build/
+results/*
 
-# Ignora file di VS Code, ma non la cartella
-.vscode/*
-!.vscode/settings.json  # Se vuoi mantenere settings.json
+# Ignoring .vscode/ directory; 
+.vscode/
+
+# Ignoring file: 
+todo 
