@@ -14,7 +14,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y libeigen3-dev
-          echo "✅ Eigen installato"
+          echo "Eigen installato"
 
       - name: Controllare la posizione di Eigen
         run: |
@@ -28,11 +28,11 @@ jobs:
 
       - name: Compilare il codice
         run: |
-          g++ -Wall -O3 -std=c++17 -fopenmp -I/usr/include/eigen3 main.cpp -o build/main.exe
+          g++ -Wall -O3 -std=c++17 -fopenmp -I/usr/include/eigen3 main.cpp -o build/main
         continue-on-error: true
         
       - name: Verificare la presenza dell'eseguibile
         run: ls -l build/
 
       - name: Testare l'eseguibile
-        run: ./build/main.exe 0.001 0 0 1000
+        run: ./build/main 0.001 0 0 1000
