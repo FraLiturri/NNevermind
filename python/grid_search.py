@@ -1,6 +1,6 @@
 # %%
 import multiprocessing as mp
-import NN.parameters as param
+import include.parameters.py as param
 import subprocess
 from itertools import product
 from loguru import logger

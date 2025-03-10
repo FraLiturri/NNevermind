@@ -1,10 +1,9 @@
 # %%
 import sys
-import python.info as info
-import python.analyzer as analyzer
-import python.initializer as initializer
-import python.grid_search as grid_search
-
+import info as info
+import analyzer as analyzer
+import initializer as initializer
+import grid_search as grid_search
 
 def main():
 
