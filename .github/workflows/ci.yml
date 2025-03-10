@@ -18,7 +18,7 @@ jobs:
 
       - name: Compilare il codice
         run: |
-          g++ -Wall -O3 -std=c++17 -fopenmp -I/usr/include/eigen3 src/main.cpp -o build/main
+          g++ -Wall -O3 -std=c++17 -fopenmp -I/usr/include/eigen3 main.cpp -o build/main
           echo "✅ Compilazione completata"
 
       - name: Verificare se il file è stato generato
