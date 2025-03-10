@@ -1,6 +1,12 @@
 <h1 align="center"> NNeverMind (Alpha testing: work in progress)
 </h1>
 
+<p align="center">
+  <img src="https://github.com/FraLiturri/NNeverMind/actions/workflows/linux.yml/badge.svg?branch=Development" alt="Linux test">
+  <img src="https://github.com/FraLiturri/NNeverMind/actions/workflows/macos.yml/badge.svg?branch=Development" alt="MacOs test">
+  <img src="https://github.com/FraLiturri/NNeverMind/actions/workflows/windows.yml/badge.svg?branch=Development" alt="Windows test">
+</p>
+
 ## ⏩ A quick look
 This package offers an easy-to-use MLP with many different training choices such as: 
 - Backpropagation
