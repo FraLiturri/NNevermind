@@ -16,18 +16,35 @@ jobs:
 
       - name: Linux installing
         if: runner.os == 'Linux'
-        run: sudo apt update && sudo apt install -y g++ make
+        run: sudo apt update && sudo apt install -y g++ make 
+        run: sudo apt update && sudo apt install -y libeigen3-dev
 
       - name: MacOs installing
         if: runner.os == 'macOS'
         run: brew install gcc make
+        run: brew install eigen
 
       - name: Windows installing
         if: runner.os == 'Windows'
         run: choco install mingw
+        run: |
+          choco install eigen
+          echo "EIGEN_PATH=C:\ProgramData\chocolatey\lib\eigen\include\eigen3" >> $GITHUB_ENV
 
-      - name: compilation
-        run: g++ main.cpp -fopenmp -O3 -o build/main.exe
+      - name: compilation on Linux/MacOs
+       run: |
+          EIGEN_INCLUDE=""
+          if [ "$RUNNER_OS" == "Linux" ]; then
+            EIGEN_INCLUDE="/usr/include/eigen3"
+          elif [ "$RUNNER_OS" == "macOS" ]; then
+            EIGEN_INCLUDE="/usr/local/include/eigen3"
+          fi
+          g++ -Wall -O3 -std=c++17 -fopenmp -I$EIGEN_INCLUDE main.cpp -o build/main
+        shell: bash
+
+      - name: Compilation on Windows
+        if: runner.os == 'Windows'
+        run: g++ -Wall -O3 -std=c++17 -fopenmp -I"%EIGEN_PATH%" src/main.cpp -o build/main.exe
 
       - name: Testing
         if: runner.os != 'Windows'

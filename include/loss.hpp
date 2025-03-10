@@ -92,7 +92,6 @@ public:
 
     void calculator(variant<double, VectorXd> NN_outputs, variant<double, VectorXd> targets, int data_size)
     {
-        #pragma omp critical
         if (choosen_loss == "MSE")
         {
             choice = MSE;
