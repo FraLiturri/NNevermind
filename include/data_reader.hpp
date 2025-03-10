@@ -10,7 +10,7 @@ using namespace Eigen;
 class DataReader
 {
 public:
-    void VecAndDouble(const string fileinput, VectorXd &resultsVector, vector<VectorXd> &Inputs) //, double splitting_index = 124)
+    void VecAndDouble(const string fileinput, vector<VectorXd> &Inputs, VectorXd &resultsVector) //, double splitting_index = 124)
     {
         string line; // declaring the std::string that will act as a placeholder for each line of the file;
         ifstream myfile_in(fileinput);

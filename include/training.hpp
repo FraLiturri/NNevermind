@@ -47,6 +47,7 @@ void BackPropagation(variant<double, VectorXd> d, double eta, double alpha = 0, 
                     delta_k = (get<double>(d) - outputs[i][k]) * der_act_func(net_t[k]);
                     delta[k] = delta_k;
                 }
+                // cout << "d: " << get<double>(d) << endl;
             }
             else if (holds_alternative<VectorXd>(d))
             {
@@ -56,11 +57,13 @@ void BackPropagation(variant<double, VectorXd> d, double eta, double alpha = 0, 
                     delta_k = (get<VectorXd>(d)[k] - outputs[i][k]) * der_act_func(net_t[k]);
                     delta[k] = delta_k;
                 }
+                // cout << "d: " << get<VectorXd>(d).transpose() << endl;
             }
             else
             {
                 throw runtime_error("Backpropagation accepts only double or VectorXd as first input.");
             }
+            // cout << delta.transpose() << endl;
 
             if (prev_updates[0](0, 0) == 0) // The first element is 0 only at initialization; after is always 1 (bias term);
             {
@@ -186,7 +189,7 @@ void Adam(variant<double, VectorXd> d, double eta, double alpha, double lambda)
             gradient_square = (gradient.array().square()).matrix();
             epsilon.conservativeResize(gradient.rows(), gradient.cols());
 
-            if (counters[i-1] == 0)
+            if (counters[i - 1] == 0)
             {
                 epsilon.setConstant(pow(10, -8));
             }
@@ -194,8 +197,8 @@ void Adam(variant<double, VectorXd> d, double eta, double alpha, double lambda)
             M_t[i - 1] = M_t[i - 1] * beta_1 + (1 - beta_1) * gradient;
             V_t[i - 1] = V_t[i - 1] * beta_2 + (1 - beta_2) * gradient_square;
 
-            M_hat = M_t[i - 1] / (1 - pow(beta_1, counters[i-1]+1));
-            V_hat = V_t[i - 1] / (1 - pow(beta_2, counters[i-1]+1));
+            M_hat = M_t[i - 1] / (1 - pow(beta_1, counters[i - 1] + 1));
+            V_hat = V_t[i - 1] / (1 - pow(beta_2, counters[i - 1] + 1));
 
             sqrt_v = (V_t[i - 1].array().sqrt()).matrix();
             sqrt_v = sqrt_v + epsilon;
@@ -205,39 +208,39 @@ void Adam(variant<double, VectorXd> d, double eta, double alpha, double lambda)
             weights[i - 1] = weights[i - 1] + eta * update;
             weights[i - 1].col(0).setConstant(1);
 
-            counters[i-1]++; 
+            counters[i - 1]++;
         }
 
         else
         {
-           /*  net_t = net_calculator(i);
-            func_choiser(function_strings[i - 1]);
-            delta = weights[i].transpose() * delta;
+            /*  net_t = net_calculator(i);
+             func_choiser(function_strings[i - 1]);
+             delta = weights[i].transpose() * delta;
 
-            for (int k = 0; k < delta.size(); k++)
-            {
-                delta[k] = delta[k] * der_act_func(net_t[k]);
-            }
+             for (int k = 0; k < delta.size(); k++)
+             {
+                 delta[k] = delta[k] * der_act_func(net_t[k]);
+             }
 
-            gradient = delta * outputs[i - 1].transpose();
-            gradient_square = (gradient.array().square()).matrix();
-            epsilon.conservativeResize(gradient.rows(), gradient.cols());
+             gradient = delta * outputs[i - 1].transpose();
+             gradient_square = (gradient.array().square()).matrix();
+             epsilon.conservativeResize(gradient.rows(), gradient.cols());
 
-            M_t[i - 1] = M_t[i - 1] * beta_1 + (1 - beta_1) * gradient;
-            V_t[i - 1] = V_t[i - 1] * beta_2 + (1 - beta_2) * gradient_square;
+             M_t[i - 1] = M_t[i - 1] * beta_1 + (1 - beta_1) * gradient;
+             V_t[i - 1] = V_t[i - 1] * beta_2 + (1 - beta_2) * gradient_square;
 
-            M_hat = M_t[i - 1] / (double)(1 - pow(beta_1, counters[i-1]+1));
-            V_hat = V_t[i - 1] / (double)(1 - pow(beta_2, counters[i-1]+1));
+             M_hat = M_t[i - 1] / (double)(1 - pow(beta_1, counters[i-1]+1));
+             V_hat = V_t[i - 1] / (double)(1 - pow(beta_2, counters[i-1]+1));
 
-            sqrt_v = (V_hat.array().sqrt()).matrix();
-            sqrt_v = sqrt_v + epsilon;
+             sqrt_v = (V_hat.array().sqrt()).matrix();
+             sqrt_v = sqrt_v + epsilon;
 
-            update = (M_hat.array() / sqrt_v.array()).matrix();
+             update = (M_hat.array() / sqrt_v.array()).matrix();
 
-            weights[i - 1] = weights[i - 1] + eta * update;
-            weights[i - 1].col(0).setConstant(1);
+             weights[i - 1] = weights[i - 1] + eta * update;
+             weights[i - 1].col(0).setConstant(1);
 
-            counters[i-1]++;  */
+             counters[i-1]++;  */
         }
         i--;
     };

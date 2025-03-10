@@ -4,9 +4,9 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 # Creiamo dati per X, Y, Z
-X = np.loadtxt("data/regression.csv", usecols= 13)
-Y = np.loadtxt("data/regression.csv", usecols= 14)
-Z = np.loadtxt("data/regression.csv", usecols= 15)
+X = np.loadtxt("../data/regression.csv", usecols= 13)
+Y = np.loadtxt("../data/regression.csv", usecols= 14)
+Z = np.loadtxt("../data/regression.csv", usecols= 15)
 
 # Creiamo la figura e l'asse 3D
 fig = plt.figure(figsize=(8, 6))
@@ -19,7 +19,7 @@ ax.scatter(X, Y, Z, c='b', marker='o')
 ax.set_xlabel('X')
 ax.set_ylabel('Y')
 ax.set_zlabel('Z')
-ax.set_title('3D Plot Example')
+ax.set_title('3D Plot Python example')
 
 plt.show()
 
