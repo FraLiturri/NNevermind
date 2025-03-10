@@ -11,19 +11,32 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Installare Eigen
-        run: sudo apt update && sudo apt install -y libeigen3-dev
+        run: |
+          sudo apt update
+          sudo apt install -y libeigen3-dev
+          echo "✅ Eigen installato"
+
+      - name: Controllare la posizione di Eigen
+        run: |
+          echo "📂 Contenuto di /usr/include/eigen3:"
+          ls -l /usr/include/eigen3
+          echo "📂 Contenuto di /usr/include:"
+          ls -l /usr/include | grep eigen
 
       - name: Creare la cartella build
         run: mkdir -p build
 
       - name: Compilare il codice
         run: |
-          g++ -Wall -O3 -std=c++17 -fopenmp -I/usr/include/eigen3 main.cpp -o build/main
-          echo "✅ Compilazione completata"
+          g++ -Wall -O3 -std=c++17 -fopenmp -I/usr/include/eigen3 main.cpp -o build/main.exe
+        continue-on-error: true
 
-      - name: Verificare se il file è stato generato
+      - name: Stampare eventuali errori di compilazione
+        if: failure()
+        run: echo "❌ Errore di compilazione: verifica gli include di Eigen"
+        
+      - name: Verificare la presenza dell'eseguibile
         run: ls -l build/
 
       - name: Testare l'eseguibile
-        run: |
-          ./build/main.exe 0.01 0 0 100 || { echo "❌ Errore durante l'esecuzione"; exit 1; }
+        run: ./build/main.exe 0.001 0 0 1000
