@@ -57,6 +57,10 @@ then type Eigen's path: `C:/User/.../your_path_to_eigen/Eigen/Dense` (remember t
 | `Hidden_Layer` |  `Hidden_Layer output_layer;` <br /> &#x2003; &#x2003; &#x22EE; <br />`output_layer.Backpropagation(variant<double, VectorXd> targets_results, eta, alpha = 0, lambda = 0);` | ➤ `target_results`: target values; <br /> ➤ `eta`: learning rate;  <br /> ➤ `alpha`: for Nesterov momentum (0 by default); <br /> ➤ `lambda`: for L2 regularization (0 by default).|
 | `Loss` | `Loss TrainingLoss;` <br /> &#x2003; &#x2003; &#x22EE; <br /> `TrainingLoss.calculator(string loss_function, string file_path, variant<double, VectorXd> target_values, data_size);` | ➤ `loss_function`: `MEE` (mean euclidean error), `MSE` (mean square error) and `BCE` (binary cross entropy);  <br /> ➤ `file_path`: desired path where loss results have to be stored;  <br /> ➤ `target_values`: these are the targets values to be reached by the NN; can be double (typically for classifications tasks) or VectorXd. <br /> ➤ `data_size`: size of the data used.|
 
+## Dependencies
+
+This project uses the [Eigen library](https://eigen.tuxfamily.org/) under the [MPL 2.0 license](https://opensource.org/licenses/MPL-2.0).
+
 ## 📑 Additional info 
 <details>
   <summary> Implementation example </summary><br />
