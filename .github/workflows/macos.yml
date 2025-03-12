@@ -12,6 +12,8 @@ jobs:
 
       - name: Installing gcc
         run: brew install gcc
+             brew install libomp
+
 
       - name: Installare Eigen
         run: |
@@ -50,9 +52,7 @@ jobs:
 
       - name: Compilare il codice
         run: |
-          /usr/local/bin/g++-14.2 -Wall -O3 -std=c++17 -fopenmp -I$EIGEN_PATH main.cpp -o build/main
-
-        continue-on-error: true
+          clang++ -Wall -O3 -std=c++17 -I$EIGEN_PATH -Xclang -load -Xclang /usr/local/opt/libomp/lib/libomp.dylib main.cpp -o build/main
         
       - name: Verificare la presenza dell'eseguibile
         run: ls -l build/
