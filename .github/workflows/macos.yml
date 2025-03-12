@@ -19,6 +19,8 @@ jobs:
       - name: Install Python and dependencies
         run: |
           python3 -m venv myenv
+          brew install tcl-tk
+          brew install python-tk
           source myenv/bin/activate
           pip install numpy
           pip install matplotlib 
