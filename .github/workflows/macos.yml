@@ -51,7 +51,7 @@ jobs:
 
       - name: Compilare il codice
         run: |
-          clang++ -Wall -O3 -std=c++17 -I$EIGEN_PATH -Xclang -load -Xclang /usr/local/opt/libomp/lib/libomp.dylib main.cpp -o build/main
+            g++ -Wall -O3 -std=c++17 -I/usr/include/eigen3 main.cpp -o build/main
         
       - name: Verificare la presenza dell'eseguibile
         run: ls -l build/
