@@ -50,7 +50,7 @@ jobs:
 
       - name: Compilare il codice
         run: |
-          /usr/local/bin/g++-12 -Wall -O3 -std=c++17 -fopenmp -I$EIGEN_PATH main.cpp -o build/main
+          /usr/local/bin/g++-14.2 -Wall -O3 -std=c++17 -fopenmp -I$EIGEN_PATH main.cpp -o build/main
 
         continue-on-error: true
         
