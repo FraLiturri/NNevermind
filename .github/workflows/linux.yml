@@ -16,6 +16,11 @@ jobs:
           sudo apt install -y libeigen3-dev
           echo "Eigen installato"
 
+      - name: Install Python and dependencies
+        run: |
+          sudo apt install -y python3 python3-pip
+          pip3 install numpy matplotlib
+
       - name: Get Eigen Path
         run: |
           EIGEN_PATH=$(dpkg -L libeigen3-dev | grep "Eigen/Core" | sed 's:/Eigen/Core::' | head -n 1)
