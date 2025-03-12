@@ -29,7 +29,8 @@ jobs:
 
       - name: Run copilot.py with Eigen path
         run: |
-          python copilot.py change_path "$EIGEN_PATH\Eigen\Dense"
+          echo "Running copilot.py with Eigen path"
+          python copilot.py change_path "$EIGEN_PATH\\Eigen\\Dense"
 
       - name: Creare la cartella build
         run: mkdir build
