@@ -20,7 +20,7 @@ jobs:
           choco install python
           pip install numpy matplotlib
           pip install loguru customtkinter
-          choco install python-tk
+          pip install tk  # Aggiungi questa riga per installare Tkinter
 
       - name: Get Eigen Path
         run: |
