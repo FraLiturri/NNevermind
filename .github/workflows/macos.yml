@@ -18,9 +18,11 @@ jobs:
 
       - name: Install Python and dependencies
         run: |
-          brew install numpy matplotlib
-          brew install loguru customtkinter
-          brew install tk  # Aggiungi questa riga per installare Tkinter su macOS
+          brew install python-numpy 
+          brew install python-matplotlib
+          brew install python-loguru 
+          brew install python-customtkinter
+          brew install python-tk  # Aggiungi questa riga per installare Tkinter su macOS
 
       - name: Get Eigen Path
         run: |
