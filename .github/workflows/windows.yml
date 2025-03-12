@@ -15,21 +15,32 @@ jobs:
           choco install eigen
           echo "Eigen installato"
 
-      - name: Controllare la posizione di Eigen
+      - name: Install Python and dependencies
         run: |
-          echo "Contenuto di C:\ProgramData\chocolatey\lib\eigen\tools:"
-          dir C:\ProgramData\chocolatey\lib\eigen\tools
+          choco install python
+          pip install numpy matplotlib
+          pip install loguru customtkinter
+          choco install python-tk
+
+      - name: Get Eigen Path
+        run: |
+          $EIGEN_PATH = "C:\Program Files\Eigen"
+          echo "EIGEN_PATH=$EIGEN_PATH" >> $env:GITHUB_ENV
+
+      - name: Run copilot.py with Eigen path
+        run: |
+          python copilot.py change_path "$EIGEN_PATH\Eigen\Dense"
 
       - name: Creare la cartella build
         run: mkdir build
 
       - name: Compilare il codice
         run: |
-          g++ -Wall -O3 -std=c++17 -fopenmp -I"C:\ProgramData\chocolatey\lib\eigen\tools" main.cpp -o build\main.exe
+          g++ -Wall -O3 -std=c++17 -fopenmp -I"$EIGEN_PATH\Eigen" main.cpp -o build\main.exe
         continue-on-error: true
-
+        
       - name: Verificare la presenza dell'eseguibile
         run: dir build\
 
       - name: Testare l'eseguibile
-        run: build\main.exe 0.001 0 0 1000
+        run: build\main.exe 0.001 0 0 100

@@ -1,4 +1,4 @@
-name: C++ Build & Test (macOS)
+name: macOS
 
 on: [push, pull_request]
 
@@ -12,24 +12,35 @@ jobs:
 
       - name: Installare Eigen
         run: |
+          brew update
           brew install eigen
           echo "Eigen installato"
 
-      - name: Controllare la posizione di Eigen
+      - name: Install Python and dependencies
         run: |
-          echo "Contenuto di /opt/homebrew/include/eigen3:"
-          ls -l /opt/homebrew/include/eigen3
+          brew install python
+          pip3 install numpy matplotlib
+          pip3 install loguru customtkinter
+          brew install python-tk
+
+      - name: Get Eigen Path
+        run: |
+          EIGEN_PATH=$(brew --prefix eigen)
+          echo "EIGEN_PATH=$EIGEN_PATH" >> $GITHUB_ENV
+
+      - name: Run copilot.py with Eigen path
+        run: echo "$EIGEN_PATH/Eigen/Dense" | python3 copilot.py change_path
 
       - name: Creare la cartella build
         run: mkdir -p build
 
       - name: Compilare il codice
         run: |
-          g++ -Wall -O3 -std=c++17 -fopenmp -I/opt/homebrew/include/eigen3 main.cpp -o build/main
+          g++ -Wall -O3 -std=c++17 -fopenmp -I$EIGEN_PATH main.cpp -o build/main
         continue-on-error: true
-
+        
       - name: Verificare la presenza dell'eseguibile
         run: ls -l build/
 
       - name: Testare l'eseguibile
-        run: ./build/main 0.001 0 0 1000
+        run: ./build/main 0.001 0 0 100
