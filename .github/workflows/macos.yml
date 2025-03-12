@@ -10,6 +10,9 @@ jobs:
       - name: Checkout del repository
         uses: actions/checkout@v4
 
+      - name: Installing gcc
+        run: brew install gcc
+
       - name: Installare Eigen
         run: |
           brew update
@@ -47,7 +50,8 @@ jobs:
 
       - name: Compilare il codice
         run: |
-          g++ -Wall -O3 -std=c++17 -fopenmp -I$EIGEN_PATH main.cpp -o build/main
+          /usr/local/bin/g++-12 -Wall -O3 -std=c++17 -fopenmp -I$EIGEN_PATH main.cpp -o build/main
+
         continue-on-error: true
         
       - name: Verificare la presenza dell'eseguibile
