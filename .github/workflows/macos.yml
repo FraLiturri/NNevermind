@@ -10,9 +10,8 @@ jobs:
       - name: Checkout del repository
         uses: actions/checkout@v4
 
-      - name: Installing gcc
-        run: brew install gcc
-             brew install libomp
+      - name: Installing libomp
+        run:  brew install libomp
 
 
       - name: Installare Eigen
