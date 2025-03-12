@@ -37,7 +37,7 @@ class NN
 public:
     void train(string tr_alg, Loss &tr_loss, vector<VectorXd> Data, vector<VectorXd> &Targets, double eta, double alpha, double lambda, int epochs)
     {
-         for (int epoch = 0; epoch < epochs; epoch++)
+        for (int epoch = 0; epoch < epochs; epoch++)
         {
             for (int data_index = 0; data_index < Data.size(); data_index++)
             {
@@ -63,13 +63,14 @@ public:
                 {
                     cerr << "Choice unavailable, please select a proper one." << endl;
                 }
-                tr_loss.calculator(outputs[weights.size()], Targets[data_index], Targets.size());
+                tr_loss.calculate(outputs[weights.size()], Targets[data_index], Targets.size());
             }
-        } 
+        }
     };
 
-    void train_and_validate(string tr_alg, string file_path, vector<VectorXd> Tr_Data, VectorXd Tr_Targets, vector<VectorXd> Val_Data, VectorXd Val_Targets, double eta, double alpha, double lambda, double epochs) {
-         for (int epoch = 0; epoch < epochs; epoch++)
+    void train_and_validate(string tr_alg, string file_path, vector<VectorXd> Tr_Data, VectorXd Tr_Targets, vector<VectorXd> Val_Data, VectorXd Val_Targets, double eta, double alpha, double lambda, double epochs)
+    {
+        for (int epoch = 0; epoch < epochs; epoch++)
         {
             for (int i = 0; i < hidden_and_out_units.size(); i++)
             {
@@ -95,7 +96,7 @@ public:
 
             // add validation here;
         }
-    }; 
+    };
 
-   void test(string file_path, vector<VectorXd> Test_data, VectorXd Test_results) {};
+    void test(string file_path, vector<VectorXd> Test_data, VectorXd Test_results) {};
 };

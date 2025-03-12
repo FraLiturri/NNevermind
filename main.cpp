@@ -13,12 +13,12 @@ int main(int argc, char *argv[])
      unsigned seed = std::chrono::system_clock::now().time_since_epoch().count(); // Defining seed for different random numbers;
 
      //! Cleaning data from previous runs;
-     ofstream(tr_loss_path, std::ios::trunc).close();
-     ofstream(val_loss_path, std::ios::trunc).close();
-     ofstream(test_loss_path, std::ios::trunc).close();
+     ofstream(tr_loss_path, std::ios::trunc);
+     ofstream(val_loss_path, std::ios::trunc);
+     ofstream(test_loss_path, std::ios::trunc);
 
      //! Demiurge blows;
-     Demiurge MLP(5, {30, 30}, 3, seed); // Input units - hidden_units vector - output units - seed;
+     Demiurge MLP(5, {300, 300}, 3, seed); // Input units - hidden_units vector - output units - seed;
      Demiurge *pointer = &MLP;           // Pointer to NeuralNetwork for print_info, avoidable if not desired;
 
      //! Preparing data;
@@ -46,10 +46,6 @@ int main(int argc, char *argv[])
      //! Training, Validation and Test;
      NN NeuralNetwork;
      NeuralNetwork.train("BackPropagation", TrainingLoss, TrainingData, TrainingResults, stod(argv[1]), stod(argv[2]), stod(argv[3]), atoi(argv[4]));
-
-     cout << "outputs: " << outputs[weights.size()].transpose() << endl;
-     cout << "expected: " << TrainingResults[39].transpose() << endl
-          << endl;
 
      //! Counter stops and prints elapsed time;
      auto end = chrono::high_resolution_clock::now();

@@ -2,9 +2,8 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
-
 def plot():
-    training_loss_path = "results/training_loss.txt"
+    training_loss_path = "results/tr_loss.txt"
     validation_loss_path = "results/val_loss.txt"
 
     tr_loss = np.loadtxt(training_loss_path)
@@ -19,7 +18,6 @@ def plot():
     plt.grid(ls="dashed", axis="both")
     plt.xlabel("Epochs")
     plt.ylabel("Loss")
-    plt.title("Training loss")
     plt.savefig("results/loss_plot.pdf")
     plt.legend(loc="best")
     plt.show()

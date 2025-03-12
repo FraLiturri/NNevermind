@@ -17,12 +17,16 @@
 using namespace std;
 using namespace Eigen;
 
-double aux;
+double aux = 0;
 int counter = 0;
+double loss_value = 0;
 
 VectorXd aux_vec;
 
-double MSE(variant<double, VectorXd> x, variant<double, VectorXd> y)
+#pragma GCC push_options
+#pragma GCC optimize ("O0")
+
+double MSE(variant<double, VectorXd> &x, variant<double, VectorXd> &y)
 {
     if (holds_alternative<VectorXd>(x))
     {
@@ -39,7 +43,7 @@ double MSE(variant<double, VectorXd> x, variant<double, VectorXd> y)
     }
     return aux;
 }
-double BCE(variant<double, VectorXd> x, variant<double, VectorXd> y)
+double BCE(variant<double, VectorXd> &x, variant<double, VectorXd> &y)
 {
     if (holds_alternative<VectorXd>(x))
     {
@@ -56,7 +60,7 @@ double BCE(variant<double, VectorXd> x, variant<double, VectorXd> y)
     }
     return aux;
 }
-double MEE(variant<double, VectorXd> x, variant<double, VectorXd> y)
+double MEE(variant<double, VectorXd> &x, variant<double, VectorXd> &y)
 {
     if (holds_alternative<VectorXd>(x))
     {
@@ -75,59 +79,51 @@ double MEE(variant<double, VectorXd> x, variant<double, VectorXd> y)
     return aux;
 }
 
-double (*choice)(variant<double, VectorXd> x, variant<double, VectorXd> y);
-
 class Loss
 {
+
 public:
-    double loss_value;
-    string choosen_loss;
-    string path;
+    double (*choice)(variant<double, VectorXd> &x, variant<double, VectorXd> &y);
+    string path = "";
 
-    Loss(string loss_function, string filepath)
+    Loss(string loss_function, string filepath) 
     {
-        choosen_loss = loss_function;
         path = filepath;
-    };
-
-    void calculator(variant<double, VectorXd> NN_outputs, variant<double, VectorXd> targets, int data_size)
-    {
-        if (choosen_loss == "MSE")
+        if (loss_function == "MSE")
         {
             choice = MSE;
-            loss_value += choice(NN_outputs, targets) / (double)data_size;
         }
-        else if (choosen_loss == "BCE")
+        else if (loss_function == "BCE")
         {
             choice = BCE;
-            loss_value += choice(NN_outputs, targets) / (double)data_size;
         }
-        else if (choosen_loss == "MEE")
+        else if (loss_function == "MEE")
         {
             choice = MEE;
-            loss_value += choice(NN_outputs, targets) / (double)data_size;
         }
         else
         {
-            cout << "\nUnvailable choice as loss function. " << endl;
+            throw std::logic_error("unavailable choice as loss function.");
         }
+    };
+
+    void calculate(variant<double, VectorXd> NN_outputs, variant<double, VectorXd> targets, int data_size)
+    {
+        loss_value += choice(NN_outputs, targets) / (double)data_size;
         counter++;
+
         if (counter == data_size)
         {
             ofstream outputFile(path, ios::app);
-            if (outputFile.is_open())
-            {
-                outputFile << loss_value << endl;
-                outputFile.close();
-            }
-            else
-            {
-                cerr << "Errore: impossibile aprire il file " << path << endl;
-            }
+
+            outputFile << loss_value << endl;
+            outputFile.close();
             counter = 0;
             loss_value = 0;
         }
     };
 };
+
+#pragma GCC pop_options
 
 #endif
