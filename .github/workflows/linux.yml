@@ -22,7 +22,7 @@ jobs:
           echo "EIGEN_PATH=$EIGEN_PATH" >> $GITHUB_ENV
 
       - name: Run copilot.py with Eigen path
-        run: echo "$EIGEN_PATH" | python python/copilot.py change_path
+        run: echo "$EIGEN_PATH" | python copilot.py change_path
 
       - name: Creare la cartella build
         run: mkdir -p build
