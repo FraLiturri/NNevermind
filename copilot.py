@@ -14,8 +14,11 @@ def main():
         )
 
     elif str(sys.argv[1]) == "change_path":
-        Eigen_path = str(input("\nInsert your Eigen's path here: "))
-        initializer.create_hpp_file("include/eigen_path.hpp", Eigen_path)
+        try: 
+            Eigen_path = str(input("\nInsert your Eigen's path here: "))
+            initializer.create_hpp_file("include/eigen_path.hpp", Eigen_path)
+        except EOFError:
+            print("no data provided to input function")
 
     elif str(sys.argv[1]) == "plot":
         analyzer.plot()
