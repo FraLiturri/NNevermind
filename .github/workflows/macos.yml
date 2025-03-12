@@ -24,6 +24,7 @@ jobs:
           pip install matplotlib 
           pip install loguru
           pip install customtkinter
+          pip install tk
           
 
       - name: Get Eigen Path
