@@ -4,6 +4,7 @@ results/*
 python/__pycache__
 deprecated/__pycache__
 include/__pycache__
+data/shuffled_data.csv
 
 # Ignoring .vscode/ directory; 
 .vscode/

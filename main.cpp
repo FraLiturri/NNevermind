@@ -18,16 +18,17 @@ int main(int argc, char *argv[])
      ofstream(test_loss_path, std::ios::trunc);
 
      //! Demiurge blows;
-     Demiurge MLP(5, {300, 300}, 3, seed); // Input units - hidden_units vector - output units - seed;
+     Demiurge MLP(7, {30, 30}, 3, seed); // Input units - hidden_units vector - output units - seed;
      Demiurge *pointer = &MLP;           // Pointer to NeuralNetwork for print_info, avoidable if not desired;
 
      //! Preparing data;
-     DataReader Getter;
-     Getter.VecAndVec("data/test.csv", TrainingData, TrainingResults);
+     DataReader Reader;
+     Reader.shuffle("data/regression_data.csv", "data/shuffled_data.csv", seed); 
+     Reader.read("data/shuffled_data.csv", TrainingData, TrainingResults);
 
      //! Splitting data for validation part;
      Validation Validator;
-     Validator.HoldOut(TrainingData, TrainingResults, ValidationData, ValidationResults, TestData, TestResults, 40, 50);
+     Validator.HoldOut(TrainingData, TrainingResults, ValidationData, ValidationResults, TestData, TestResults, 450, 500);
 
      //! Printing NN general info: can be avoided if not desired;
      print_info(pointer);

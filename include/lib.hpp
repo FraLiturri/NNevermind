@@ -11,12 +11,6 @@
 #include <iterator>
 #include <algorithm>
 #include <omp.h>
-
 #include "eigen_path.hpp"
-
-namespace Libraries
-{
-    using namespace std;
-}
 
 #endif
