@@ -17,117 +17,85 @@
 using namespace std;
 using namespace Eigen;
 
-double aux;
+double aux = 0, loss_value = 0;
 int counter = 0;
 
 VectorXd aux_vec;
 
-double MSE(variant<double, VectorXd> x, variant<double, VectorXd> y)
+#pragma GCC push_options
+#pragma GCC optimize("O0")
+
+double MSE(VectorXd &x, VectorXd &y)
 {
-    if (holds_alternative<VectorXd>(x))
-    {
-        aux_vec = get<VectorXd>(x) - get<VectorXd>(y);
-        aux = pow(aux_vec.norm(), 2);
-    }
-    else if (holds_alternative<double>(x))
-    {
-        aux = pow(get<double>(x) - get<double>(y), 2);
-    }
-    else
-    {
-        cerr << "Type not accepted: please try with VectorXd or double" << endl;
-    }
-    return aux;
-}
-double BCE(variant<double, VectorXd> x, variant<double, VectorXd> y)
-{
-    if (holds_alternative<VectorXd>(x))
-    {
-        aux_vec = get<VectorXd>(x) - get<VectorXd>(y);
-        aux = pow(aux_vec.norm(), 2);
-    }
-    else if (holds_alternative<double>(x))
-    {
-        aux = pow(get<double>(x) - get<double>(y), 2);
-    }
-    else
-    {
-        cerr << "Type not accepted: please try with VectorXd or double" << endl;
-    }
-    return aux;
-}
-double MEE(variant<double, VectorXd> x, variant<double, VectorXd> y)
-{
-    if (holds_alternative<VectorXd>(x))
-    {
-        aux_vec = get<VectorXd>(x) - get<VectorXd>(y);
-        aux = aux_vec.norm();
-    }
-    else if (holds_alternative<double>(x))
-    {
-        aux = pow(get<double>(x) - get<double>(y), 2);
-        aux = pow(aux, 0.5);
-    }
-    else
-    {
-        cerr << "Type not accepted: please try with VectorXd or double" << endl;
-    }
+    aux_vec = x - y;
+    aux = pow(aux_vec.norm(), 2);
+
     return aux;
 }
 
-double (*choice)(variant<double, VectorXd> x, variant<double, VectorXd> y);
+double BCE(VectorXd &x, VectorXd &y)
+{
+    aux = -y[0] * log(x[0]) - (1 - y[0]) * log(1 - x[0]);
+    return aux;
+}
+
+double MEE(VectorXd &x, VectorXd &y)
+{
+    aux_vec = x - y;
+    aux = aux_vec.norm();
+
+    return aux;
+}
 
 class Loss
 {
+
 public:
-    double loss_value;
-    string choosen_loss;
-    string path;
+    double last_loss = 0; 
+    double (*choice)(VectorXd &x, VectorXd &y);
+    string path = "";
 
     Loss(string loss_function, string filepath)
     {
-        choosen_loss = loss_function;
+        ofstream(filepath, ios::trunc).close();
         path = filepath;
-    };
-
-    void calculator(variant<double, VectorXd> NN_outputs, variant<double, VectorXd> targets, int data_size)
-    {
-        if (choosen_loss == "MSE")
+        if (loss_function == "MSE")
         {
             choice = MSE;
-            loss_value += choice(NN_outputs, targets) / (double)data_size;
         }
-        else if (choosen_loss == "BCE")
+        else if (loss_function == "BCE")
         {
             choice = BCE;
-            loss_value += choice(NN_outputs, targets) / (double)data_size;
         }
-        else if (choosen_loss == "MEE")
+        else if (loss_function == "MEE")
         {
             choice = MEE;
-            loss_value += choice(NN_outputs, targets) / (double)data_size;
         }
         else
         {
-            cout << "\nUnvailable choice as loss function. " << endl;
+            throw std::logic_error("unavailable choice as loss function.");
         }
+    };
+
+    void calculate(VectorXd &NN_outputs, VectorXd &targets, int data_size)
+    {
+        loss_value += choice(NN_outputs, targets) / (double) data_size;
         counter++;
+
         if (counter == data_size)
         {
             ofstream outputFile(path, ios::app);
-            if (outputFile.is_open())
-            {
-                outputFile << loss_value << endl;
-                outputFile.close();
-            }
-            else
-            {
-                cerr << "Errore: impossibile aprire il file " << path << endl;
-            }
+
+            outputFile << loss_value << endl;
+            outputFile.close();
+
             counter = 0;
+            last_loss = loss_value; 
             loss_value = 0;
         }
     };
 };
+
+#pragma GCC pop_options
 
 #endif

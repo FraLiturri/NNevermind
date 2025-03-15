@@ -1,0 +1,60 @@
+name: macOS
+
+on: []
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout del repository
+        uses: actions/checkout@v4
+
+      - name: Installing libomp
+        run:  brew install libomp
+
+
+      - name: Installare Eigen
+        run: |
+          brew update
+          brew install eigen
+          echo "Eigen installato"
+
+      - name: Install Python and dependencies
+        run: |
+          python3 -m venv myenv
+          brew install tcl-tk
+          brew install python-tk
+          source myenv/bin/activate
+          pip install numpy
+          pip install matplotlib 
+          pip install loguru
+          pip install customtkinter
+          pip install tk
+          
+
+      - name: Get Eigen Path
+        run: |
+          EIGEN_PATH=$(brew --prefix eigen)
+          echo "EIGEN_PATH=$EIGEN_PATH" >> $GITHUB_ENV
+
+      - name: Run copilot.py with Eigen path
+        run: |
+          # Attiva l'ambiente virtuale
+          source myenv/bin/activate
+          # Esegui lo script con il percorso Eigen
+          echo "$EIGEN_PATH/Eigen/Dense" | python3 copilot.py change_path
+
+
+      - name: Creare la cartella build
+        run: mkdir -p build
+
+      - name: Compilare il codice
+        run: |
+            g++ -Wall -O3 -std=c++17 -I/usr/include/eigen3 main.cpp -o build/main
+        
+      - name: Verificare la presenza dell'eseguibile
+        run: ls -l build/
+
+      - name: Testare l'eseguibile
+        run: ./build/main 0.001 0 0 100

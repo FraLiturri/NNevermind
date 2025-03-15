@@ -1,0 +1,22 @@
+cmake_minimum_required(VERSION 3.10)
+project(NNeverMind)
+
+set(CMAKE_CXX_STANDARD 17)
+
+# Definiamo una variabile CMake per il path di Eigen, configurabile dall'utente
+set(EIGEN_PATH "" CACHE PATH "Path to Eigen library")
+
+if(NOT EIGEN_PATH)
+    message(FATAL_ERROR "Please set EIGEN_PATH with -DEIGEN_PATH=/path/to/eigen")
+endif()
+
+# Legge il contenuto attuale di eigen_path.hpp
+file(READ ${CMAKE_SOURCE_DIR}/include/eigen_path.hpp EIGEN_HPP_CONTENTS)
+
+# Sostituisce il vecchio path con il nuovo
+string(REGEX REPLACE "#include \\\".*?/Eigen/Dense\\\"" "#include \\\"${EIGEN_PATH}/Eigen/Dense\\\"" EIGEN_HPP_CONTENTS "${EIGEN_HPP_CONTENTS}")
+
+# Scrive il nuovo contenuto nel file
+file(WRITE ${CMAKE_SOURCE_DIR}/include/eigen_path.hpp "${EIGEN_HPP_CONTENTS}")
+
+message(STATUS "Updated include/eigen_path.hpp with EIGEN_PATH=${EIGEN_PATH}")

@@ -1,6 +1,6 @@
-name: C++ Build & Test (Linux)
+name: Linux
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   build:
@@ -16,12 +16,20 @@ jobs:
           sudo apt install -y libeigen3-dev
           echo "Eigen installato"
 
-      - name: Controllare la posizione di Eigen
+      - name: Install Python and dependencies
         run: |
-          echo "Contenuto di /usr/include/eigen3:"
-          ls -l /usr/include/eigen3
-          echo "Contenuto di /usr/include:"
-          ls -l /usr/include | grep eigen
+          sudo apt install -y python3 python3-pip
+          pip3 install numpy matplotlib 
+          pip3 install loguru customtkinter
+          sudo apt install -y python3-tk
+
+      - name: Get Eigen Path
+        run: |
+          EIGEN_PATH=$(dpkg -L libeigen3-dev | grep "Eigen/Core" | sed 's:/Eigen/Core::' | head -n 1)
+          echo "EIGEN_PATH=$EIGEN_PATH" >> $GITHUB_ENV
+
+      - name: Run copilot.py with Eigen path
+        run: echo "$EIGEN_PATH/Eigen/Dense"   | python copilot.py change_path
 
       - name: Creare la cartella build
         run: mkdir -p build
@@ -35,4 +43,4 @@ jobs:
         run: ls -l build/
 
       - name: Testare l'eseguibile
-        run: ./build/main 0.001 0 0 1000
+        run: ./build/main 0.001 0 0 100
