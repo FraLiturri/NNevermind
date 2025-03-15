@@ -1,5 +1,5 @@
-<h1 align="center"> NNeverMind (alpha)
-</h1>
+
+![nnevermind-high-resolution-logo](https://github.com/user-attachments/assets/9bfe3fd3-8188-4ce2-867b-94a390892fb6)
 
 <p align="center">
   <img src ="https://img.shields.io/github/v/tag/FraLiturri/NNeverMind?label=version&sort=semver" alt="Version">
