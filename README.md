@@ -60,7 +60,8 @@ then type Eigen's path: `C:/User/.../your_path_to_eigen/Eigen/Dense` (remember t
 
 ## Dependencies
 
-This project uses the [Eigen library](https://eigen.tuxfamily.org/) under the [MPL 2.0 license](https://opensource.org/licenses/MPL-2.0).
+This project uses the [Eigen library](https://eigen.tuxfamily.org/) under the [MPL 2.0 license](https://opensource.org/licenses/MPL-2.0); 
+logo created with [Logo.com](https://logo.com/). 
 
 ## 📑 Additional info 
 <details>
