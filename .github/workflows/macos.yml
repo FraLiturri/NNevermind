@@ -1,6 +1,6 @@
 name: macOS
 
-on: [pull_request]
+on: []
 
 jobs:
   build:
