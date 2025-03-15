@@ -1,4 +1,4 @@
-<h1 align="center"> NNeverMind (Alpha testing: work in progress)
+<h1 align="center"> NNeverMind (alpha)
 </h1>
 
 <p align="center">
