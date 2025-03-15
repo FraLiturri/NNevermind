@@ -1,5 +1,5 @@
 
-![nnevermind-high-resolution-logo](https://github.com/user-attachments/assets/9bfe3fd3-8188-4ce2-867b-94a390892fb6)
+![image](https://github.com/user-attachments/assets/d575f505-557b-41b2-a67e-bb96a8a33fbc)
 
 <p align="center">
   <img src ="https://img.shields.io/github/v/tag/FraLiturri/NNeverMind?label=version&sort=semver" alt="Version">
