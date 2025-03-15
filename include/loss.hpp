@@ -17,65 +17,33 @@
 using namespace std;
 using namespace Eigen;
 
-double aux = 0;
+double aux = 0, loss_value = 0;
 int counter = 0;
-double loss_value = 0;
 
 VectorXd aux_vec;
 
 #pragma GCC push_options
-#pragma GCC optimize ("O0")
+#pragma GCC optimize("O0")
 
-double MSE(variant<double, VectorXd> &x, variant<double, VectorXd> &y)
+double MSE(VectorXd &x, VectorXd &y)
 {
-    if (holds_alternative<VectorXd>(x))
-    {
-        aux_vec = get<VectorXd>(x) - get<VectorXd>(y);
-        aux = pow(aux_vec.norm(), 2);
-    }
-    else if (holds_alternative<double>(x))
-    {
-        aux = pow(get<double>(x) - get<double>(y), 2);
-    }
-    else
-    {
-        cerr << "Type not accepted: please try with VectorXd or double" << endl;
-    }
+    aux_vec = x - y;
+    aux = pow(aux_vec.norm(), 2);
+
     return aux;
 }
-double BCE(variant<double, VectorXd> &x, variant<double, VectorXd> &y)
+
+double BCE(VectorXd &x, VectorXd &y)
 {
-    if (holds_alternative<VectorXd>(x))
-    {
-        aux_vec = get<VectorXd>(x) - get<VectorXd>(y);
-        aux = pow(aux_vec.norm(), 2);
-    }
-    else if (holds_alternative<double>(x))
-    {
-        aux = pow(get<double>(x) - get<double>(y), 2);
-    }
-    else
-    {
-        cerr << "Type not accepted: please try with VectorXd or double" << endl;
-    }
+    aux = -y[0] * log(x[0]) - (1 - y[0]) * log(1 - x[0]);
     return aux;
 }
-double MEE(variant<double, VectorXd> &x, variant<double, VectorXd> &y)
+
+double MEE(VectorXd &x, VectorXd &y)
 {
-    if (holds_alternative<VectorXd>(x))
-    {
-        aux_vec = get<VectorXd>(x) - get<VectorXd>(y);
-        aux = aux_vec.norm();
-    }
-    else if (holds_alternative<double>(x))
-    {
-        aux = pow(get<double>(x) - get<double>(y), 2);
-        aux = pow(aux, 0.5);
-    }
-    else
-    {
-        cerr << "Type not accepted: please try with VectorXd or double" << endl;
-    }
+    aux_vec = x - y;
+    aux = aux_vec.norm();
+
     return aux;
 }
 
@@ -83,11 +51,13 @@ class Loss
 {
 
 public:
-    double (*choice)(variant<double, VectorXd> &x, variant<double, VectorXd> &y);
+    double last_loss = 0; 
+    double (*choice)(VectorXd &x, VectorXd &y);
     string path = "";
 
-    Loss(string loss_function, string filepath) 
+    Loss(string loss_function, string filepath)
     {
+        ofstream(filepath, ios::trunc).close();
         path = filepath;
         if (loss_function == "MSE")
         {
@@ -107,9 +77,9 @@ public:
         }
     };
 
-    void calculate(variant<double, VectorXd> NN_outputs, variant<double, VectorXd> targets, int data_size)
+    void calculate(VectorXd &NN_outputs, VectorXd &targets, int data_size)
     {
-        loss_value += choice(NN_outputs, targets) / (double)data_size;
+        loss_value += choice(NN_outputs, targets) / (double) data_size;
         counter++;
 
         if (counter == data_size)
@@ -118,7 +88,9 @@ public:
 
             outputFile << loss_value << endl;
             outputFile.close();
+
             counter = 0;
+            last_loss = loss_value; 
             loss_value = 0;
         }
     };

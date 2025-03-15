@@ -8,19 +8,20 @@
 using namespace std;
 using namespace Eigen;
 
-vector<MatrixXd> weights; // i-th component is the weights matrix of i-th and i+1-th layer; //? well init;
-vector<VectorXd> outputs; // i-th component is the output (with weights) of i-the layer; //? well init;
+vector<VectorXd> next_inputs, outputs, biases; // init;
+vector<std::string> function_strings;          // init;
 
-vector<VectorXd> next_inputs;         //? well init;
-vector<std::string> function_strings; //? well init;
+vector<MatrixXd> prev_updates, V_t, M_t, weights; // init;
 
-vector<MatrixXd> prev_updates; // necessary for training: Nesterov; //? well init;
-vector<MatrixXd> V_t, M_t;     // neceessary for Adam training; //? well init;
+vector<int> hidden_and_out_units; // init;
+VectorXd units_output, bias; 
 
-vector<int> hidden_and_out_units, counters; //? well init;
-VectorXd units_output;                      // auxiliar vector; //? don't care init;
+VectorXd delta, net_t, net, vec_aux;
+MatrixXd update, auxiliar, gradient, gradient_square, sqrt_v, M_hat, V_hat;
 
-int first_units, last_units = 0;
+double epsilon = 1e-8;
+
+int first_units, last_units, adam_counter = 0;
 
 //! Demiurge class: the Creator;
 class Demiurge
@@ -31,8 +32,8 @@ public:
     {
         srand(seed);
 
-        in_units = input_units;   // correct;
-        out_units = output_units; // correct;
+        in_units = input_units;
+        out_units = output_units;
 
         first_units = input_units;
         last_units = output_units;
@@ -53,22 +54,16 @@ public:
         hidden_and_out_units = hidden_units;
         hidden_and_out_units.push_back(output_units); // Adds output's units to vector;
 
-        for (int k = 0; k < hidden_layers + 2; k++)
-        {
-            k == 0 ? outputs[k].resize(input_units) : outputs[k].resize(hidden_and_out_units[k - 1]);
-            outputs[k].setZero();
-
-            if (k < hidden_layers + 1)
-            {
-                k == 0 ? next_inputs[k].resize(input_units) : next_inputs[k].resize(hidden_and_out_units[k - 1]);
-                next_inputs[k].setConstant(0);
-            }
-        }
-
         for (int i = 0; i < hidden_layers + 2; i++) // This cycle creates weights matrices;
         {
+            i == 0 ? outputs[i].resize(input_units) : outputs[i].resize(hidden_and_out_units[i - 1]);
+            outputs[i].setZero();
+
             i == 0 ? cols = in_units : cols = hidden_and_out_units[i - 1];              // Paying attention to first layer (input);
             i == hidden_layers + 1 ? rows = out_units : rows = hidden_and_out_units[i]; // Paying attention to last layer (output);
+
+            bias.resize(rows);
+            bias.setConstant(1);
 
             MatrixXd weight = MatrixXd::NullaryExpr(rows, cols, []()
                                                     { return Eigen::internal::random<double>(-0.1, 0.1); });
@@ -79,15 +74,18 @@ public:
             MatrixXd v_aux = MatrixXd::NullaryExpr(rows, cols, []()
                                                    { return Eigen::internal::random<double>(0, 0); });
 
-            if (i != hidden_layers + 1)
+            if (i < hidden_layers + 1)
             {
+                i == 0 ? next_inputs[i].resize(input_units) : next_inputs[i].resize(hidden_and_out_units[i - 1]);
+                next_inputs[i].setConstant(0);
+
                 weights.push_back(weight);
                 prev_updates.push_back(ghost);
 
                 V_t.push_back(v_aux);
                 M_t.push_back(m_aux);
 
-                counters.push_back(0);
+                biases.push_back(bias);
             }
         }
     };
