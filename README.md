@@ -33,8 +33,9 @@ then type Eigen's path: `C:/User/.../your_path_to_eigen/Eigen/Dense` (remember t
 The tests were executed on 500 samples (Hold-out), using an 11th-generation Intel(R) Core(TM) i7-1165G7 @ 2.80GHz. Time may vary on different devices.  
 | Network size (only hiddens) | Grid size | Iterations | Time (seconds) |
 | --- | --- |--- | --- |
-| 20x20 | 1 | 1000 | 2.40 |
-| 1 x 10 x 1 | 1 | 1000 | 14.83 |
+| 20x20 | 1 | 1000 | 2.4 |
+| 50x50 | 1 | 1000 | 6.4 |
+| 100x100 | 1 | 1000 | 16.3 |
 
 ## 🧱 Dependencies
 This project uses the [Eigen library](https://eigen.tuxfamily.org/) under the [MPL 2.0 license](https://opensource.org/licenses/MPL-2.0). 
