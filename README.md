@@ -9,13 +9,6 @@
   <img src="https://img.shields.io/github/stars/FraLiturri/NNeverMind" alt= "Stars">
 </p>
 
-## 📖 Benchmark
-The tests were executed on 100-byte data sets, using an 11th-generation Intel(R) Core(TM) i7-1165G7 @ 2.80GHz. Time may vary on different devices.  
-| Network size | Grid size | Iterations | Time (seconds) |
-| --- | --- |--- | --- |
-| 1 x 10 x 1 | 1 | 100 | 1.21 |
-| 1 x 10 x 1 | 1 | 1000 | 14.83 |
-
 ## ⬇️ Installation 
 The download is available via GitHub or by typing
 ```
@@ -34,6 +27,14 @@ Before starting to build your NN, setting up file paths is necessary. Open the t
 python copilot.py initialize
 ```
 then type Eigen's path: `C:/User/.../your_path_to_eigen/Eigen/Dense` (remember to add `Eigen/Dense` and to use `/` to specify sub-directories).  
+
+
+## 📖 Benchmark
+The tests were executed on 500 samples (Hold-out), using an 11th-generation Intel(R) Core(TM) i7-1165G7 @ 2.80GHz. Time may vary on different devices.  
+| Network size (only hiddens) | Grid size | Iterations | Time (seconds) |
+| --- | --- |--- | --- |
+| 20x20 | 1 | 1000 | 2.40 |
+| 1 x 10 x 1 | 1 | 1000 | 14.83 |
 
 ## 🧱 Dependencies
 This project uses the [Eigen library](https://eigen.tuxfamily.org/) under the [MPL 2.0 license](https://opensource.org/licenses/MPL-2.0). 
