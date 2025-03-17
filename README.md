@@ -9,18 +9,6 @@
   <img src="https://img.shields.io/github/stars/FraLiturri/NNeverMind" alt= "Stars">
 </p>
 
-  ## ⏩ A quick look
-This package offers an easy-to-use MLP with many different training choices such as: 
-- Backpropagation
-- Random Training
-- Adam
-
-The available choices between activation and loss functions are various (see the next sections). It's also provided a Python script for getting general info, 
-data plotting, mean calculator, and a user-friendly interface for parallelized grid search. 
-
-## ⚙️ Platforms
-The entire package should work perfectly in any OS. Report an issue if any incompatibility pops up!
-
 ## 📖 Benchmark
 The tests were executed on 100-byte data sets, using an 11th-generation Intel(R) Core(TM) i7-1165G7 @ 2.80GHz. Time may vary on different devices.  
 | Network size | Grid size | Iterations | Time (seconds) |
