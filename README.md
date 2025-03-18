@@ -28,6 +28,8 @@ python copilot.py initialize
 ```
 then type Eigen's path: `C:/User/.../your_path_to_eigen/Eigen/Dense` (remember to add `Eigen/Dense` and to use `/` to specify sub-directories).  
 
+For the best performances, compile using the flags `-fopenmp -O3`.
+
 ## 📖 Benchmark
 The tests were executed on 500 samples (Hold-out, trained with BackPropagation), using an 11th-generation Intel(R) Core(TM) i7-1165G7 @ 2.80GHz. Time may vary on different devices.  
 | Network size (only hiddens) | Grid size | Iterations | Time (seconds) |
