@@ -14,7 +14,7 @@ The download is available via GitHub or by typing
 ```
 git clone https://github.com/FraLiturri/NNeverMind.git
 ```
-in the terminal, in the desired directory. 
+in the terminal. 
 This package also requires Eigen, which can be installed from the official website [Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page) or by typing 
 ```
 git clone https://gitlab.com/libeigen/eigen.git
@@ -28,14 +28,14 @@ python copilot.py initialize
 ```
 then type Eigen's path: `C:/User/.../your_path_to_eigen/Eigen/Dense` (remember to add `Eigen/Dense` and to use `/` to specify sub-directories).  
 
-
 ## 📖 Benchmark
-The tests were executed on 500 samples (Hold-out), using an 11th-generation Intel(R) Core(TM) i7-1165G7 @ 2.80GHz. Time may vary on different devices.  
+The tests were executed on 500 samples (Hold-out, trained with BackPropagation), using an 11th-generation Intel(R) Core(TM) i7-1165G7 @ 2.80GHz. Time may vary on different devices.  
 | Network size (only hiddens) | Grid size | Iterations | Time (seconds) |
 | --- | --- |--- | --- |
 | 20x20 | 1 | 1000 | 2.4 |
 | 50x50 | 1 | 1000 | 6.4 |
 | 100x100 | 1 | 1000 | 16.3 |
+| 200x200 | 1 | 1000 | 26.9 |
 
 ## 🧱 Dependencies
 This project uses the [Eigen library](https://eigen.tuxfamily.org/) under the [MPL 2.0 license](https://opensource.org/licenses/MPL-2.0). 
