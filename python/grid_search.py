@@ -1,17 +1,27 @@
 # %%
+import os
+import sys
+
 import multiprocessing as mp
 import subprocess
+
 from itertools import product
 from loguru import logger
 from tkinter import messagebox
-import multiprocessing as mp
-import os
+
 from customtkinter import *
 import customtkinter as ctk
 
+sys.path.append(
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "include"))
+)
+
+import parameters as param
+
 IsCompilationGood = False
-NomeFileDaCompilare = "main.cpp"
-run_command = "main.exe"
+show_final_plot = False
+NomeFileDaCompilare = "../main.cpp"
+run_command = "build/main.exe"
 
 # Standard parameters for grid search;
 Eta_Min_Default = 0.01
@@ -23,13 +33,22 @@ Alpha_Max_Default = 0
 Step1_Default = 10
 Step2_Default = 1
 Step3_Default = 1
-Training_Steps_Default = 200
+Training_Steps_Default = 1000
 CPU_Number = os.cpu_count()
 
 # Standard parameters for single run;
-Eta_single = 0.2
+Eta_single = 0.01
 Lambda_single = 0.0
 Alpha_single = 0.0
+
+
+def switch():
+    if show_final_plot == True:
+        show_final_plot = False
+    else:
+        show_final_plot = True
+    return show_final_plot
+
 
 def CallMain(Inputs):
     command = [
@@ -47,7 +66,7 @@ def Compile():
     global IsCompilationGood
     try:
         process = subprocess.run(
-            ["g++", "-o", "main.exe", NomeFileDaCompilare],
+            ["g++", "-fopenmp", "-O3", "-o", "../build/main.exe", NomeFileDaCompilare],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
@@ -201,7 +220,7 @@ if __name__ == "__main__":
 
     try:
         process = subprocess.run(
-            ["g++", "-o", "main.exe", NomeFileDaCompilare],
+            ["g++", "-fopenmp", "-O3", "-o", "..build/main.exe", NomeFileDaCompilare],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
@@ -309,15 +328,20 @@ if __name__ == "__main__":
     single_alpha_entry.grid(row=1, column=0, padx=10, pady=5, sticky="w")
     single_training_steps_entry.grid(row=1, column=3, padx=10, pady=5, sticky="w")
 
+    show_plot = ctk.CTkSwitch(
+        single_run_tab, corner_radius=20, text="Show final plot", command=switch
+    )
+    show_plot.grid(row=10, column=0, pady=15)
+
     done_button_single = ctk.CTkButton(
         single_run_tab, text="Done", command=submit_values_for_single_training
     )
-    done_button_single.grid(row=5, column=0, columnspan=2, pady=20)
+    done_button_single.grid(row=15, column=0, columnspan=2, pady=10)
 
     recompile_button_single = ctk.CTkButton(
         single_run_tab, text="Ricompile", command=Compile
     )
-    recompile_button_single.grid(row=5, column=2, columnspan=2, pady=20)
+    recompile_button_single.grid(row=15, column=2, columnspan=2, pady=10)
 
     root.lift()
     root.mainloop()

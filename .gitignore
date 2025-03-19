@@ -1,5 +1,5 @@
 # Ignoring build/, results/; 
-build/
+build/*
 results/*
 python/__pycache__
 deprecated/__pycache__

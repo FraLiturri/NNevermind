@@ -8,7 +8,6 @@
 #include "data_reader.hpp"
 #include "validation.hpp"
 #include "lib.hpp"
-#include "eigen_path.hpp"
 
 using namespace std;
 using namespace Eigen;
@@ -19,7 +18,7 @@ int counter = 0;
 VectorXd aux_vec;
 
 #pragma GCC push_options
-#pragma GCC optimize("O0")
+#pragma GCC optimize("O1")
 
 double MSE(VectorXd &x, VectorXd &y)
 {
@@ -53,10 +52,9 @@ public:
     double last_loss = 0;
     double (*choice)(VectorXd &x, VectorXd &y);
 
-    Loss(string loss_function, string filepath)
+    Loss(string loss_function, string filepath) : outputFile(filepath, ios::app)
     {
         ofstream(filepath, ios::trunc);
-        ofstream outputFile(filepath, ios::app);
 
         if (loss_function == "MSE")
         {
