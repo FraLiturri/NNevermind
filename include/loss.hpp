@@ -7,12 +7,8 @@
 #include "training.hpp"
 #include "data_reader.hpp"
 #include "validation.hpp"
+#include "lib.hpp"
 #include "eigen_path.hpp"
-
-#include <iostream>
-#include <iomanip>
-#include <fstream>
-#include <sstream>
 
 using namespace std;
 using namespace Eigen;
@@ -50,15 +46,18 @@ double MEE(VectorXd &x, VectorXd &y)
 class Loss
 {
 
+private:
+    ofstream outputFile;
+
 public:
-    double last_loss = 0; 
+    double last_loss = 0;
     double (*choice)(VectorXd &x, VectorXd &y);
-    string path = "";
 
     Loss(string loss_function, string filepath)
     {
-        ofstream(filepath, ios::trunc).close();
-        path = filepath;
+        ofstream(filepath, ios::trunc);
+        ofstream outputFile(filepath, ios::app);
+
         if (loss_function == "MSE")
         {
             choice = MSE;
@@ -77,25 +76,27 @@ public:
         }
     };
 
+    ~Loss()
+    {
+        if (outputFile.is_open())
+            outputFile.close();
+    }
+
     void calculate(VectorXd &NN_outputs, VectorXd &targets, int data_size)
     {
-        loss_value += choice(NN_outputs, targets) / (double) data_size;
+        loss_value += choice(NN_outputs, targets) / (double)data_size;
         counter++;
 
         if (counter == data_size)
         {
-            ofstream outputFile(path, ios::app);
-
             outputFile << loss_value << endl;
-            outputFile.close();
 
+            last_loss = loss_value;
             counter = 0;
-            last_loss = loss_value; 
             loss_value = 0;
         }
     };
 };
 
 #pragma GCC pop_options
-
 #endif

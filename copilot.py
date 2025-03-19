@@ -2,7 +2,6 @@
 import sys
 import python.analyzer as analyzer
 import python.initializer as initializer
-#import include.parameters as param
 import python.grid_search as grid_search
 
 

@@ -13,8 +13,8 @@ int main(int argc, char *argv[])
      unsigned seed = std::chrono::system_clock::now().time_since_epoch().count(); // Defining seed for different random numbers;
 
      //! Demiurge blows;
-     Demiurge MLP(5, {20, 20}, 1, seed); // Input units - hidden_units vector - output units - seed;
-     Demiurge *pointer = &MLP;            // Pointer to NeuralNetwork for print_info, avoidable if not desired;
+     Demiurge MLP(5, {50, 50}, 1, seed); // Input units - hidden_units vector - output units - seed;
+     Demiurge *pointer = &MLP;           // Pointer to NeuralNetwork for print_info, avoidable if not desired;
 
      //! Preparing data;
      DataReader Reader;
@@ -33,10 +33,11 @@ int main(int argc, char *argv[])
 
      //! Neural network construction;
      Input_Layer input_layer;
-     Hidden_Layer first_hidden, second_hidden, output_layer;
+     Hidden_Layer first_hidden, second_hidden, third_hidden, output_layer;
 
      first_hidden.create("relu", 1);
      second_hidden.create("relu", 2);
+     // third_hidden.create("relu", 3);
      output_layer.create("sigmoid", 3);
 
      //! Training, Validation and Test;
