@@ -4,7 +4,6 @@ import python.analyzer as analyzer
 import python.initializer as initializer
 import python.grid_search as grid_search
 
-
 def main():
 
     if len(sys.argv) == 1:
@@ -26,7 +25,7 @@ def main():
         analyzer.plot()
 
     elif str(sys.argv[1]) == "search":
-        print()
+        grid_search.grid_search()
 
     else:
         print(
