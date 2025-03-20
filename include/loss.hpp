@@ -87,6 +87,7 @@ public:
 
         if (counter == data_size)
         {
+            isnan(loss_value)? loss_value = 1000 : loss_value; 
             outputFile << loss_value << endl;
 
             last_loss = loss_value;

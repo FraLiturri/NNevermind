@@ -164,7 +164,7 @@ class NeuralNetworkTrainer:
             logger.info(f"Starting {len(inputs)} processes on {self.cpu_count} CPUs")
             with mp.Pool(processes=self.cpu_count) as pool:
                 results = pool.map(self.call_main, inputs)
-
+                print(results)
             logger.success("Grid search completed successfully!")
             return True
         except Exception as e:

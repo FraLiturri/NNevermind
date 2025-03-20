@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
      unsigned seed = std::chrono::system_clock::now().time_since_epoch().count(); // Defining seed for different random numbers;
 
      //! Demiurge blows;
-     Demiurge MLP(7, {10, 10}, 3, seed); // Input units - hidden_units vector - output units - seed;
+     Demiurge MLP(7, {100, 100}, 3, seed); // Input units - hidden_units vector - output units - seed;
      Demiurge *pointer = &MLP;           // Pointer to NeuralNetwork for print_info, avoidable if not desired;
 
      //! Preparing data;
@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
      //! Training, Validation and Test;
      NN NeuralNetwork("BP", stod(argv[1]), stod(argv[2]), stod(argv[3]), atoi(argv[4]));
      NeuralNetwork.train_and_validate(TrainingLoss, TrainingData, TrainingResults, ValidationLoss, ValidationData, ValidationResults);
-     NeuralNetwork.test(TestLoss, TestData, TestResults);
+     //NeuralNetwork.test(TestLoss, TestData, TestResults);
 
      //! Counter stops: printing elapsed time;
      auto end = chrono::high_resolution_clock::now();

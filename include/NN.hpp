@@ -87,6 +87,15 @@ public:
                 Val_Loss.calculate(outputs[weights.size()], Val_Targets[val_index], Val_Targets.size());
             }
         }
+        if (Val_Loss.last_loss == 1000)
+        {
+            cout << "Warning: loss diverges. Value setted to 1000."
+                 << endl;
+        }
+        else
+        {
+            cout << "Val. loss converges to: " << Val_Loss.last_loss << "." << endl;
+        }
     };
 
     void test(Loss &Test_Loss, vector<VectorXd> &Test_data, vector<VectorXd> &Test_results)

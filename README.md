@@ -8,8 +8,6 @@
   <img src="https://img.shields.io/github/stars/FraLiturri/NNeverMind" alt= "Stars">
 </p>
 
-## Quick look
-
 
 ## ⬇️ Installation 
 The download is available via GitHub or by typing
@@ -30,17 +28,18 @@ python copilot.py initialize
 ```
 then type Eigen's path: `C:/User/.../your_path_to_eigen/Eigen/Dense` (remember to add `Eigen/Dense` and to use `/` to specify sub-directories).  
 
-
-
 ## 📖 Benchmark
 The tests were executed on 500 samples (trained with BackPropagation), using an 11th-generation Intel(R) Core(TM) i7-1165G7 @ 2.80GHz. Time may vary on different devices.  
 | Size (only hidden units) | Epochs | Time (seconds) |
 | --- |--- | --- |
-| 20x20 | 1000 | 1.8 |
-| 50x50 | 1000 | 3.3 |
-| 100x100 | 1000 | 16.3 |
-| 200x200 | 1000 | 26.9 |
-| 200x200x200 | 1000 | 52.6 |
+| 20x20 | 1k | 1.1 |
+| 20x20 | 10k | 10.4 |
+| 50x50 | 1k | 3.3 |
+| 50x50 | 10k | 30.8 |
+| 100x100 | 1k | 16.3 |
+| 100x100 | 10k | 82.1 |
+| 200x200 | 1k | 26.9 |
+| 200x200x200 | 1k | 52.6 |
 
 ## 🧱 Dependencies
 This project uses the [Eigen library](https://eigen.tuxfamily.org/) under the [MPL 2.0 license](https://opensource.org/licenses/MPL-2.0). 
