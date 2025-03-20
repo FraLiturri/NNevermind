@@ -36,7 +36,7 @@ then type Eigen's path: `C:/User/.../your_path_to_eigen/Eigen/Dense` (remember t
 The tests were executed on 500 samples (trained with BackPropagation), using an 11th-generation Intel(R) Core(TM) i7-1165G7 @ 2.80GHz. Time may vary on different devices.  
 | Size (only hidden units) | Epochs | Time (seconds) |
 | --- |--- | --- |
-| 20x20  1000 | 1.8 |
+| 20x20 | 1000 | 1.8 |
 | 50x50 | 1000 | 3.3 |
 | 100x100 | 1000 | 16.3 |
 | 200x200 | 1000 | 26.9 |
