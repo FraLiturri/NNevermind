@@ -13,12 +13,12 @@ int main(int argc, char *argv[])
      unsigned seed = std::chrono::system_clock::now().time_since_epoch().count(); // Defining seed for different random numbers;
 
      //! Demiurge blows;
-     Demiurge MLP(7, {100, 100}, 3, seed); // Input units - hidden_units vector - output units - seed;
+     Demiurge MLP(5, {20, 20}, 1, seed); // Input units - hidden_units vector - output units - seed;
      Demiurge *pointer = &MLP;           // Pointer to NeuralNetwork for print_info, avoidable if not desired;
 
      //! Preparing data;
      DataReader Reader;
-     Reader.shuffle("data/regression_data.csv", "data/shuffled_data.csv", seed);
+     Reader.shuffle("data/classification_data.csv", "data/shuffled_data.csv", seed);
      Reader.read("data/shuffled_data.csv", TrainingData, TrainingResults);
 
      //! Splitting data for validation part;
@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
 
      first_hidden.create("relu", 1);
      second_hidden.create("relu", 2);
-     output_layer.create("linear", 3);
+     output_layer.create("sigmoid", 3);
 
      //! Training, Validation and Test;
      NN NeuralNetwork("BP", stod(argv[1]), stod(argv[2]), stod(argv[3]), atoi(argv[4]));

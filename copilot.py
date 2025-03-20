@@ -4,6 +4,7 @@ import python.analyzer as analyzer
 import python.initializer as initializer
 import python.grid_search as grid_search
 
+
 def main():
 
     if len(sys.argv) == 1:

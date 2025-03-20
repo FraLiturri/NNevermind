@@ -15,6 +15,35 @@ sys.path.append(
 )
 import parameters as param
 
+# Configure the logger with improved settings
+def configure_logger():
+    """Configure the logger with enhanced settings and formatting."""
+    # Remove default handlers
+    logger.remove()
+    
+    # Add a console handler with improved formatting
+    logger.add(
+        sys.stderr,
+        format="<green>{time:HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>",
+        level="INFO",
+        colorize=True,
+        backtrace=True,
+        diagnose=True,
+        enqueue=True,  # Thread-safe logging
+    )
+    
+    # Add a file handler for persistent logs
+    log_dir = "logs"
+    os.makedirs(log_dir, exist_ok=True)
+    logger.add(
+        os.path.join(log_dir, "neural_network_trainer_{time}.log"),
+        rotation="10 MB",
+        retention="1 week",
+        compression="zip",
+        level="DEBUG",
+        format="{time:YYYY-MM-DD HH:mm:ss} | {level: <8} | {name}:{function}:{line} - {message}",
+    )
+
 # Constants
 FILE_TO_COMPILE = "main.cpp"
 EXECUTABLE_PATH = "build/main.exe"
@@ -42,6 +71,13 @@ class DefaultValues:
     LAMBDA_SINGLE = 0.0
     ALPHA_SINGLE = 0.0
 
+# Funzione helper per il multiprocessing
+def call_main_helper(inputs: List[float]) -> str:
+    """Helper function to execute the compiled program with the provided parameters."""
+    command = [EXECUTABLE_PATH] + [str(x) for x in inputs]
+    result = subprocess.run(command, capture_output=True, text=True)
+    return result.stdout
+
 
 class NeuralNetworkTrainer:
     def __init__(self):
@@ -50,48 +86,56 @@ class NeuralNetworkTrainer:
         self.show_plot_enabled = False
         self.cpu_count = os.cpu_count()
         self.defaults = DefaultValues()
+        self.logger = logger.bind(context="NeuralNetworkTrainer")
 
     def toggle_plot(self):
         self.show_plot_enabled = not self.show_plot_enabled
+        self.logger.debug(f"Plot display toggled to: {self.show_plot_enabled}")
         return self.show_plot_enabled
 
     def show_plot(self):
         if self.show_plot_enabled:
+            self.logger.info("Displaying plot...")
             subprocess.run(["python", PLOT_SCRIPT, "plot"])
 
     def compile(self) -> bool:
         """Compiles the source file and returns True if compilation was successful."""
         try:
-            logger.info("Compilation in progress... please wait.")
-            subprocess.run(
+            self.logger.info("Compilation in progress... please wait.")
+            result = subprocess.run(
                 ["g++", "-fopenmp", "-O3", "-o", EXECUTABLE_PATH, FILE_TO_COMPILE],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True,
                 check=True,
             )
-            logger.success("Compilation completed successfully!")
+            self.logger.success("Compilation completed successfully!")
+            self.logger.debug(f"Compilation output: {result.stdout}")
             self.is_compilation_successful = True
             return True
         except FileNotFoundError:
-            logger.error(f"Fatal error: {FILE_TO_COMPILE} not found.")
+            self.logger.error(f"Fatal error: {FILE_TO_COMPILE} not found.", exc_info=True)
             messagebox.showerror("Error", f"File {FILE_TO_COMPILE} not found.")
             self.is_compilation_successful = False
             return False
         except subprocess.CalledProcessError as e:
-            logger.error("Fatal error: compilation failed.")
+            self.logger.error("Fatal error: compilation failed.", exc_info=True)
             messagebox.showerror(
                 "Error",
                 "Compilation failed. Check the terminal for details.",
             )
-            logger.error(f"Error details: {e.stderr}")
+            self.logger.error(f"Error details: {e.stderr}")
             self.is_compilation_successful = False
             return False
 
     def call_main(self, inputs: List[float]) -> str:
         """Executes the compiled program with the provided parameters."""
         command = [EXECUTABLE_PATH] + [str(x) for x in inputs]
+        self.logger.debug(f"Executing command: {' '.join(command)}")
         result = subprocess.run(command, capture_output=True, text=True)
+        if result.returncode != 0:
+            self.logger.warning(f"Program returned non-zero exit code: {result.returncode}")
+            self.logger.warning(f"Error output: {result.stderr}")
         return result.stdout
 
     def build_grid(
@@ -107,6 +151,10 @@ class NeuralNetworkTrainer:
         step_alpha: int,
     ) -> param.Grid:
         """Creates a grid of parameters for searching."""
+        self.logger.debug(
+            f"Building grid: eta=[{eta_min}-{eta_max}], lambda=[{lambda_min}-{lambda_max}], "
+            f"alpha=[{alpha_min}-{alpha_max}], steps=[{step_eta},{step_lambda},{step_alpha}]"
+        )
         return param.Grid(
             eta_min,
             eta_max,
@@ -122,17 +170,27 @@ class NeuralNetworkTrainer:
     def clear_results_file(self):
         """Removes the previous results file."""
         try:
-            subprocess.run(["rm", RESULTS_FILE], capture_output=True, text=True)
+            if os.path.exists(RESULTS_FILE):
+                self.logger.debug(f"Removing previous results file: {RESULTS_FILE}")
+                os.remove(RESULTS_FILE)
+            else:
+                self.logger.debug(f"Results file doesn't exist: {RESULTS_FILE}")
+                
+            # Ensure the directory exists
+            results_dir = os.path.dirname(RESULTS_FILE)
+            if not os.path.exists(results_dir):
+                self.logger.debug(f"Creating results directory: {results_dir}")
+                os.makedirs(results_dir, exist_ok=True)
         except Exception as e:
-            logger.warning(f"Unable to remove results file: {e}")
+            self.logger.warning(f"Unable to manage results file: {e}", exc_info=True)
 
     def run_grid_search(self, params: dict) -> bool:
         """Executes a grid search with the specified parameters."""
         if not self.is_compilation_successful:
-            logger.error("Compilation failed. Unable to execute grid search.")
+            self.logger.error("Compilation failed. Unable to execute grid search.")
             return False
 
-        logger.info("Grid search execution in progress...")
+        self.logger.info("Grid search execution in progress...")
         self.clear_results_file()
 
         try:
@@ -161,20 +219,27 @@ class NeuralNetworkTrainer:
             ]
 
             # Parallel execution
-            logger.info(f"Starting {len(inputs)} processes on {self.cpu_count} CPUs")
+            total_points = len(inputs)
+            self.logger.info(f"Starting {total_points} processes on {self.cpu_count} CPUs")
+            self.logger.debug(f"Grid search parameters: {params}")
+            
             with mp.Pool(processes=self.cpu_count) as pool:
-                results = pool.map(self.call_main, inputs)
+                self.logger.debug("Pool created, starting tasks...")
+                # Usa la funzione helper esterna invece di self.call_main
+                results = pool.map(call_main_helper, inputs)
+                self.logger.debug("All tasks completed")
                 print(results)
-            logger.success("Grid search completed successfully!")
+                
+            self.logger.success(f"Grid search completed successfully! Processed {total_points} parameter combinations.")
             return True
         except Exception as e:
-            logger.error(f"Error during grid search: {e}")
+            self.logger.error(f"Error during grid search: {e}", exc_info=True)
             return False
 
     def run_single_training(self, params: dict) -> bool:
         """Executes a single training with the specified parameters."""
         if not self.is_compilation_successful:
-            logger.error("Compilation failed. Unable to execute training.")
+            self.logger.error("Compilation failed. Unable to execute training.")
             return False
 
         self.clear_results_file()
@@ -188,21 +253,24 @@ class NeuralNetworkTrainer:
             ]
 
             self.counter += 1
-            logger.info(f"Executing run #{self.counter}")
+            self.logger.info(f"Executing run #{self.counter}")
+            self.logger.debug(f"Parameters: eta={inputs[0]}, lambda={inputs[1]}, alpha={inputs[2]}, steps={inputs[3]}")
 
             output = self.call_main(inputs)
             print(output)
 
             self.show_plot()
+            self.logger.success(f"Single training run #{self.counter} completed successfully!")
             return True
         except Exception as e:
-            logger.error(f"Error during single training: {e}")
+            self.logger.error(f"Error during single training: {e}", exc_info=True)
             return False
 
 
 class TrainerGUI:
     def __init__(self, trainer: NeuralNetworkTrainer):
         self.trainer = trainer
+        self.logger = logger.bind(context="TrainerGUI")
 
         # Configure the GUI
         ctk.set_appearance_mode("Dark")
@@ -216,6 +284,7 @@ class TrainerGUI:
 
     def create_ui(self):
         """Creates the user interface."""
+        self.logger.debug("Creating user interface components")
         # Tab view
         self.tab_view = ctk.CTkTabview(self.root)
         self.tab_view.pack(expand=True, fill="both", padx=20, pady=20)
@@ -227,6 +296,7 @@ class TrainerGUI:
         # Tab for single training
         self.single_run_tab = self.tab_view.add("Single Run")
         self.create_single_run_tab()
+        self.logger.debug("UI components created successfully")
 
     def create_grid_search_tab(self):
         """Creates the tab for grid search."""
@@ -407,8 +477,10 @@ class TrainerGUI:
             if "training_steps" in params and params["training_steps"] < 0:
                 raise ValueError("Epochs must be greater than or equal to zero")
 
+            self.logger.debug(f"Grid parameters validated: {params}")
             return params
         except ValueError as e:
+            self.logger.error(f"Parameter validation error: {str(e)}")
             messagebox.showerror("Error", str(e))
             return None
 
@@ -436,19 +508,23 @@ class TrainerGUI:
                 if params["training_steps"] < 0:
                     raise ValueError("Epochs must be greater than or equal to zero")
 
+            self.logger.debug(f"Single run parameters validated: {params}")
             return params
         except ValueError as e:
+            self.logger.error(f"Parameter validation error: {str(e)}")
             messagebox.showerror("Error", str(e))
             return None
 
     def submit_grid_search(self):
         """Executes the grid search with the entered parameters."""
+        self.logger.info("Grid search requested")
         params = self.get_grid_params()
         if params is not None:
             self.trainer.run_grid_search(params)
 
     def submit_single_run(self):
         """Executes the single training with the entered parameters."""
+        self.logger.info("Single run requested")
         params = self.get_single_run_params()
         if params is not None:
             self.trainer.run_single_training(params)
@@ -456,23 +532,22 @@ class TrainerGUI:
     def run(self):
         """Starts the user interface."""
         # Compile the code at startup
-        logger.info("Starting the application")
+        self.logger.info("Starting the application")
         self.trainer.compile()
 
         # Start the main loop
+        self.logger.info("Starting main UI loop")
         self.root.mainloop()
 
 
 # Main function
 def grid_search():
     # Configure the logger
-    logger.remove()
-    logger.add(
-        sys.stderr,
-        format="<green>{time:HH:mm:ss}</green> | <level>{level: <8}</level> | <level>{message}</level>",
-    )
+    configure_logger()
 
-    logger.info("Initializing Neural Network Trainer")
+    logger.info("Neural Network Trainer application starting")
+    logger.debug(f"Python version: {sys.version}")
+    logger.debug(f"Operating system: {os.name} - {sys.platform}")
 
     # Create the trainer instance
     trainer = NeuralNetworkTrainer()
