@@ -8,7 +8,6 @@
   <img src="https://img.shields.io/github/stars/FraLiturri/NNeverMind" alt= "Stars">
 </p>
 
-
 ## ⬇️ Installation 
 The download is available via GitHub or by typing
 ```
@@ -27,6 +26,7 @@ Before starting to build your NN, setting up file paths is necessary. Open the t
 python copilot.py initialize
 ```
 then type Eigen's path: `C:/User/.../your_path_to_eigen/Eigen/Dense` (remember to add `Eigen/Dense` and to use `/` to specify sub-directories).  
+For the best performances, compile using the flags `-fopenmp -O3`.
 
 ## 📖 Benchmark
 The tests were executed on 500 samples (trained with BackPropagation), using an 11th-generation Intel(R) Core(TM) i7-1165G7 @ 2.80GHz. Time may vary on different devices.  
@@ -40,6 +40,7 @@ The tests were executed on 500 samples (trained with BackPropagation), using an 
 | 100x100 | 10k | 82.1 |
 | 200x200 | 1k | 26.9 |
 | 200x200x200 | 1k | 52.6 |
+=======
 
 ## 🧱 Dependencies
 This project uses the [Eigen library](https://eigen.tuxfamily.org/) under the [MPL 2.0 license](https://opensource.org/licenses/MPL-2.0). 
