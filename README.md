@@ -3,8 +3,6 @@
 <p align="center">
   <img src ="https://img.shields.io/github/v/tag/FraLiturri/NNeverMind?label=version&sort=semver" alt="Version">
   <img src="https://github.com/FraLiturri/NNeverMind/actions/workflows/linux.yml/badge.svg?branch=Development" alt="Linux test">
-  <img src="https://github.com/FraLiturri/NNeverMind/actions/workflows/macos.yml/badge.svg?branch=Development" alt="MacOs test">
-  <img src="https://github.com/FraLiturri/NNeverMind/actions/workflows/windows.yml/badge.svg?branch=Development" alt="Windows test">
   <img src="https://img.shields.io/github/stars/FraLiturri/NNeverMind" alt= "Stars">
 </p>
 
@@ -109,6 +107,9 @@ The tests were executed on 500 samples (trained with BackPropagation), using an 
 | 100x100 | 10k | 82.1 |
 | 200x200 | 1k | 26.9 |
 | 200x200x200 | 1k | 52.6 |
+
+## 🔜 Coming soon
+Tests on macOS and Windows and Adam optimization.
 
 ## 🧱 Dependencies
 This project uses the [Eigen library](https://eigen.tuxfamily.org/) under the [MPL 2.0 license](https://opensource.org/licenses/MPL-2.0). 
