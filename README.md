@@ -80,10 +80,14 @@ Before starting to build your NN, setting up file paths is necessary. Open the t
 python copilot.py initialize
 ```
 then type Eigen's path: `C:/User/.../your_path_to_eigen/Eigen/Dense` (remember to add `Eigen/Dense` and to use `/` to specify sub-directories).  
-Compile using the flags `-fopenmp -O3` for the best performances.
+Then compile with 
+```
+g++ main.cpp -g -fopenmp -O3 -o build/main.exe
+```
+or via the Python interface (see next section).
 
 ## 🤖 Using copilot.py
-Use <code>copilot.py </code> to plot results with 
+Use <code>copilot.py</code> to plot results with 
 ```
 python copilot.py plot
 ```
@@ -91,7 +95,7 @@ or to open the interface
 ```
 python copilot.py search
 ```
-through which pass the hyperparameters for grid search (also single run is available). 
+through which pass the hyperparameters for a grid search.
 
 ## 📖 Benchmark
 The tests were executed on 500 samples (trained with BackPropagation), using an 11th-generation Intel(R) Core(TM) i7-1165G7 @ 2.80GHz. Time may vary on different devices.  
