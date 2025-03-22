@@ -40,7 +40,6 @@ The tests were executed on 500 samples (trained with BackPropagation), using an 
 | 100x100 | 10k | 82.1 |
 | 200x200 | 1k | 26.9 |
 | 200x200x200 | 1k | 52.6 |
-=======
 
 ## 🧱 Dependencies
 This project uses the [Eigen library](https://eigen.tuxfamily.org/) under the [MPL 2.0 license](https://opensource.org/licenses/MPL-2.0). 
