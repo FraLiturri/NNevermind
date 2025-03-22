@@ -15,7 +15,7 @@
 <p>The user can specify:</p>
 
 <p>
-  ▷ <strong>Training algorithm</strong> by passing a string to the constructor:
+▷ <strong>Training algorithm</strong> by passing a string to the constructor:
 </p>
 
 <pre><code>NN NeuralNetwork("BP", stod(argv[1]), stod(argv[2]), stod(argv[3]), atoi(argv[4]));</code></pre>
@@ -80,7 +80,18 @@ Before starting to build your NN, setting up file paths is necessary. Open the t
 python copilot.py initialize
 ```
 then type Eigen's path: `C:/User/.../your_path_to_eigen/Eigen/Dense` (remember to add `Eigen/Dense` and to use `/` to specify sub-directories).  
-For the best performances, compile using the flags `-fopenmp -O3`.
+Compile using the flags `-fopenmp -O3` for the best performances.
+
+## 🤖 Using copilot.py
+Use <code>copilot.py </code> to plot results with 
+```
+python copilot.py plot
+```
+or to open the interface 
+```
+python copilot.py search
+```
+through which pass the hyperparameters for grid search (also single run is available). 
 
 ## 📖 Benchmark
 The tests were executed on 500 samples (trained with BackPropagation), using an 11th-generation Intel(R) Core(TM) i7-1165G7 @ 2.80GHz. Time may vary on different devices.  
