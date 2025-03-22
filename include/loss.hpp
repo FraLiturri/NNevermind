@@ -7,58 +7,49 @@
 #include "training.hpp"
 #include "data_reader.hpp"
 #include "validation.hpp"
-#include "eigen_path.hpp"
+#include "demiurge.hpp"
 
-#include <iostream>
-#include <iomanip>
-#include <fstream>
-#include <sstream>
+#include "lib.hpp"
 
 using namespace std;
 using namespace Eigen;
 
-double aux = 0, loss_value = 0;
-int counter = 0;
-
-VectorXd aux_vec;
-
 #pragma GCC push_options
-#pragma GCC optimize("O0")
+#pragma GCC optimize("O1")
 
 double MSE(VectorXd &x, VectorXd &y)
 {
-    aux_vec = x - y;
-    aux = pow(aux_vec.norm(), 2);
-
-    return aux;
+    return pow((x - y).norm(), 2);
 }
 
 double BCE(VectorXd &x, VectorXd &y)
 {
-    aux = -y[0] * log(x[0]) - (1 - y[0]) * log(1 - x[0]);
-    return aux;
+    return -y[0] * log(x[0]) - (1 - y[0]) * log(1 - x[0]);
 }
 
 double MEE(VectorXd &x, VectorXd &y)
 {
-    aux_vec = x - y;
-    aux = aux_vec.norm();
-
-    return aux;
+    return (x - y).norm();
 }
 
 class Loss
 {
 
-public:
-    double last_loss = 0; 
-    double (*choice)(VectorXd &x, VectorXd &y);
-    string path = "";
+private:
+    ofstream outputFile;
+    static mutex loss_mutex;
 
-    Loss(string loss_function, string filepath)
+public:
+    static double loss_value;
+    static int counter;
+    double last_loss = 0;
+    double (*choice)(VectorXd &x, VectorXd &y);
+
+    Loss(string loss_function, string filepath) : outputFile(filepath, ios::app)
     {
-        ofstream(filepath, ios::trunc).close();
-        path = filepath;
+        lock_guard<mutex> lock(loss_mutex);
+        ofstream(filepath, ios::trunc);
+
         if (loss_function == "MSE")
         {
             choice = MSE;
@@ -77,25 +68,37 @@ public:
         }
     };
 
+    ~Loss()
+    {
+        if (outputFile.is_open())
+            outputFile.close();
+    }
+
     void calculate(VectorXd &NN_outputs, VectorXd &targets, int data_size)
     {
-        loss_value += choice(NN_outputs, targets) / (double) data_size;
+        loss_value += choice(NN_outputs, targets) / (double)data_size;
         counter++;
 
         if (counter == data_size)
         {
-            ofstream outputFile(path, ios::app);
+            isnan(loss_value) ? loss_value = 1000 : loss_value;
 
-            outputFile << loss_value << endl;
-            outputFile.close();
+            {
+                lock_guard<mutex> lock(loss_mutex);
+                outputFile << loss_value << endl;
+                outputFile.flush();
+            }
 
+            last_loss = loss_value;
             counter = 0;
-            last_loss = loss_value; 
             loss_value = 0;
         }
     };
 };
 
-#pragma GCC pop_options
+mutex Loss::loss_mutex;
+double Loss::loss_value = 0;
+int Loss::counter = 0;
 
+#pragma GCC pop_options
 #endif

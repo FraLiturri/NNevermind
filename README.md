@@ -1,4 +1,3 @@
-
 ![NNeverMind image](https://github.com/user-attachments/assets/d575f505-557b-41b2-a67e-bb96a8a33fbc)
 
 <p align="center">
@@ -27,17 +26,21 @@ Before starting to build your NN, setting up file paths is necessary. Open the t
 python copilot.py initialize
 ```
 then type Eigen's path: `C:/User/.../your_path_to_eigen/Eigen/Dense` (remember to add `Eigen/Dense` and to use `/` to specify sub-directories).  
-
 For the best performances, compile using the flags `-fopenmp -O3`.
 
 ## 📖 Benchmark
-The tests were executed on 500 samples (Hold-out, trained with BackPropagation), using an 11th-generation Intel(R) Core(TM) i7-1165G7 @ 2.80GHz. Time may vary on different devices.  
-| Network size (only hiddens) | Grid size | Iterations | Time (seconds) |
-| --- | --- |--- | --- |
-| 20x20 | 1 | 1000 | 2.4 |
-| 50x50 | 1 | 1000 | 6.4 |
-| 100x100 | 1 | 1000 | 16.3 |
-| 200x200 | 1 | 1000 | 26.9 |
+The tests were executed on 500 samples (trained with BackPropagation), using an 11th-generation Intel(R) Core(TM) i7-1165G7 @ 2.80GHz. Time may vary on different devices.  
+| Size (only hidden units) | Epochs | Time (seconds) |
+| --- |--- | --- |
+| 20x20 | 1k | 1.1 |
+| 20x20 | 10k | 10.4 |
+| 50x50 | 1k | 3.3 |
+| 50x50 | 10k | 30.8 |
+| 100x100 | 1k | 16.3 |
+| 100x100 | 10k | 82.1 |
+| 200x200 | 1k | 26.9 |
+| 200x200x200 | 1k | 52.6 |
+=======
 
 ## 🧱 Dependencies
 This project uses the [Eigen library](https://eigen.tuxfamily.org/) under the [MPL 2.0 license](https://opensource.org/licenses/MPL-2.0). 

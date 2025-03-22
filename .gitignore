@@ -1,10 +1,11 @@
 # Ignoring build/, results/; 
-build/
+build/*
 results/*
 python/__pycache__
 deprecated/__pycache__
 include/__pycache__
 data/shuffled_data.csv
+logs/
 
 # Ignoring .vscode/ directory; 
 .vscode/

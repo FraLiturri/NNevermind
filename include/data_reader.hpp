@@ -51,37 +51,56 @@ public:
         }
     }
 
-    void shuffle(string input_data, string shuffled_data, unsigned int seed) {
-        vector<std::string> lines;
-        ifstream inputFile(input_data);
-        
-        if (!inputFile) {
-            cerr << "Error: impossible to open file " << input_data << std::endl;
+    void shuffle(string input_data, string shuffled_data, unsigned int seed)
+    {
+        vector<string> lines;
+
+        // Use a mutex for thread-safety
+        static mutex file_mutex;
+
+        // Lock the mutex while reading from the file
+        {
+            lock_guard<mutex> lock(file_mutex);
+            ifstream inputFile(input_data);
+
+            if (!inputFile)
+            {
+                cerr << "Error: impossible to open file " << input_data << endl;
+                return;
+            }
+
+            string line;
+            while (getline(inputFile, line))
+            {
+                lines.push_back(line);
+            }
+            inputFile.close();
+        }
+
+        if (lines.empty())
+        {
+            cerr << "Error: file empty." << endl;
             return;
         }
-    
-        string line;
-        while (std::getline(inputFile, line)) {
-            lines.push_back(line);
-        }
-        inputFile.close();
-    
-        if (lines.empty()) {
-            std::cerr << "Error: file empty." << std::endl;
-            return;
-        }
-    
-        std::mt19937 g(seed);
+
+        // The shuffling itself doesn't need a lock since we're working on a local copy
+        mt19937 g(seed);
         std::shuffle(lines.begin(), lines.end(), g);
-    
-        std::ofstream outputFile(shuffled_data);
-        if (!outputFile) {
-            std::cerr << "Error: impossible to write to file" << shuffled_data << std::endl;
-            return;
-        }
-    
-        for (const auto& shuffledLine : lines) {
-            outputFile << shuffledLine << endl;
+
+        // Lock the mutex again while writing to the output file
+        {
+            lock_guard<mutex> lock(file_mutex);
+            ofstream outputFile(shuffled_data);
+            if (!outputFile)
+            {
+                cerr << "Error: impossible to write to file " << shuffled_data << endl;
+                return;
+            }
+
+            for (const auto &shuffledLine : lines)
+            {
+                outputFile << shuffledLine << endl;
+            }
         }
     }
 
