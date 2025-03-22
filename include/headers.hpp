@@ -11,6 +11,5 @@
 #include "loss.hpp"
 #include "validation.hpp"
 #include "eigen_path.hpp"
-#include "safe_writer.hpp"
 
 #endif

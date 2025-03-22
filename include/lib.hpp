@@ -11,6 +11,9 @@
 #include <iterator>
 #include <algorithm>
 #include <omp.h>
+#include <thread>
+#include <mutex>
+
 #include "eigen_path.hpp"
 
 #endif

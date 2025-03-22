@@ -8,19 +8,15 @@ from loguru import logger
 from tkinter import messagebox
 
 import customtkinter as ctk
+import python.parameters as param
 
-# Add the path for importing the parameters module
-sys.path.append(
-    os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "include"))
-)
-import parameters as param
 
 # Configure the logger with improved settings
 def configure_logger():
     """Configure the logger with enhanced settings and formatting."""
     # Remove default handlers
     logger.remove()
-    
+
     # Add a console handler with improved formatting
     logger.add(
         sys.stderr,
@@ -31,7 +27,7 @@ def configure_logger():
         diagnose=True,
         enqueue=True,  # Thread-safe logging
     )
-    
+
     # Add a file handler for persistent logs
     log_dir = "logs"
     os.makedirs(log_dir, exist_ok=True)
@@ -44,6 +40,7 @@ def configure_logger():
         format="{time:YYYY-MM-DD HH:mm:ss} | {level: <8} | {name}:{function}:{line} - {message}",
     )
 
+
 # Constants
 FILE_TO_COMPILE = "main.cpp"
 EXECUTABLE_PATH = "build/main.exe"
@@ -55,7 +52,7 @@ PLOT_SCRIPT = "copilot.py"
 @dataclass
 class DefaultValues:
     # Grid search
-    ETA_MIN = 0.01
+    ETA_MIN = 0.0
     ETA_MAX = 0.1
     LAMBDA_MIN = 0.0
     LAMBDA_MAX = 0.0
@@ -71,12 +68,33 @@ class DefaultValues:
     LAMBDA_SINGLE = 0.0
     ALPHA_SINGLE = 0.0
 
+
 # Funzione helper per il multiprocessing
-def call_main_helper(inputs: List[float]) -> str:
-    """Helper function to execute the compiled program with the provided parameters."""
+def call_main_helper(inputs: List[float]) -> Tuple[List[float], str]:
+    """Helper function to execute the compiled program with the provided parameters.
+    Returns both the input parameters and the output for tracking, handling errors properly.
+    """
     command = [EXECUTABLE_PATH] + [str(x) for x in inputs]
-    result = subprocess.run(command, capture_output=True, text=True)
-    return result.stdout
+    try:
+        result = subprocess.run(command, capture_output=True, text=True, timeout=30)
+
+        if result.returncode != 0:
+            return (
+                inputs,
+                f"Error: Non-zero exit code {result.returncode}. Stderr: {result.stderr.strip()}",
+            )
+
+        output = result.stdout.strip()
+        if not output:
+            return inputs, "Error: No output captured"
+
+        return inputs, output
+
+    except subprocess.TimeoutExpired:
+        return inputs, "Error: Process timed out"
+
+    except Exception as e:
+        return inputs, f"Error: {e}"
 
 
 class NeuralNetworkTrainer:
@@ -114,7 +132,9 @@ class NeuralNetworkTrainer:
             self.is_compilation_successful = True
             return True
         except FileNotFoundError:
-            self.logger.error(f"Fatal error: {FILE_TO_COMPILE} not found.", exc_info=True)
+            self.logger.error(
+                f"Fatal error: {FILE_TO_COMPILE} not found.", exc_info=True
+            )
             messagebox.showerror("Error", f"File {FILE_TO_COMPILE} not found.")
             self.is_compilation_successful = False
             return False
@@ -134,7 +154,9 @@ class NeuralNetworkTrainer:
         self.logger.debug(f"Executing command: {' '.join(command)}")
         result = subprocess.run(command, capture_output=True, text=True)
         if result.returncode != 0:
-            self.logger.warning(f"Program returned non-zero exit code: {result.returncode}")
+            self.logger.warning(
+                f"Program returned non-zero exit code: {result.returncode}"
+            )
             self.logger.warning(f"Error output: {result.stderr}")
         return result.stdout
 
@@ -175,7 +197,7 @@ class NeuralNetworkTrainer:
                 os.remove(RESULTS_FILE)
             else:
                 self.logger.debug(f"Results file doesn't exist: {RESULTS_FILE}")
-                
+
             # Ensure the directory exists
             results_dir = os.path.dirname(RESULTS_FILE)
             if not os.path.exists(results_dir):
@@ -183,6 +205,58 @@ class NeuralNetworkTrainer:
                 os.makedirs(results_dir, exist_ok=True)
         except Exception as e:
             self.logger.warning(f"Unable to manage results file: {e}", exc_info=True)
+
+    def save_results_to_file(self, results: List[Tuple[List[float], str]]) -> None:
+        """Safely writes the grid search results to the results file."""
+        self.logger.info(f"Saving results to {RESULTS_FILE}")
+
+        # Ensure directory exists
+        results_dir = os.path.dirname(RESULTS_FILE)
+        if not os.path.exists(results_dir):
+            os.makedirs(results_dir, exist_ok=True)
+
+        # Get a temporary file in the same directory
+        temp_file = f"{RESULTS_FILE}.tmp"
+
+        try:
+            with open(temp_file, "w") as f:
+                # Write header
+                f.write("# Grid Search Results\n")
+                f.write(
+                    "# Format: [eta] [lambda] [alpha] [training_steps] [output]\n\n"
+                )
+
+                # Write each result
+                for inputs, output in results:
+                    # Extract parameters
+                    eta, lambda_val, alpha, steps = inputs
+
+                    # Clean the output (remove extra whitespace, newlines)
+                    cleaned_output = " ".join(output.strip().split())
+
+                    # Write the line with parameters and resulting output
+                    f.write(
+                        f"{eta:.6f} {lambda_val:.6f} {alpha:.6f} {int(steps)} | {cleaned_output}\n"
+                    )
+
+            # Atomic replace of the original file with the temp file
+            if os.path.exists(RESULTS_FILE):
+                os.replace(temp_file, RESULTS_FILE)  # atomic on POSIX
+            else:
+                os.rename(temp_file, RESULTS_FILE)
+
+            self.logger.success(
+                f"Successfully wrote {len(results)} results to {RESULTS_FILE}"
+            )
+        except Exception as e:
+            self.logger.error(f"Error writing results to file: {e}", exc_info=True)
+            # Clean up temp file if it exists
+            if os.path.exists(temp_file):
+                try:
+                    os.remove(temp_file)
+                except:
+                    pass
+            raise
 
     def run_grid_search(self, params: dict) -> bool:
         """Executes a grid search with the specified parameters."""
@@ -220,17 +294,23 @@ class NeuralNetworkTrainer:
 
             # Parallel execution
             total_points = len(inputs)
-            self.logger.info(f"Starting {total_points} processes on {self.cpu_count} CPUs")
+            self.logger.info(
+                f"Starting {total_points} processes on {self.cpu_count} CPUs"
+            )
             self.logger.debug(f"Grid search parameters: {params}")
-            
+
             with mp.Pool(processes=self.cpu_count) as pool:
                 self.logger.debug("Pool created, starting tasks...")
-                # Usa la funzione helper esterna invece di self.call_main
-                results = pool.map(call_main_helper, inputs)
+                # Usa la funzione helper esterna che restituisce sia input che output
+                results = list(pool.imap_unordered(call_main_helper, inputs))
                 self.logger.debug("All tasks completed")
-                print(results)
-                
-            self.logger.success(f"Grid search completed successfully! Processed {total_points} parameter combinations.")
+
+            # Scrittura sicura dei risultati nel file
+            self.save_results_to_file(results)
+
+            self.logger.success(
+                f"Grid search completed successfully! Processed {total_points} parameter combinations."
+            )
             return True
         except Exception as e:
             self.logger.error(f"Error during grid search: {e}", exc_info=True)
@@ -254,13 +334,17 @@ class NeuralNetworkTrainer:
 
             self.counter += 1
             self.logger.info(f"Executing run #{self.counter}")
-            self.logger.debug(f"Parameters: eta={inputs[0]}, lambda={inputs[1]}, alpha={inputs[2]}, steps={inputs[3]}")
+            self.logger.debug(
+                f"Parameters: eta={inputs[0]}, lambda={inputs[1]}, alpha={inputs[2]}, steps={inputs[3]}"
+            )
 
             output = self.call_main(inputs)
             print(output)
 
             self.show_plot()
-            self.logger.success(f"Single training run #{self.counter} completed successfully!")
+            self.logger.success(
+                f"Single training run #{self.counter} completed successfully!"
+            )
             return True
         except Exception as e:
             self.logger.error(f"Error during single training: {e}", exc_info=True)

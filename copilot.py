@@ -1,5 +1,6 @@
 # %%
 import sys
+import multiprocessing as mp
 import python.analyzer as analyzer
 import python.initializer as initializer
 import python.grid_search as grid_search
@@ -26,7 +27,8 @@ def main():
         analyzer.plot()
 
     elif str(sys.argv[1]) == "search":
-        grid_search.grid_search()
+        if __name__ == "__main__":
+            grid_search.grid_search()
 
     else:
         print(
