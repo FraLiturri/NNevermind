@@ -82,7 +82,11 @@ Then compile with
 ```
 g++ main.cpp -g -fopenmp -O3 -o build/main.exe
 ```
-or via the Python interface (see next section).
+Parameters can be passed via terminal 
+```
+./build/main.exe eta_value alpha_value lambda_value epochs
+```
+or using the interface (see next section).
 
 ## 🤖 Using copilot.py
 Use <code>copilot.py</code> to plot results with 
@@ -93,7 +97,7 @@ or to open the interface
 ```
 python copilot.py search
 ```
-through which pass the hyperparameters for a grid search.
+through which pass the hyperparameters for a grid search or a single run.
 
 ## 📖 Benchmark
 The tests were executed on 500 samples (trained with BackPropagation), using an 11th-generation Intel(R) Core(TM) i7-1165G7 @ 2.80GHz. Time may vary on different devices.  
