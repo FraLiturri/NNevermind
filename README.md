@@ -8,6 +8,12 @@
   <img src="https://img.shields.io/github/stars/FraLiturri/NNeverMind" alt= "Stars">
 </p>
 
+## A quick look 
+Many training options are available, as well as activation and loss functions: 
+
+```
+NN NameChoosen(string training_algorithm, double, double, double, int);
+```
 
 ## ⬇️ Installation 
 The download is available via GitHub or by typing
