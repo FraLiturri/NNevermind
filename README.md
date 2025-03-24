@@ -88,8 +88,6 @@ Parameters can be passed via the terminal
 ```
 or using the interface (see next section). 
 
-<strong>Warning:</strong> please, to perform the grid search use the name `main.cpp` for your source file, otherwise the script won't work. 
-
 ## 🤖 Using copilot.py
 Use <code>copilot.py</code> to plot results with 
 ```
@@ -100,6 +98,8 @@ or to open the interface
 python copilot.py search
 ```
 through which the hyperparameters are passed for a grid search or a single run. When launched, the interface automatically compiles the code.
+
+⚠️ Please, to perform the grid search use the name `main.cpp` for your source file, otherwise the script won't work. 
 
 ## 📖 Benchmark
 The tests were executed on 500 samples (trained with BackPropagation), using an 11th-generation Intel(R) Core(TM) i7-1165G7 @ 2.80GHz. Time may vary on different devices.  
