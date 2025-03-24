@@ -75,12 +75,12 @@ as usually.
 ## 🚀 Starting engines
 Before starting, setting up file paths is necessary: open the terminal and run
 ```
-python copilot.py initialize
+python copilot.py change_path
 ```
 then type Eigen's path: `C:/User/.../your_path_to_eigen/Eigen/Dense` (remember to add `Eigen/Dense` and to use `/` to specify sub-directories).  
 Then compile with 
 ```
-g++ main.cpp -g -fopenmp -O3 -o build/main.exe
+g++ main.cpp -fopenmp -O3 -o build/main.exe
 ```
 Parameters can be passed via the terminal 
 ```
