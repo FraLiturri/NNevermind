@@ -1,9 +1,0 @@
-cmake_minimum_required(VERSION 3.10)
-project(NNevermind)
-
-set(EIGEN_PATH "C:/Users/franc/OneDrive/Desktop/Sync/Eigen/Eigen/Dense")
-include_directories(${EIGEN_PATH})
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp -O3")
-
-add_executable(my_exe main.cpp)
