@@ -63,7 +63,7 @@ More info can be found in the Wiki (not now).
 ## ⬇️ Installation 
 The download is available via GitHub or by typing
 ```
-git clone https://github.com/FraLiturri/NNeverMind.git
+git clone https://github.com/FraLiturri/NNevermind.git
 ```
 in the terminal. 
 This package also requires Eigen, which can be installed from the official website [Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page) or by typing 
