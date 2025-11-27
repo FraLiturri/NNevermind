@@ -6,8 +6,16 @@
   <img src="https://img.shields.io/github/stars/FraLiturri/NNeverMind" alt= "Stars">
 </p>
 
+<p align="center"> Work is still in progress; this is a temporary version.</p>
+
+<h2> 🏅 What's NNevermind? </h2>
+
+NNevermind is a customizable Neural Network with parallelized grid search and results analysis.
+Originally developed for a Machine Learning exam, this project achieved the best loss performance among all Type A projects (building a neural network from scratch) and ranked second in the overall combined leaderboard (including Type B projects using pre-built neural networks). 
+This gave us the motivation to turn it into a fast and user-friendly library.
+
 <h2>🏃 A quick look</h2>
-<p>Many options are available for training algorithms, activation functions, and loss functions, allowing full customization of the neural network behavior.</p>
+<p>Many options are available for training algorithms, activation functions, and loss functions, allowing full customisation of the neural network behaviour.</p>
 
 <h3>🔧 Configuration</h3>
 <p>The user can specify:</p>
