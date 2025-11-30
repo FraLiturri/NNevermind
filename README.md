@@ -6,7 +6,7 @@
   <img src="https://img.shields.io/github/stars/FraLiturri/NNeverMind" alt= "Stars">
 </p>
 
-<p align="center"> Work is still in progress; this is a temporary version.</p>
+<p align="center"> ⚠️ Work is still in progress; this is a temporary version.</p>
 
 <h2> 🏅 What's NNevermind? </h2>
 
